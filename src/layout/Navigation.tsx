@@ -32,38 +32,38 @@ const Navigation = () => {
           </li>
           <li>
             <Link
-              to="/theme"
+              to="/calendar"
               className={`px-4 py-2 font-medium rounded-md transition-all duration-200 ${
-                isActive('/theme')
+                isActive('/calendar')
                   ? 'text-blue-600 bg-blue-50'
                   : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
               }`}
             >
-              테마
+              달력
             </Link>
           </li>
           <li>
             <Link
-              to="/order"
+              to="/team"
               className={`px-4 py-2 font-medium rounded-md transition-all duration-200 ${
-                isActive('/order')
+                isActive('/team')
                   ? 'text-blue-600 bg-blue-50'
                   : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
               }`}
             >
-              주문
+              팀 페이지
             </Link>
           </li>
           <li>
             <Link
-              to="/mypage"
+              to="/members"
               className={`px-4 py-2 font-medium rounded-md transition-all duration-200 ${
-                isActive('/mypage')
+                isActive('/members')
                   ? 'text-blue-600 bg-blue-50'
                   : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
               }`}
             >
-              마이페이지
+              팀원 가용 페이지
             </Link>
           </li>
         </ul>
