@@ -1,3 +1,4 @@
+import { CalendarPaths } from '@/routes/path';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
@@ -7,6 +8,14 @@ const Calendar = () => {
   const { date, view } = useParams<{ date?: string; view?: string }>();
   const navigate = useNavigate();
   const location = useLocation();
+
+  const getToday = (): string => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = (now.getMonth() + 1).toString().padStart(2, '0');
+    const date = now.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${date}`;
+  };
 
   // URL에서 뷰와 날짜 추출
   const getViewFromPath = (pathname: string): ViewType => {
@@ -19,12 +28,13 @@ const Calendar = () => {
   const [currentView, setCurrentView] = useState<ViewType>(() =>
     getViewFromPath(location.pathname),
   );
-  const [currentDate, setCurrentDate] = useState(() => date || '2025-08-28');
+  const [currentDate, setCurrentDate] = useState(() => date || getToday());
 
   // 뷰 변경 시 URL 업데이트
   const handleViewChange = (newView: ViewType) => {
     setCurrentView(newView);
-    navigate(`/calendar/${newView}/${currentDate}`);
+    const path = CalendarPaths[newView](currentDate);
+    navigate(path);
   };
 
   // URL 변경 감지하여 상태 업데이트
@@ -74,7 +84,9 @@ const Calendar = () => {
               {['월', '화', '수', '목', '금', '토', '일'].map((day, index) => (
                 <div key={day} className="p-3 text-center bg-gray-50 rounded-lg">
                   <div className="font-medium text-gray-800">{day}</div>
-                  <div className="text-sm text-gray-600">8/25</div>
+                  <div className="text-sm text-gray-600">
+                    {currentDate.slice(5, 7)}/{currentDate.slice(8, 10)}
+                  </div>
                 </div>
               ))}
             </div>

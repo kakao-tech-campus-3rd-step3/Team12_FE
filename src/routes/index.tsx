@@ -3,6 +3,7 @@ import RootLayout from '@/layout/RootLayout';
 import Calendar from '@/pages/Calendar/Calendar';
 import Login from '@/pages/Login/Login';
 import { createBrowserRouter, Link } from 'react-router-dom';
+import { RouterPath } from './path';
 
 export const router = createBrowserRouter([
   {
@@ -19,7 +20,7 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: 'calendar',
+        path: RouterPath.CALENDAR.slice(1), // 'calendar'
         children: [
           {
             index: true,
@@ -32,11 +33,11 @@ export const router = createBrowserRouter([
         ],
       },
       {
-        path: 'login',
+        path: RouterPath.LOGIN.slice(1), // 'login'
         element: <Login />,
       },
       {
-        path: 'team',
+        path: RouterPath.TEAM.slice(1), // 'team'
         element: (
           <div className="p-6 mx-auto max-w-4xl">
             <h2 className="mb-6 text-3xl font-bold text-gray-800">팀 페이지</h2>
@@ -65,7 +66,7 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: 'members',
+        path: RouterPath.MEMBERS.slice(1), // 'members'
         element: (
           <div className="p-6 mx-auto max-w-4xl">
             <h2 className="mb-6 text-3xl font-bold text-gray-800">팀원 가용 페이지</h2>
@@ -91,7 +92,7 @@ export const router = createBrowserRouter([
             <h3 className="mb-4 text-2xl font-semibold text-gray-600">페이지를 찾을 수 없습니다</h3>
             <p className="mb-8 text-gray-500">요청하신 페이지가 존재하지 않거나 이동되었습니다.</p>
             <Link
-              to="/"
+              to={RouterPath.HOME} // '/'
               className="inline-block px-6 py-3 text-white bg-blue-600 rounded-md transition-colors hover:bg-blue-700"
             >
               홈으로 돌아가기
