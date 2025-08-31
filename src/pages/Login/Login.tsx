@@ -1,15 +1,12 @@
-import { User, Lock, GraduationCap } from 'lucide-react';
+import { User, Lock } from 'lucide-react';
+import Logo from '@/components/Logo';
 
 const Login = () => {
   return (
     <div className="flex items-center justify-center h-screen overflow-hidden">
       <div className="w-[340px]">
-        <div className="flex flex-col justify-center items-center mb-10">
-          <div className="flex items-center space-x-2">
-            <GraduationCap className="w-8 h-8 text-blue-600" />
-            <h1 className="text-3xl font-bold text-blue-600">UniSchedule</h1>
-          </div>
-          <p className="text-sm text-blue-500 mt-1">대학생을 위한 팀 일정 매니저</p>
+        <div className="mb-6">
+          <Logo />
         </div>
         <div className="space-y-6">
           <div className="space-y-1.5">
