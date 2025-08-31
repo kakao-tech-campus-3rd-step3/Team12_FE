@@ -1,4 +1,6 @@
+import { Link } from 'react-router-dom';
 import { User, Lock } from 'lucide-react';
+import { RouterPath } from '@/routes/path';
 import Logo from '@/components/Logo';
 
 const Login = () => {
@@ -34,9 +36,12 @@ const Login = () => {
           <p className="text-xs text-gray-500 text-center cursor-pointer hover:underline">
             비밀번호를 잊으셨나요?
           </p>
-          <p className="text-xs text-gray-500 text-center mt-2 mb-6 cursor-pointer hover:underline">
+          <Link
+            to={RouterPath.SIGNUP}
+            className="block text-xs text-gray-500 text-center mt-2 mb-6 hover:underline"
+          >
             회원가입
-          </p>
+          </Link>
         </div>
       </div>
     </div>

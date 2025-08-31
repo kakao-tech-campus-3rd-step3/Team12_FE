@@ -4,6 +4,7 @@ export const RouterPath = {
   CALENDAR_VIEW: '/calendar/:view/:date',
   TEAM: '/team',
   LOGIN: '/login',
+  SIGNUP: '/signup',
   MEMBERS: '/members',
 };
 
