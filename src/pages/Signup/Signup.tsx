@@ -40,6 +40,7 @@ const Signup = () => {
                 />
               </div>
               <button
+                type="button"
                 onClick={() => setShowVerification(true)}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-4 rounded-lg font-medium cursor-pointer transition"
               >
@@ -63,7 +64,7 @@ const Signup = () => {
                 </div>
 
                 <div className="flex space-x-2">
-                  <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 rounded-lg font-medium cursor-pointer transition">
+                  <button type="button" className="bg-blue-600 hover:bg-blue-700 text-white px-4 rounded-lg font-medium cursor-pointer transition">
                     인증하기
                   </button>
                 </div>
