@@ -1,9 +1,17 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { User, Lock, Mail, KeyRound } from 'lucide-react';
+import { RouterPath } from '@/routes/path';
 import Logo from '@/components/Logo';
 
 const Signup = () => {
   const [showVerification, setShowVerification] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    navigate(RouterPath.LOGIN);
+  };
 
   return (
     <div className="flex items-center justify-center">
@@ -11,7 +19,7 @@ const Signup = () => {
         <div className="mb-7">
           <Logo />
         </div>
-        <div className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-1.5">
             <div className="flex items-center mb-3 border border-gray-300 rounded-lg px-3 py-3 hover:border-blue-500 focus-within:border-blue-500 transition">
               <User className="w-5 h-5 text-gray-400 mr-2" />
@@ -82,10 +90,13 @@ const Signup = () => {
             </div>
           </div>
 
-          <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium cursor-pointer transition">
+          <button
+            type="submit"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium cursor-pointer transition"
+          >
             회원가입 하기
           </button>
-        </div>
+        </form>
       </div>
     </div>
   );
