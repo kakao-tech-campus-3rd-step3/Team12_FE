@@ -33,7 +33,7 @@ const Signup = () => {
               </div>
               <button
                 onClick={() => setShowVerification(true)}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 rounded-lg font-medium transition"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 rounded-lg font-medium cursor-pointer transition"
               >
                 인증코드
               </button>
@@ -55,7 +55,7 @@ const Signup = () => {
                 </div>
 
                 <div className="flex space-x-2">
-                  <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 rounded-lg font-medium transition">
+                  <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 rounded-lg font-medium cursor-pointer transition">
                     인증하기
                   </button>
                 </div>
@@ -82,7 +82,7 @@ const Signup = () => {
             </div>
           </div>
 
-          <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium transition">
+          <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium cursor-pointer transition">
             회원가입 하기
           </button>
         </div>
