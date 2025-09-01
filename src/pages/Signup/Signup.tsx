@@ -6,7 +6,7 @@ const Signup = () => {
   const [showVerification, setShowVerification] = useState(false);
 
   return (
-    <div className="flex items-center justify-center h-screen overflow-hidden">
+    <div className="flex items-center justify-center">
       <div className="w-[340px]">
         <div className="mb-7">
           <Logo />

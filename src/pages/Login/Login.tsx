@@ -5,7 +5,7 @@ import Logo from '@/components/Logo';
 
 const Login = () => {
   return (
-    <div className="flex items-center justify-center h-screen overflow-hidden">
+    <div className="flex items-center justify-center">
       <div className="w-[340px]">
         <div className="mb-6">
           <Logo />
