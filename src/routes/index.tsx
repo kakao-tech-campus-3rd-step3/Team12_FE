@@ -1,6 +1,7 @@
 import Test from '@/components/Test';
 import RootLayout from '@/layout/RootLayout';
 import Calendar from '@/pages/Calendar/Calendar';
+import FullCalendar from '@/pages/Calendar/FullCalendar';
 import Login from '@/pages/Login/Login';
 import Signup from '@/pages/Signup/Signup';
 import { createBrowserRouter, Link } from 'react-router-dom';
@@ -88,6 +89,10 @@ export const router = createBrowserRouter([
             </div>
           </div>
         ),
+      },
+      {
+        path: RouterPath.FULL_CALENDAR.slice(1), // 'full-calendar'
+        element: <FullCalendar />,
       },
       {
         path: '*',
