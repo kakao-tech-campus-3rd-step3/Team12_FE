@@ -3,8 +3,8 @@ import Logo from '@/components/Logo';
 
 const Navigation = () => {
   return (
-    <nav className="sticky top-0 z-50 py-1 bg-white border-b border-gray-200">
-      <div className="flex justify-between items-center mx-auto max-w-6xl">
+    <nav className="sticky top-0 z-50 py-1  bg-white border-b border-gray-200">
+      <div className="flex justify-between items-center mx-10">
         <div>
           <Logo className="scale-80" />
         </div>
