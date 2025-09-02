@@ -2,6 +2,7 @@ import Test from '@/components/Test';
 import RootLayout from '@/layout/RootLayout';
 import Calendar from '@/pages/Calendar/Calendar';
 import Login from '@/pages/Login/Login';
+import Signup from '@/pages/Signup/Signup';
 import { createBrowserRouter, Link } from 'react-router-dom';
 import { RouterPath } from './path';
 
@@ -35,6 +36,10 @@ export const router = createBrowserRouter([
       {
         path: RouterPath.LOGIN.slice(1), // 'login'
         element: <Login />,
+      },
+      {
+        path: RouterPath.SIGNUP,
+        element: <Signup />,
       },
       {
         path: RouterPath.TEAM.slice(1), // 'team'
