@@ -1,8 +1,13 @@
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css');
 
 @import 'tailwindcss';
-// 애니메이션 추가 시 주석 삭제
+/* 애니메이션 추가 시 주석 삭제 */
 /* @import 'tw-animate-css'; */
+
+/* FullCalendar v6 CSS (CDN import) */
+@import url('https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.19/index.css');
+@import url('https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.19/index.css');
+@import url('https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@6.1.19/index.css');
 
 @layer base {
   body {
@@ -25,5 +30,170 @@
     font-weight: 400;
     margin: 0;
     min-height: 100vh;
+  }
+}
+
+/* FullCalendar 커스텀 스타일 */
+@layer components {
+  .fc * {
+    border: none !important;
+  }
+  /* 기본 캘린더 스타일 */
+  .fc {
+    @apply font-['Pretendard'] text-gray-900;
+  }
+  /* 헤더 스타일 */
+  .fc-toolbar {
+    @apply mb-6;
+  }
+
+  .fc-toolbar-title {
+    @apply text-2xl font-bold text-gray-900;
+  }
+
+  /* 요일 헤더 스타일 */
+  .fc-col-header-cell {
+    @apply !border-0 !bg-transparent;
+  }
+
+  .fc-col-header-cell.fc-day {
+    @apply !border-0 !bg-transparent;
+  }
+
+  .fc-col-header-cell-frame {
+    @apply !border-0 !bg-transparent;
+  }
+
+  /* 버튼 스타일 */
+  .fc-button {
+    @apply rounded-lg px-4 py-2 font-medium transition-all duration-200 shadow-sm bg-blue-500 border-blue-500 text-white;
+  }
+
+  .fc-button:hover {
+    @apply shadow-md transform -translate-y-0.5 bg-blue-600 border-blue-600;
+  }
+
+  .fc-button:active {
+    @apply bg-blue-700 border-blue-700;
+  }
+
+  /* 이벤트 스타일 */
+  .fc-event {
+    @apply !rounded-xl !border-0 shadow-sm transition-all duration-200 bg-blue-500 text-white;
+  }
+
+  .fc-event:hover {
+    @apply shadow-md transform scale-105;
+  }
+
+  /* 날짜 셀 스타일 */
+  .fc-daygrid-day {
+    @apply !rounded-none !m-0 !p-1 !overflow-visible !border-none;
+  }
+
+  .fc-daygrid-day-frame {
+    @apply !rounded-xl !overflow-hidden !ring-1 !ring-blue-200 !border-none;
+  }
+
+  .fc-daygrid-day:hover {
+    @apply bg-gray-50;
+  }
+
+  .fc-day-today {
+    @apply bg-blue-50;
+  }
+
+  /* 날짜 셀 내부 요소들도 둥글게 */
+
+  .fc-daygrid-day-events {
+    @apply !rounded-xl;
+  }
+
+  /* 날짜 셀 내부 모든 요소들 둥글게 */
+  .fc-daygrid-day-top {
+    @apply !rounded-t-xl;
+  }
+
+  .fc-daygrid-day-bottom {
+    @apply !rounded-b-xl;
+  }
+
+  /* 날짜 숫자 스타일 */
+  .fc-daygrid-day-number {
+    @apply rounded-lg px-1 py-0.5;
+  }
+
+  /* 주말 스타일 */
+  .fc-day-sun {
+    @apply bg-red-50;
+  }
+
+  .fc-day-sat {
+    @apply bg-blue-50;
+  }
+
+  /* 테두리 색상 */
+  .fc td,
+  .fc th {
+    @apply border-none;
+  }
+
+  /* 중립 색상 */
+  .fc-neutral {
+    @apply bg-gray-50 text-gray-500;
+  }
+
+  /* 하이라이트 색상 */
+  .fc-highlight {
+    @apply bg-blue-100;
+  }
+
+  .fc-daygrid-day.fc-day {
+    @apply !rounded-xl !m-1 !overflow-hidden !border-none;
+  }
+
+  .fc-daygrid-day-frame.fc-scrollgrid-sync-inner {
+    @apply !rounded-xl !border-none;
+  }
+
+  .fc-event.fc-daygrid-event {
+    @apply !rounded-xl !border-none;
+  }
+
+  /* 요일 헤더 강제 스타일 */
+  .fc .fc-col-header-cell {
+    @apply !border-none !bg-transparent;
+  }
+
+  .fc .fc-col-header-cell-frame {
+    @apply !border-none !bg-transparent;
+  }
+
+  .fc-col-header-cell.fc-day.fc-day-sun,
+  .fc-col-header-cell.fc-day.fc-day-mon,
+  .fc-col-header-cell.fc-day.fc-day-tue,
+  .fc-col-header-cell.fc-day.fc-day-wed,
+  .fc-col-header-cell.fc-day.fc-day-thu,
+  .fc-col-header-cell.fc-day.fc-day-fri,
+  .fc-col-header-cell.fc-day.fc-day-sat,
+  .fc-scrollgrid {
+    @apply !border-none !bg-transparent;
+  }
+
+  /* 전체 캘린더 테두리 제거 */
+  .fc .fc-scrollgrid {
+    @apply !border-none;
+  }
+
+  .fc .fc-scrollgrid-section-header {
+    @apply !border-none;
+  }
+
+  .fc .fc-scrollgrid-section-body {
+    @apply !border-none;
+  }
+
+  .fc .fc-scrollgrid-section-footer {
+    @apply !border-none;
   }
 }
