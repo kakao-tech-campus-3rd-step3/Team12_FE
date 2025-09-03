@@ -1,29 +1,160 @@
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css');
-
 @import 'tailwindcss';
-// 애니메이션 추가 시 주석 삭제
-/* @import 'tw-animate-css'; */
 
-@layer base {
-  body {
-    font-family:
-      'Pretendard',
-      -apple-system,
-      BlinkMacSystemFont,
-      system-ui,
-      Roboto,
-      'Helvetica Neue',
-      'Segoe UI',
-      'Apple SD Gothic Neo',
-      'Noto Sans KR',
-      'Malgun Gothic',
-      'Apple Color Emoji',
-      'Segoe UI Emoji',
-      'Segoe UI Symbol',
-      sans-serif;
-    line-height: 1.5;
-    font-weight: 400;
-    margin: 0;
-    min-height: 100vh;
-  }
+.rbc-calendar {
+  font-family:
+    'Pretendard',
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    'Noto Sans KR',
+    Arial,
+    sans-serif;
+  color: #111827;
+  background: #fff;
+}
+
+.rbc-toolbar {
+  display: none !important;
+}
+
+.rbc-header {
+  padding: 2px 5px;
+  font-weight: 700;
+  color: #6b7280;
+  font-size: 16px;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* 월간 뷰 컨테이너 */
+.rbc-month-view {
+  border: none !important;
+  background: #fff;
+}
+
+/* 월간 뷰 각 날짜 셀 배경 레이어*/
+.rbc-row-bg .rbc-day-bg {
+  border: none !important;
+  margin: 4px;
+  background: #fff;
+  transition: border-color 0.15s ease;
+}
+
+.rbc-row-bg .rbc-day-bg:hover {
+  background: #f9fafb;
+  border-color: #d1d5db;
+}
+
+/* 날짜 숫자 */
+.rbc-date-cell {
+  margin: 9px;
+  text-align: right;
+  font-weight: 600;
+  font-size: 14px;
+  color: #374151;
+}
+
+/* 오늘 날짜 하이라이트*/
+.rbc-today {
+  background: #f3f4f6 !important;
+  border-radius: 12px;
+}
+
+.rbc-today .rbc-date-cell {
+  color: #2563eb;
+  font-weight: 800;
+}
+
+/* 이전/다음 달 날짜 흐리게 */
+.rbc-off-range-bg {
+  background: transparent !important;
+}
+
+.rbc-off-range .rbc-date-cell {
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+/* 이벤트(캡슐형) */
+.rbc-event {
+  border-radius: 8px;
+  padding: 6px 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: none;
+  background: #2563eb;
+  color: #fff;
+  box-shadow: 0 1px 3px rgba(17, 24, 39, 0.1);
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease,
+    opacity 0.12s ease;
+}
+
+.rbc-event:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(17, 24, 39, 0.12);
+  opacity: 0.95;
+}
+
+/* 이벤트 더보기 버튼 */
+.rbc-show-more {
+  background: #2563eb;
+  color: #fff;
+  border-radius: 8px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border: none;
+  box-shadow: 0 1px 3px rgba(17, 24, 39, 0.1);
+}
+
+.rbc-show-more:hover {
+  background: #1d4ed8;
+}
+
+.rbc-time-view {
+  border: none !important;
+  overflow: hidden;
+  background: #fff;
+}
+
+.rbc-time-header,
+.rbc-time-content {
+  border-color: #e5e7eb;
+}
+
+.rbc-time-content > * + * > * {
+  border-left: 1px solid #e5e7eb;
+}
+
+.rbc-time-slot {
+  border-top: 1px solid #f3f4f6;
+}
+
+.rbc-timeslot-group {
+  border-bottom: 1px solid #f3f4f6;
+}
+
+/* 선택 드래그 영역 */
+.rbc-slot-selection {
+  background: rgba(37, 99, 235, 0.08);
+  border: 1px dashed rgba(37, 99, 235, 0.5);
+  border-radius: 10px;
+}
+
+/* 현재 시간 인디케이터*/
+.rbc-current-time-indicator {
+  background-color: #ef4444 !important;
+  height: 2px;
+  border-radius: 1px;
+}
+
+/* 캡션을 별도로 쓰는 경우를 위한 제목 스타일*/
+.rbc-toolbar-label {
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: #111827;
 }

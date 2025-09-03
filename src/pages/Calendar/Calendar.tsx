@@ -1,173 +1,220 @@
-import { CalendarPaths } from '@/routes/path';
-import { useEffect, useState } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useState, useCallback } from 'react';
+import { Calendar as BigCalendar, momentLocalizer, Views } from 'react-big-calendar';
+import type { View } from 'react-big-calendar';
+import moment from 'moment';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+import type { CalendarEvent } from '@/types';
+import { Plus } from 'lucide-react';
 
-type ViewType = 'day' | 'week' | 'month';
+moment.locale('ko');
+const localizer = momentLocalizer(moment);
 
 const Calendar = () => {
-  const { date, view } = useParams<{ date?: string; view?: string }>();
-  const navigate = useNavigate();
-  const location = useLocation();
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [currentView, setCurrentView] = useState<View>(Views.MONTH);
+  const [showEventModal, setShowEventModal] = useState(false);
+  const [selectedSlot, setSelectedSlot] = useState<any>(null);
+  const [events, setEvents] = useState<CalendarEvent[]>([
+    {
+      id: '1',
+      title: '팀 미팅',
+      start: new Date(2025, 8, 10, 14, 0),
+      end: new Date(2025, 8, 10, 15, 30),
+    },
+    {
+      id: '2',
+      title: '프로젝트 발표',
+      start: new Date(2025, 8, 15, 10, 0),
+      end: new Date(2025, 8, 15, 12, 0),
+    },
+    {
+      id: '3',
+      title: '코드 리뷰',
+      start: new Date(2025, 8, 8, 16, 0),
+      end: new Date(2025, 8, 8, 17, 0),
+    },
+  ]);
 
-  const getToday = (): string => {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = (now.getMonth() + 1).toString().padStart(2, '0');
-    const date = now.getDate().toString().padStart(2, '0');
-    return `${year}-${month}-${date}`;
-  };
+  const handleSelectSlot = useCallback((slotInfo: any) => {
+    setSelectedSlot(slotInfo);
+    setShowEventModal(true);
+  }, []);
 
-  // URL에서 뷰와 날짜 추출
-  const getViewFromPath = (pathname: string): ViewType => {
-    if (pathname.includes('/day/')) return 'day';
-    if (pathname.includes('/week/')) return 'week';
-    if (pathname.includes('/month/')) return 'month';
-    return 'day';
-  };
+  const handleSelectEvent = useCallback((event: CalendarEvent) => {
+    alert(`이벤트: ${event.title}`);
+  }, []);
 
-  const [currentView, setCurrentView] = useState<ViewType>(() =>
-    getViewFromPath(location.pathname),
+  const handleNavigate = useCallback((newDate: Date) => {
+    setCurrentDate(newDate);
+  }, []);
+
+  const handleViewChange = useCallback((view: View) => {
+    setCurrentView(view);
+  }, []);
+
+  const addEvent = useCallback(
+    (title: string) => {
+      if (selectedSlot && title.trim()) {
+        const newEvent: CalendarEvent = {
+          id: Date.now().toString(),
+          title: title.trim(),
+          start: selectedSlot.start,
+          end: selectedSlot.end,
+        };
+        setEvents((prev) => [...prev, newEvent]);
+      }
+      setShowEventModal(false);
+      setSelectedSlot(null);
+    },
+    [selectedSlot],
   );
-  const [currentDate, setCurrentDate] = useState(() => date || getToday());
 
-  // 뷰 변경 시 URL 업데이트
-  const handleViewChange = (newView: ViewType) => {
-    setCurrentView(newView);
-    const path = CalendarPaths[newView](currentDate);
-    navigate(path);
+  const eventStyleGetter = (event: CalendarEvent) => {
+    const style = {
+      backgroundColor: '#3b82f6',
+      borderRadius: '6px',
+      opacity: 0.8,
+      color: 'white',
+      border: '0px',
+      display: 'block',
+      fontSize: '12px',
+      fontWeight: '500',
+    };
+    return { style };
   };
 
-  // URL 변경 감지하여 상태 업데이트
-  useEffect(() => {
-    const newView = getViewFromPath(location.pathname);
-    if (newView !== currentView) {
-      setCurrentView(newView);
-    }
-
-    if (date && date !== currentDate) {
-      setCurrentDate(date);
-    }
-  }, [location.pathname, date, currentView, currentDate]);
-
-  const renderCalendarContent = () => {
-    switch (currentView) {
-      case 'day':
-        return (
-          <div className="p-6 bg-white rounded-lg shadow-md">
-            <p className="mb-4 text-lg text-gray-600">
-              선택된 날짜: <span className="font-semibold text-blue-600">{currentDate}</span>
-            </p>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-              <div className="p-4 bg-blue-50 rounded-lg">
-                <h3 className="font-medium text-blue-800">오전</h3>
-                <p className="text-sm text-blue-600">일정 없음</p>
-              </div>
-              <div className="p-4 bg-green-50 rounded-lg">
-                <h3 className="font-medium text-green-800">오후</h3>
-                <p className="text-sm text-green-600">팀 미팅 2:00 PM</p>
-              </div>
-              <div className="p-4 bg-purple-50 rounded-lg">
-                <h3 className="font-medium text-purple-800">저녁</h3>
-                <p className="text-sm text-purple-600">일정 없음</p>
-              </div>
-            </div>
-          </div>
-        );
-
-      case 'week':
-        return (
-          <div className="p-6 bg-white rounded-lg shadow-md">
-            <p className="mb-4 text-lg text-gray-600">
-              선택된 주: <span className="font-semibold text-green-600">2025년 35주차</span>
-            </p>
-            <div className="grid grid-cols-7 gap-2">
-              {['월', '화', '수', '목', '금', '토', '일'].map((day, index) => (
-                <div key={day} className="p-3 text-center bg-gray-50 rounded-lg">
-                  <div className="font-medium text-gray-800">{day}</div>
-                  <div className="text-sm text-gray-600">
-                    {currentDate.slice(5, 7)}/{currentDate.slice(8, 10)}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        );
-
-      case 'month':
-        return (
-          <div className="p-6 bg-white rounded-lg shadow-md">
-            <p className="mb-4 text-lg text-gray-600">
-              선택된 월: <span className="font-semibold text-purple-600">2025년 8월</span>
-            </p>
-            <div className="grid grid-cols-7 gap-1">
-              {['일', '월', '화', '수', '목', '금', '토'].map((day) => (
-                <div
-                  key={day}
-                  className="p-2 text-sm font-medium text-center text-gray-600 bg-gray-100"
-                >
-                  {day}
-                </div>
-              ))}
-              {Array.from({ length: 31 }, (_, i) => (
-                <div
-                  key={i}
-                  className="p-2 text-sm text-center border border-gray-200 cursor-pointer hover:bg-gray-50"
-                >
-                  {i + 1}
-                </div>
-              ))}
-            </div>
-          </div>
-        );
-
-      default:
-        return null;
-    }
+  const messages = {
+    allDay: '종일',
+    previous: '이전',
+    next: '다음',
+    today: '오늘',
+    month: '월',
+    week: '주',
+    day: '일',
+    agenda: '일정',
+    date: '날짜',
+    time: '시간',
+    event: '이벤트',
+    noEventsInRange: '이 범위에는 이벤트가 없습니다.',
+    showMore: (total: number) => `+${total}개 더보기`,
   };
 
   return (
-    <div className="mx-auto max-w-4xl">
-      <div className="mb-6 text-center">
-        <h2 className="mb-4 text-3xl font-bold text-gray-800">캘린더</h2>
-        <p className="mb-6 text-gray-600">원하는 뷰를 선택하세요</p>
+    <div className="flex items-center justify-center bg-gray-50">
+      <div className="w-full max-w-6xl mx-4">
+        <div className="mb-4 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div className="flex items-center justify-between">
+            <button
+              onClick={() => setShowEventModal(true)}
+              className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200"
+            >
+              <Plus className="w-4 h-4" />새 일정
+            </button>
 
-        {/* 뷰 전환 버튼들 */}
-        <div className="flex gap-4 justify-center mb-8">
-          <button
-            onClick={() => handleViewChange('day')}
-            className={`px-6 py-3 rounded-lg font-medium transition-all duration-200 ${
-              currentView === 'day'
-                ? 'bg-blue-600 text-white shadow-lg'
-                : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
-            }`}
-          >
-            일간 뷰
-          </button>
-          <button
-            onClick={() => handleViewChange('week')}
-            className={`px-6 py-3 rounded-lg font-medium transition-all duration-200 ${
-              currentView === 'week'
-                ? 'bg-green-600 text-white shadow-lg'
-                : 'bg-green-50 text-green-600 hover:bg-green-100'
-            }`}
-          >
-            주간 뷰
-          </button>
-          <button
-            onClick={() => handleViewChange('month')}
-            className={`px-6 py-3 rounded-lg font-medium transition-all duration-200 ${
-              currentView === 'month'
-                ? 'bg-purple-600 text-white shadow-lg'
-                : 'bg-purple-50 text-purple-600 hover:bg-purple-100'
-            }`}
-          >
-            월간 뷰
-          </button>
+            <div className="flex gap-2">
+              {[
+                { view: Views.MONTH, label: '월간' },
+                { view: Views.WEEK, label: '주간' },
+                { view: Views.DAY, label: '일간' },
+              ].map(({ view, label }) => (
+                <button
+                  key={view}
+                  onClick={() => handleViewChange(view)}
+                  className={`px-4 py-2 rounded-lg font-medium transition-colors duration-200 ${
+                    currentView === view
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
-      </div>
 
-      {/* 캘린더 내용 */}
-      {renderCalendarContent()}
+        {/* 캘린더 */}
+        <div className="w-[900px] bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <BigCalendar
+            localizer={localizer}
+            events={events}
+            startAccessor="start"
+            endAccessor="end"
+            style={{ height: 700 }}
+            onSelectEvent={handleSelectEvent}
+            onSelectSlot={handleSelectSlot}
+            selectable
+            onNavigate={handleNavigate}
+            onView={handleViewChange}
+            view={currentView}
+            date={currentDate}
+            eventPropGetter={eventStyleGetter}
+            messages={messages}
+            formats={{
+              monthHeaderFormat: 'YYYY년 M월',
+              dayHeaderFormat: 'M월 D일 dddd',
+              dayRangeHeaderFormat: (range: { start: Date; end: Date }) => {
+                const start = moment(range.start).format('M월 D일');
+                const end = moment(range.end).format('M월 D일');
+                return `${start} - ${end}`;
+              },
+            }}
+          />
+        </div>
+
+        {/* 새 일정 모달 */}
+        {showEventModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-6 w-96 mx-4">
+              <h3 className="text-lg font-semibold mb-4">새 일정 추가</h3>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const formData = new FormData(e.target as HTMLFormElement);
+                  const title = formData.get('title') as string;
+                  addEvent(title);
+                }}
+              >
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">일정 제목</label>
+                  <input
+                    type="text"
+                    name="title"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                    placeholder="일정 제목을 입력하세요"
+                    autoFocus
+                    required
+                  />
+                </div>
+                {selectedSlot && (
+                  <div className="mb-4 text-sm text-gray-600">
+                    <p>시작: {moment(selectedSlot.start).format('YYYY-MM-DD HH:mm')}</p>
+                    <p>종료: {moment(selectedSlot.end).format('YYYY-MM-DD HH:mm')}</p>
+                  </div>
+                )}
+                <div className="flex gap-3 justify-end">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowEventModal(false);
+                      setSelectedSlot(null);
+                    }}
+                    className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                  >
+                    취소
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  >
+                    추가
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
