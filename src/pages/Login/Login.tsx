@@ -1,7 +1,7 @@
-import { Link } from 'react-router-dom';
-import { User, Lock } from 'lucide-react';
+import Logo from '@/components/common/Logo';
 import { RouterPath } from '@/routes/path';
-import Logo from '@/components/Logo';
+import { Lock, User } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
   return (
