@@ -6,6 +6,7 @@ export const RouterPath = {
   LOGIN: '/login',
   SIGNUP: '/signup',
   MEMBERS: '/members',
+  FULL_CALENDAR: '/full-calendar',
 };
 
 export const createCalendarPath = (view: string, date: string) => `/calendar/${view}/${date}`;
