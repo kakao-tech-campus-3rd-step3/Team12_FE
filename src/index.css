@@ -33,6 +33,11 @@
   }
 }
 
+@theme {
+  --color-mainBlue: #165dfb;
+  --color-mainGreen: #00c856;
+}
+
 /* FullCalendar 커스텀 스타일 */
 @layer components {
   .fc * {
@@ -44,50 +49,115 @@
   }
   /* 헤더 스타일 */
   .fc-toolbar {
-    @apply mb-6;
+    @apply mb-6 flex items-center justify-between;
   }
 
   .fc-toolbar-title {
-    @apply text-lg text-gray-900;
+    @apply text-xl font-semibold text-gray-900;
+  }
+
+  /* 헤더 버튼 그룹 스타일 */
+  .fc-toolbar-chunk {
+    @apply flex items-center gap-3;
+  }
+  /* 버튼 스타일 */
+  .fc-button {
+    @apply rounded-lg px-4 py-2 font-medium transition-all duration-200 shadow-sm !bg-blue-200 !border-blue-200 !text-white;
+  }
+
+  .fc-button:hover {
+    @apply shadow-md transform -translate-y-0.5 !bg-blue-600 !border-blue-600;
+  }
+
+  .fc-button:active {
+    @apply !bg-blue-700 !border-blue-700;
+  }
+
+  /* 네비게이션 버튼 스타일 */
+  .fc-prev-button,
+  .fc-next-button {
+    @apply rounded-lg px-3 py-2 font-medium transition-all duration-200 shadow-sm !bg-gray-50 !border !border-gray-300 !text-gray-700;
+  }
+
+  .fc-prev-button:hover,
+  .fc-next-button:hover {
+    @apply shadow-md transform -translate-y-0.5 !bg-gray-200 !border-gray-200;
+  }
+  /* 새 일정 버튼 스타일 */
+  .fc-addEvent-button {
+    @apply rounded-lg px-4 py-2 font-medium transition-all duration-200 shadow-sm
+  !bg-blue-500 !border-blue-500 !text-white hover:bg-blue-600 hover:border-blue-600;
+  }
+
+  .fc-addEvent-button:hover {
+    @apply shadow-md transform -translate-y-0.5;
+  }
+
+  /* 오늘 버튼 스타일 */
+  .fc-today-button {
+    @apply rounded-lg px-4 py-2 font-medium transition-all duration-200 shadow-sm !bg-mainGreen !border-mainGreen !text-white hover:bg-mainGreen hover:border-mainGreen;
+  }
+
+  .fc-today-button:hover {
+    @apply shadow-md transform -translate-y-0.5 !bg-mainGreen/80 !border-mainGreen/80;
+  }
+
+  /* 뷰 버튼 그룹 스타일 */
+  .fc-button-group {
+    @apply flex overflow-hidden border border-gray-300 p-1;
+  }
+
+  .fc-button-group .fc-button {
+    @apply border-0 shadow-none !bg-gray-100 !text-gray-600 hover:!bg-gray-100;
+  }
+
+  .fc-button-group .fc-button-active {
+    @apply !bg-mainBlue !text-white hover:!bg-mainBlue;
+  }
+
+  .fc-dayGridMonth-button,
+  .fc-timeGridWeek-button,
+  .fc-timeGridDay-button,
+  .fc-month-button,
+  .fc-week-button,
+  .fc-day-button {
+    @apply !rounded-lg !border-0 !shadow-none !bg-gray-100 !text-gray-600 hover:!bg-gray-200 !mx-1 !px-4 !py-2 transition-all duration-200 hover:shadow-md;
+  }
+
+  .fc-dayGridMonth-button.fc-button-active,
+  .fc-timeGridWeek-button.fc-button-active,
+  .fc-timeGridDay-button.fc-button-active,
+  .fc-month-button.fc-button-active,
+  .fc-week-button.fc-button-active,
+  .fc-day-button.fc-button-active {
+    @apply !bg-mainBlue !text-white hover:!bg-mainBlue/80 shadow-md;
   }
 
   /* 요일 헤더 스타일 */
-  .fc-col-header-cell.fc-day.fc-day-sun,
-  .fc-col-header-cell.fc-day.fc-day-mon,
-  .fc-col-header-cell.fc-day.fc-day-tue,
-  .fc-col-header-cell.fc-day.fc-day-wed,
-  .fc-col-header-cell.fc-day.fc-day-thu,
-  .fc-col-header-cell.fc-day.fc-day-fri,
-  .fc-col-header-cell.fc-day.fc-day-sat {
-    @apply !border-none !bg-transparent text-gray-900;
+  .fc-col-header-cell {
+    @apply !border-none !bg-transparent !text-gray-900 !font-medium !py-3;
   }
+
+  .fc-col-header-cell .fc-col-header-cell-cushion {
+    @apply !text-gray-900 !font-medium;
+  }
+
   /* 요일 헤더 - 일요일 텍스트 빨간색 */
-  .fc-col-header-cell.fc-day.fc-day-sun {
-    @apply text-red-600;
+  .fc-day-sun .fc-col-header-cell-cushion {
+    @apply !text-red-600;
   }
-  .fc-col-header-cell.fc-day.fc-day-sat {
-    @apply text-blue-500;
+
+  /* 요일 헤더 - 토요일 텍스트 파란색 */
+  .fc-day-sat .fc-col-header-cell-cushion {
+    @apply !text-blue-600;
   }
   .fc-scrollgrid {
     @apply !border-none text-blue-300;
   }
 
-  /* 버튼 스타일 */
-  .fc-button {
-    @apply rounded-lg px-4 py-2 font-medium transition-all duration-200 shadow-sm bg-red-500 border-red-500 text-white;
-  }
-
-  .fc-button:hover {
-    @apply shadow-md transform -translate-y-0.5 bg-blue-600 border-red-600;
-  }
-
-  .fc-button:active {
-    @apply bg-red-700 border-red-700;
-  }
-
   /* 이벤트 스타일 */
   .fc-event {
-    @apply !rounded-xl !border-0 shadow-sm transition-all duration-200 bg-blue-500 text-white;
+    @apply !rounded-xl !border-0 shadow-sm transition-all duration-200 !bg-blue-500 !text-white;
   }
 
   .fc-event:hover {

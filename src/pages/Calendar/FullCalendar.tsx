@@ -2,7 +2,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 
 type CalendarEvent = {
   id: string;
@@ -17,6 +17,8 @@ const CalendarPage = () => {
     { id: '1', title: '팀미팅', start: new Date().toISOString(), allDay: false },
   ]);
 
+  const calendarRef = useRef<any>(null);
+
   const plugins = useMemo(() => [dayGridPlugin, timeGridPlugin, interactionPlugin], []);
 
   return (
@@ -30,12 +32,55 @@ const CalendarPage = () => {
         <div className="overflow-hidden bg-white rounded-2xl shadow-xl">
           <div className="p-6">
             <FullCalendar
+              ref={calendarRef}
               plugins={plugins}
               initialView="dayGridMonth"
               headerToolbar={{
-                left: 'prev,next today', // 이전/다음/오늘 버튼
-                center: 'title', // 제목 (연도 월)
+                left: 'addEvent today', // 새 일정, 오늘 버튼
+                center: 'prev title next', // 이전, 제목, 다음 버튼
                 right: 'dayGridMonth,timeGridWeek,timeGridDay', // 월/주/일 뷰
+              }}
+              customButtons={{
+                addEvent: {
+                  text: '+ 새 일정',
+                  click: () => {
+                    const title = prompt('일정 제목을 입력하세요');
+                    if (!title) return;
+                    setEvents((prev) => [
+                      ...prev,
+                      {
+                        id: crypto.randomUUID(),
+                        title,
+                        start: new Date().toISOString(),
+                        allDay: true,
+                      },
+                    ]);
+                  },
+                },
+                today: {
+                  text: '오늘',
+                  click: () => {
+                    calendarRef.current?.getApi().gotoToday();
+                  },
+                },
+                dayGridMonth: {
+                  text: '월간',
+                  click: () => {
+                    calendarRef.current?.getApi().changeView('dayGridMonth');
+                  },
+                },
+                timeGridWeek: {
+                  text: '주간',
+                  click: () => {
+                    calendarRef.current?.getApi().changeView('timeGridWeek');
+                  },
+                },
+                timeGridDay: {
+                  text: '일간',
+                  click: () => {
+                    calendarRef.current?.getApi().changeView('timeGridDay');
+                  },
+                },
               }}
               locale="ko"
               height="auto"
@@ -50,8 +95,16 @@ const CalendarPage = () => {
                 minute: '2-digit', // 분을 2자리로 표시 (05, 30)
                 meridiem: false, // AM/PM 표시 안함 (24시간 형식)
               }}
-              dayHeaderFormat={{
-                weekday: 'short', // 요일을 짧게 표시 (월, 화, 수...)
+              views={{
+                dayGridMonth: {
+                  dayHeaderFormat: { weekday: 'short' }, // 월 뷰에서는 요일만
+                },
+                timeGridWeek: {
+                  dayHeaderFormat: { weekday: 'short', day: 'numeric' }, // 주 뷰에서는 요일과 날짜
+                },
+                timeGridDay: {
+                  dayHeaderFormat: { weekday: 'short', day: 'numeric' }, // 일 뷰에서는 요일과 날짜
+                },
               }}
               titleFormat={{
                 year: 'numeric', // 연도를 숫자로 표시 (2024)
