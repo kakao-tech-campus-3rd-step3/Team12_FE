@@ -1,8 +1,8 @@
+import Logo from '@/components/common/Logo';
+import { RouterPath } from '@/routes/path';
+import { KeyRound, Lock, Mail, User } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, Lock, Mail, KeyRound } from 'lucide-react';
-import { RouterPath } from '@/routes/path';
-import Logo from '@/components/Logo';
 
 const Signup = () => {
   const [showVerification, setShowVerification] = useState(false);
@@ -64,7 +64,10 @@ const Signup = () => {
                 </div>
 
                 <div className="flex space-x-2">
-                  <button type="button" className="bg-blue-600 hover:bg-blue-700 text-white px-4 rounded-lg font-medium cursor-pointer transition">
+                  <button
+                    type="button"
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 rounded-lg font-medium cursor-pointer transition"
+                  >
                     인증하기
                   </button>
                 </div>
