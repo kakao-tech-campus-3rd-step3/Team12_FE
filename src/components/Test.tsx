@@ -1,4 +1,9 @@
+import Button from '@/components/common/BlueButton';
+import TimeTableModal from '@/components/common/TimeTableModal';
+import { useState } from 'react';
+
 const Test = () => {
+  const [isOpen, setIsOpen] = useState(false);
   return (
     //**
     // padding: p-4
@@ -12,9 +17,9 @@ const Test = () => {
     // gap-4: 그리드 간격 4
     //*/
     <div className="grid grid-cols-2 gap-4 p-4 m-4 text-white bg-red-500 rounded-md border border-gray-300 transition-all duration-200 hover:bg-red-600">
-      <div className="p-4 m-4 text-white bg-blue-500 rounded-md border border-gray-300 transition-all duration-200 hover:bg-blue-600">
-        Test
-      </div>
+      <TimeTableModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
+      <Button handleSubmit={() => setIsOpen(true)} text="모달 켜기" />
+
       <div className="p-4 m-4 text-white bg-red-500 rounded-md border border-gray-300 transition-all duration-200 hover:bg-red-600">
         Test 2
       </div>
