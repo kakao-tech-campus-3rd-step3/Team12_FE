@@ -4,7 +4,7 @@ import type { View } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import type { CalendarEvent } from '@/types';
-import { Plus } from 'lucide-react';
+import { Plus, ChevronLeft, ChevronRight } from 'lucide-react';
 
 moment.locale('ko');
 const localizer = momentLocalizer(moment);
@@ -14,6 +14,9 @@ const Calendar = () => {
   const [currentView, setCurrentView] = useState<View>(Views.MONTH);
   const [showEventModal, setShowEventModal] = useState(false);
   const [selectedSlot, setSelectedSlot] = useState<any>(null);
+  {
+    /*mock 일정*/
+  }
   const [events, setEvents] = useState<CalendarEvent[]>([
     {
       id: '1',
@@ -70,24 +73,29 @@ const Calendar = () => {
   );
 
   const eventStyleGetter = (event: CalendarEvent) => {
+    const colors = ['#8B5CF6', '#06B6D4', '#10B981', '#F59E0B', '#EF4444'];
+    const colorIndex = event.id.charCodeAt(0) % colors.length;
+
     const style = {
-      backgroundColor: '#3b82f6',
-      borderRadius: '6px',
-      opacity: 0.8,
+      backgroundColor: colors[colorIndex],
+      borderRadius: '12px',
+      opacity: 0.9,
       color: 'white',
       border: '0px',
       display: 'block',
       fontSize: '12px',
-      fontWeight: '500',
+      fontWeight: '600',
+      padding: '4px 8px',
+      boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
     };
     return { style };
   };
 
   const messages = {
     allDay: '종일',
-    previous: '이전',
-    next: '다음',
-    today: '오늘',
+    previous: '',
+    next: '',
+    today: '',
     month: '월',
     week: '주',
     day: '일',
@@ -99,18 +107,86 @@ const Calendar = () => {
     showMore: (total: number) => `+${total}개 더보기`,
   };
 
+  const navigatePrevious = () => {
+    const newDate = new Date(currentDate);
+    if (currentView === Views.MONTH) {
+      newDate.setMonth(newDate.getMonth() - 1);
+    } else if (currentView === Views.WEEK) {
+      newDate.setDate(newDate.getDate() - 7);
+    } else {
+      newDate.setDate(newDate.getDate() - 1);
+    }
+    setCurrentDate(newDate);
+  };
+
+  const navigateNext = () => {
+    const newDate = new Date(currentDate);
+    if (currentView === Views.MONTH) {
+      newDate.setMonth(newDate.getMonth() + 1);
+    } else if (currentView === Views.WEEK) {
+      newDate.setDate(newDate.getDate() + 7);
+    } else {
+      newDate.setDate(newDate.getDate() + 1);
+    }
+    setCurrentDate(newDate);
+  };
+
+  const navigateToday = () => {
+    setCurrentDate(new Date());
+  };
+
+  const getCurrentPeriod = () => {
+    if (currentView === Views.MONTH) {
+      return moment(currentDate).format('YYYY년 M월');
+    } else if (currentView === Views.WEEK) {
+      const start = moment(currentDate).startOf('week');
+      const end = moment(currentDate).endOf('week');
+      return `${start.format('M월 D일')} - ${end.format('M월 D일')}`;
+    } else {
+      return moment(currentDate).format('YYYY년 M월 D일');
+    }
+  };
+
   return (
-    <div className="flex items-center justify-center bg-gray-50">
+    <div className="m-4 flex items-center justify-center bg-gray-50">
       <div className="w-full max-w-6xl mx-4">
+        {/* 커스텀 툴바 */}
         <div className="mb-4 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
           <div className="flex items-center justify-between">
-            <button
-              onClick={() => setShowEventModal(true)}
-              className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200"
-            >
-              <Plus className="w-4 h-4" />새 일정
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setShowEventModal(true)}
+                className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200"
+              >
+                <Plus className="w-4 h-4" />새 일정
+              </button>
+              <button
+                onClick={navigateToday}
+                className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-medium transition-colors duration-200"
+              >
+                오늘
+              </button>
+            </div>
 
+            <div className="flex items-center gap-4">
+              <button
+                onClick={navigatePrevious}
+                className="p-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors duration-200"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <div className="text-center">
+                <h2 className="text-xl font-bold text-gray-800">{getCurrentPeriod()}</h2>
+              </div>
+              <button
+                onClick={navigateNext}
+                className="p-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors duration-200"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* 오른쪽: 월간/주간/일간 버튼 */}
             <div className="flex gap-2">
               {[
                 { view: Views.MONTH, label: '월간' },
@@ -120,7 +196,7 @@ const Calendar = () => {
                 <button
                   key={view}
                   onClick={() => handleViewChange(view)}
-                  className={`px-4 py-2 rounded-lg font-medium transition-colors duration-200 ${
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors duration-200 ${
                     currentView === view
                       ? 'bg-blue-600 text-white'
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -165,7 +241,7 @@ const Calendar = () => {
         {/* 새 일정 모달 */}
         {showEventModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-6 w-96 mx-4">
+            <div className="bg-white rounded-lg p-6 w-96 mx-4 shadow-xl">
               <h3 className="text-lg font-semibold mb-4">새 일정 추가</h3>
               <form
                 onSubmit={(e) => {
