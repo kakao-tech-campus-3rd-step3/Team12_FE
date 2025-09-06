@@ -1,6 +1,6 @@
-import Button from '@/components/common/Button';
-import ModalHeader from '@/components/common/ModalHeader';
-import ImageInput from '@/components/Timetable/ImageInput';
+import Button from '@/components/atoms/Button';
+import ModalHeader from '@/components/common/Modal/ModalHeader';
+import ImageInput from '@/pages/Calendar/components/TimetableModal/ImageInput';
 import React, { useEffect, useState } from 'react';
 
 interface TimeTableModalProps {

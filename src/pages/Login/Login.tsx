@@ -1,4 +1,4 @@
-import Logo from '@/components/common/Logo';
+import Logo from '@/components/atoms/Logo';
 import { RouterPath } from '@/routes/path';
 import { Lock, User } from 'lucide-react';
 import { Link } from 'react-router-dom';
