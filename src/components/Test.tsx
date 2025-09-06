@@ -1,5 +1,5 @@
 import Button from '@/components/common/BlueButton';
-import TimeTableModal from '@/components/common/TimetableModal';
+import TimeTableModal from '@/components/Timetable/TimetableModal';
 import { useState } from 'react';
 
 const Test = () => {
