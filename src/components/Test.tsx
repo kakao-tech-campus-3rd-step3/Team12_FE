@@ -1,6 +1,7 @@
-import Button from '@/components/common/BlueButton';
+import Button from '@/components/common/Button';
 import TimeTableModal from '@/components/Timetable/TimetableModal';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const Test = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,9 +21,12 @@ const Test = () => {
       <TimeTableModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
       <Button handleSubmit={() => setIsOpen(true)} text="모달 켜기" />
 
-      <div className="p-4 m-4 text-white bg-red-500 rounded-md border border-gray-300 transition-all duration-200 hover:bg-red-600">
-        Test 2
-      </div>
+      <Link
+        to="/calendar"
+        className="p-4 m-4 text-white bg-red-500 rounded-md border border-gray-300 transition-all duration-200 hover:bg-red-600"
+      >
+        Calendar
+      </Link>
     </div>
   );
 };

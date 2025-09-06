@@ -1,6 +1,5 @@
 import Test from '@/components/Test';
 import RootLayout from '@/layout/RootLayout';
-import Calendar from '@/pages/Calendar/Calendar';
 import FullCalendar from '@/pages/Calendar/FullCalendar';
 import Login from '@/pages/Login/Login';
 import Signup from '@/pages/Signup/Signup';
@@ -22,17 +21,8 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: RouterPath.CALENDAR.slice(1), // 'calendar'
-        children: [
-          {
-            index: true,
-            element: <Calendar />,
-          },
-          {
-            path: ':view/:date',
-            element: <Calendar />,
-          },
-        ],
+        path: RouterPath.CALENDAR, // 'calendar'
+        element: <FullCalendar />,
       },
       {
         path: RouterPath.LOGIN.slice(1), // 'login'
@@ -90,10 +80,7 @@ export const router = createBrowserRouter([
           </div>
         ),
       },
-      {
-        path: RouterPath.FULL_CALENDAR.slice(1), // 'full-calendar'
-        element: <FullCalendar />,
-      },
+
       {
         path: '*',
         element: (
