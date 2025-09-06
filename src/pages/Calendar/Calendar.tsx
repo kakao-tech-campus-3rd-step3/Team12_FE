@@ -81,7 +81,7 @@ const Calendar = () => {
               선택된 주: <span className="font-semibold text-green-600">2025년 35주차</span>
             </p>
             <div className="grid grid-cols-7 gap-2">
-              {['월', '화', '수', '목', '금', '토', '일'].map((day, index) => (
+              {['월', '화', '수', '목', '금', '토', '일'].map((day) => (
                 <div key={day} className="p-3 text-center bg-gray-50 rounded-lg">
                   <div className="font-medium text-gray-800">{day}</div>
                   <div className="text-sm text-gray-600">
