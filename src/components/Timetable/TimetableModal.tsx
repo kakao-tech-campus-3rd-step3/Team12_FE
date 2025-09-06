@@ -1,5 +1,5 @@
 import Button from '@/components/common/BlueButton';
-import ImageInput from '@/components/common/ImageInput';
+import ImageInput from '@/components/Timetable/ImageInput';
 import ModalHeader from '@/components/common/ModalHeader';
 import React, { useEffect, useState } from 'react';
 
