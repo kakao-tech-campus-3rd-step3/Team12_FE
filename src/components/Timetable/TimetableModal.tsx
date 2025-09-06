@@ -1,4 +1,4 @@
-import Button from '@/components/common/BlueButton';
+import Button from '@/components/common/Button';
 import ModalHeader from '@/components/common/ModalHeader';
 import ImageInput from '@/components/Timetable/ImageInput';
 import React, { useEffect, useState } from 'react';
