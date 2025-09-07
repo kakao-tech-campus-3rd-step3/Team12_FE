@@ -1,5 +1,5 @@
-import Button from '@/components/common/Button';
-import TimeTableModal from '@/components/Timetable/TimetableModal';
+import Button from '@/components/atoms/Button';
+import TimeTableModal from '@/pages/Calendar/components/TimetableModal/TimetableModal';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 

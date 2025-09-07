@@ -1,4 +1,4 @@
-import Logo from '@/components/common/Logo';
+import Logo from '@/components/atoms/Logo';
 import { Link } from 'react-router-dom';
 
 const Navigation = () => {
