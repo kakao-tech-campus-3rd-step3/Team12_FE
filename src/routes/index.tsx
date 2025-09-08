@@ -1,7 +1,7 @@
 import Test from '@/components/Test';
 import RootLayout from '@/layout/RootLayout';
-import FullCalendar from '@/pages/Calendar/FullCalendar';
 import Login from '@/pages/Login/Login';
+import PersonalCalendarPage from '@/pages/PersonalCalendar/PersonalCalendar';
 import Signup from '@/pages/Signup/Signup';
 import { createBrowserRouter, Link } from 'react-router-dom';
 import { RouterPath } from './path';
@@ -21,8 +21,12 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: RouterPath.CALENDAR, // 'calendar'
-        element: <FullCalendar />,
+        path: RouterPath.PERSONAL_CALENDAR, // '/personal-calendar'
+        element: <PersonalCalendarPage />,
+      },
+      {
+        path: RouterPath.PERSONAL_CALENDAR_VIEW, // '/personal-calendar/:view/:date'
+        element: <PersonalCalendarPage />,
       },
       {
         path: RouterPath.LOGIN.slice(1), // 'login'
