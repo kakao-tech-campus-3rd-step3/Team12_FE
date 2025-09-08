@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom';
 
 const RootLayout = () => {
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
+    <div className="flex flex-col min-h-screen">
       <Navigation />
       <main className="flex flex-1 justify-center items-center">
         <Outlet />
