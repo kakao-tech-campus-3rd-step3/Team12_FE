@@ -22,7 +22,7 @@ const Test = () => {
       <Button handleSubmit={() => setIsOpen(true)} text="모달 켜기" />
 
       <Link
-        to="/calendar"
+        to="/personal-calendar"
         className="p-4 m-4 text-white bg-red-500 rounded-md border border-gray-300 transition-all duration-200 hover:bg-red-600"
       >
         Calendar

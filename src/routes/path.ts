@@ -1,16 +1,18 @@
 export const RouterPath = {
   HOME: '/',
-  CALENDAR: '/calendar',
-  CALENDAR_VIEW: '/calendar/:view/:date',
+  // 개인 캘린더
+  PERSONAL_CALENDAR: '/personal-calendar',
+  PERSONAL_CALENDAR_VIEW: '/personal-calendar/:view/:date',
   TEAM: '/team',
   LOGIN: '/login',
   SIGNUP: '/signup',
   MEMBERS: '/members',
 };
 
-export const createCalendarPath = (view: string, date: string) => `/calendar/${view}/${date}`;
-export const CalendarPaths = {
-  day: (date: string) => createCalendarPath('day', date),
-  week: (date: string) => createCalendarPath('week', date),
-  month: (date: string) => createCalendarPath('month', date),
+export const createPersonalCalendarPath = (view: string, date: string) =>
+  `/personal-calendar/${view}/${date}`;
+export const PersonalCalendarPaths = {
+  day: (date: string) => createPersonalCalendarPath('day', date),
+  week: (date: string) => createPersonalCalendarPath('week', date),
+  month: (date: string) => createPersonalCalendarPath('month', date),
 };
