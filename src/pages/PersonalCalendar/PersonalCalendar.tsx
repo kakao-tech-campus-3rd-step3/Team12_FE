@@ -1,6 +1,6 @@
 import Drawer from '@/components/common/Drawer/Drawer';
 import FullCalendar from '@/pages/Calendar/FullCalendar';
-import LinkStatus from '@/pages/PersonalCalendar/components/LinkStatus';
+import LinkStatus from '@/pages/PersonalCalendar/LinkStatus/LinkStatus';
 import MyClass from '@/pages/PersonalCalendar/sidebar-components/MyClass';
 import MyTeam from '@/pages/PersonalCalendar/sidebar-components/MyTeam';
 import QuickActions from '@/pages/PersonalCalendar/sidebar-components/QuickActions';
