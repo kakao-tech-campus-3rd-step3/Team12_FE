@@ -22,12 +22,12 @@ const CalendarPage = () => {
   const plugins = useMemo(() => [dayGridPlugin, timeGridPlugin, interactionPlugin], []);
 
   return (
-    <div className="p-6 min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="p-4 min-h-screen">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-8">
+        {/* <div className="mb-8">
           <h1 className="mb-2 text-3xl font-bold text-gray-900">일정 관리</h1>
           <p className="text-gray-600">팀 일정을 효율적으로 관리하세요</p>
-        </div>
+        </div> */}
 
         <div className="overflow-hidden bg-white rounded-2xl shadow-xl">
           <div className="p-6">

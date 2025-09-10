@@ -8,11 +8,11 @@ const TodaySchedule = () => {
   ];
 
   return (
-    <div className="mb-8">
+    <div className="px-3 mb-8">
       <h3 className="mb-4 text-lg font-semibold text-gray-800">오늘 일정</h3>
       <div className="space-y-3">
         {schedules.map((schedule, index) => (
-          <div key={index} className="flex flex-row p-3 bg-white rounded-lg">
+          <div key={index} className="flex flex-row p-2 pl-0 bg-white rounded-lg">
             <div className="flex justify-between items-center mr-4 mb-1">
               <span className="text-sm font-medium text-mainBlue">{schedule.time}</span>
             </div>
