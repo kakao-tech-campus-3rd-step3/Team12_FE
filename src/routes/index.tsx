@@ -2,6 +2,7 @@ import Test from '@/components/Test';
 import RootLayout from '@/layout/RootLayout';
 import Login from '@/pages/Login/Login';
 import PersonalCalendarPage from '@/pages/PersonalCalendar/PersonalCalendar';
+import TeamCalendarPage from '@/pages/TeamCalendar/TeamCalendar';
 import Signup from '@/pages/Signup/Signup';
 import { createBrowserRouter, Link } from 'react-router-dom';
 import { RouterPath } from './path';
@@ -27,6 +28,14 @@ export const router = createBrowserRouter([
       {
         path: RouterPath.PERSONAL_CALENDAR_VIEW, // '/personal-calendar/:view/:date'
         element: <PersonalCalendarPage />,
+      },
+      {
+        path: RouterPath.TEAM_CALENDAR.DEFAULT,
+        element: <TeamCalendarPage />,
+      },
+      {
+        path: RouterPath.TEAM_CALENDAR.VIEW,
+        element: <TeamCalendarPage />,
       },
       {
         path: RouterPath.LOGIN.slice(1), // 'login'

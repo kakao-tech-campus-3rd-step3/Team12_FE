@@ -3,6 +3,10 @@ export const RouterPath = {
   // 개인 캘린더
   PERSONAL_CALENDAR: '/personal-calendar',
   PERSONAL_CALENDAR_VIEW: '/personal-calendar/:view/:date',
+  TEAM_CALENDAR: {
+    DEFAULT: '/team-calendar/:id',
+    VIEW: '/team-calendar/:id/:view/:date',
+  },
   TEAM: '/team',
   LOGIN: '/login',
   SIGNUP: '/signup',
