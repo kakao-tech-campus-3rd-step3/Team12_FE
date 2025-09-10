@@ -1,22 +1,7 @@
 import React, { useState } from 'react';
-import { ChevronDown, ChevronUp, Search, Settings } from 'lucide-react';
-
-interface Member {
-  id: number;
-  name: string;
-  status: '온라인' | '바쁨';
-}
-
-const mockMembers: Member[] = [
-  { id: 1, name: '김민수', status: '온라인' },
-  { id: 2, name: '박지영', status: '바쁨' },
-  { id: 3, name: '강민재', status: '바쁨' },
-  { id: 4, name: '송하늘', status: '온라인' },
-  { id: 5, name: '이도윤', status: '온라인' },
-  { id: 6, name: '최서연', status: '바쁨' },
-  { id: 7, name: '정우진', status: '온라인' },
-  { id: 8, name: '한지민', status: '바쁨' },
-];
+import { ChevronDown, ChevronUp, Settings } from 'lucide-react';
+import { mockMembers } from '@/mockdata/memberData';
+import SearchBar from '@/components/atoms/SearchBar';
 
 const TeamMembers: React.FC = () => {
   const [isOpen, setIsOpen] = useState(true);
@@ -41,14 +26,7 @@ const TeamMembers: React.FC = () => {
 
       {isOpen && (
         <div className="mt-4">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-            <input
-              type="text"
-              placeholder="팀원 검색하기"
-              className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-            />
-          </div>
+          <SearchBar placeholder="팀원 검색하기" />
         </div>
       )}
 
