@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronDown, ChevronUp, Settings } from 'lucide-react';
-import { mockMembers } from '@/mockdata/memberData';
+import { mockMembers } from '@/mockdata/teamData';
 import SearchBar from '@/components/atoms/SearchBar';
 
 const TeamMembers: React.FC = () => {
