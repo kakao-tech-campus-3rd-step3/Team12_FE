@@ -52,11 +52,11 @@ const RecommendTimes: React.FC = () => {
 
         <div className="flex gap-4 overflow-x-auto pb-2 transition-all duration-300 ease-out">
           {mockTimeSlots.map((slot, index) => (
-            <div 
+            <div
               key={slot.id}
               className="bg-white border border-gray-200 rounded-lg p-3 flex-shrink-0 w-80 transform transition-all duration-300 ease-out"
               style={{
-                transitionDelay: `${index * 50}ms`
+                transitionDelay: `${index * 50}ms`,
               }}
             >
               <div className="flex justify-between items-center">
