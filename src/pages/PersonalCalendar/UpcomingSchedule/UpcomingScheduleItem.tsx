@@ -1,4 +1,4 @@
-import { upcomingSchedule } from './schedule';
+import { upcomingSchedule } from '@/mockdata/schedule';
 
 export const UpcomingScheduleItem = ({ schedule }: { schedule: (typeof upcomingSchedule)[0] }) => {
   const today = new Date();

@@ -1,11 +1,6 @@
-const MyTeam = () => {
-  const teams = [
-    { name: '프로그래밍 조별과제', members: 3, color: 'bg-blue-500' },
-    { name: '프로그래밍 동아리', members: 12, color: 'bg-green-500' },
-    { name: '프로그래밍 동아리', members: 12, color: 'bg-green-500' },
-    { name: '알고리즘스터디', members: 4, color: 'bg-purple-500' },
-  ];
+import { teams } from '@/mockdata/schedule';
 
+const MyTeam = () => {
   return (
     <div className="px-3 mb-8">
       <div className="flex justify-between items-center mb-4">

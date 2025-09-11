@@ -1,10 +1,6 @@
-const MyClass = () => {
-  const classes = [
-    { name: '데이터구조', instructor: '김영훈', color: 'bg-blue-500' },
-    { name: '웹프로그래발', instructor: '이영훈', color: 'bg-green-500' },
-    { name: '알고리즘', instructor: '박영훈', color: 'bg-green-500' },
-  ];
+import { classes } from '@/mockdata/schedule';
 
+const MyClass = () => {
   return (
     <div className="px-3 mb-8">
       <div className="flex justify-between items-center mb-4">
