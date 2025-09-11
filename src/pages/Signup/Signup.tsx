@@ -14,7 +14,7 @@ const Signup = () => {
   };
 
   return (
-    <div className="flex items-center justify-center">
+    <div className="min-h-[calc(100vh-70px)] flex items-center justify-center">
       <div className="w-[340px]">
         <div className="mb-7">
           <Logo />
