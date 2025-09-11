@@ -27,12 +27,12 @@ const Button = ({
   noWrapper = false,
 }: ButtonProps) => {
   const baseStyles =
-    'font-medium rounded-md transition-colors text-nowrap focus:outline-none focus:ring-2 focus:ring-offset-2';
+    'font-medium rounded-md transition-colors text-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2';
 
   const variantStyles = {
-    primary: 'text-white bg-blue-600 hover:bg-blue-700 focus:ring-blue-500',
-    secondary: 'text-gray-700 bg-gray-100 hover:bg-gray-200 focus:ring-gray-500',
-    outline: 'text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 focus:ring-blue-500',
+    primary: 'text-white bg-blue-600 hover:bg-blue-700 focus-visible:ring-blue-500',
+    secondary: 'text-gray-700 bg-gray-100 hover:bg-gray-200 focus-visible:ring-gray-500',
+    outline: 'text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 focus-visible:ring-blue-500',
   };
 
   const sizeStyles = {
