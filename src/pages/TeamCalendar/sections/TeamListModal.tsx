@@ -59,7 +59,7 @@ const TeamListModal = ({ isOpen, onClose }: TeamListModalProps) => {
           <div className="space-y-3 max-h-[60vh] overflow-y-auto">
             {mockTeams.map((team) => (
               <TeamListCard
-                key={team.id}
+                key={team.code}
                 team={team}
                 onSettingsClick={(teamId) => {
                   console.log('팀 설정', teamId);

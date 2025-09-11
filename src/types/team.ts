@@ -15,7 +15,7 @@ export interface TimeSlot {
 }
 
 export interface Team {
-  id: string;
+  code: string;
   name: string;
   members: string[];
   meetings: number;

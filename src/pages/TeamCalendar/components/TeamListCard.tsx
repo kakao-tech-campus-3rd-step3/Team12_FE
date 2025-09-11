@@ -8,9 +8,7 @@ interface TeamListCardProps {
 
 const TeamListCard = ({ team, onSettingsClick }: TeamListCardProps) => {
   return (
-    <div
-      className="border border-gray-200 rounded-xl p-4 bg-white shadow-sm hover:border-blue-400 transition-all duration-300 group relative hover:z-10"
-    >
+    <div className="border border-gray-200 rounded-xl p-4 bg-white shadow-sm hover:border-blue-400 transition-all duration-300 group relative hover:z-10">
       <div className="flex justify-between items-start">
         <div className="flex-1">
           <div className="flex items-center space-x-3 mb-2">
@@ -56,11 +54,11 @@ const TeamListCard = ({ team, onSettingsClick }: TeamListCardProps) => {
 
         <div className="flex items-center space-x-2">
           <span className="px-2 py-1 text-xs rounded-full font-medium border font-mono bg-gray-100 border-gray-200 text-gray-600">
-            {team.id}
+            {team.code}
           </span>
-          <button 
+          <button
             className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-all duration-200"
-            onClick={() => onSettingsClick?.(team.id)}
+            onClick={() => onSettingsClick?.(team.code)}
           >
             <Settings className="w-4 h-4" />
           </button>
@@ -70,4 +68,4 @@ const TeamListCard = ({ team, onSettingsClick }: TeamListCardProps) => {
   );
 };
 
-export default TeamListCard; 
+export default TeamListCard;
