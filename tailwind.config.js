@@ -22,6 +22,10 @@ export default {
           'sans-serif',
         ],
       },
+      colors: {
+        mainBlue: '#165dfb',
+        mainGreen: '#00c856',
+      },
     },
   },
   plugins: [require('flowbite/plugin')],

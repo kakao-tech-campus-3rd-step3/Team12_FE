@@ -4,11 +4,12 @@ interface ButtonProps {
   handleSubmit: () => void;
   text: string;
   className?: string;
+  fullWidth?: boolean;
 }
 
-const Button = ({ handleSubmit, text, className }: ButtonProps) => {
+const Button = ({ handleSubmit, text, className, fullWidth = false }: ButtonProps) => {
   return (
-    <div className="p-6 mx-auto w-50">
+    <div className={fullWidth ? 'w-full' : 'p-6 mx-auto w-50'}>
       <button
         onClick={handleSubmit}
         className={twMerge(
