@@ -62,9 +62,7 @@ const RecommendTimes: React.FC = () => {
               }}
             >
               <div className="flex justify-between items-center gap-2">
-                <div className="font-medium text-gray-800 text-xs sm:text-sm lg:text-base truncate flex-1 min-w-0">
-                  {slot.day}
-                </div>
+                <div className="font-medium text-gray-800 flex-1 min-w-0">{slot.day}</div>
                 <span
                   className={`px-1 py-0.5 sm:px-1.5 sm:py-0.5 lg:px-2 lg:py-1 text-xs font-medium rounded-full transition-all duration-200 flex-shrink-0 ${
                     slot.tag === '최적' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'
@@ -73,9 +71,7 @@ const RecommendTimes: React.FC = () => {
                   {slot.tag}
                 </span>
               </div>
-              <div className="text-xs sm:text-sm text-gray-700 mt-1 sm:mt-2 font-medium truncate">
-                {slot.time}
-              </div>
+              <div className="text-xs text-gray-700 mt-1 sm:mt-2 font-medium">{slot.time}</div>
               <div className="text-xs text-gray-500 mt-1 line-clamp-2">{slot.participants}</div>
             </div>
           ))}
