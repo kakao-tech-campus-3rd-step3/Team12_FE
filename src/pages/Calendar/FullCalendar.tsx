@@ -48,7 +48,7 @@ const CalendarPage = () => {
   }, [currentDate, currentView]);
 
   return (
-    <div className="p-4 min-h-screen">
+    <div className="p-4">
       <div className="mx-auto max-w-7xl">
         {/* <div className="mb-8">
           <h1 className="mb-2 text-3xl font-bold text-gray-900">일정 관리</h1>
@@ -62,10 +62,12 @@ const CalendarPage = () => {
               plugins={plugins}
               initialView={currentView}
               headerToolbar={{
-                left: 'addEvent today', // 새 일정, 오늘 버튼
-                center: 'prev title next', // 이전, 제목, 다음 버튼
-                right: 'dayGridMonth,timeGridWeek,timeGridDay', // 월/주/일 뷰
+                left: 'prev title next',
+                right: 'today dayGridMonth,timeGridWeek,timeGridDay',
               }}
+              // 모바일에서 더 작은 헤더 높이
+              height="auto"
+              aspectRatio={1.8}
               customButtons={{
                 addEvent: {
                   text: '+ 새 일정',
@@ -122,7 +124,6 @@ const CalendarPage = () => {
                 },
               }}
               locale="ko"
-              height="auto"
               selectable // 날짜 선택 가능 (새 일정 추가)
               editable // 이벤트 편집 가능 (드래그, 리사이즈)
               events={events}

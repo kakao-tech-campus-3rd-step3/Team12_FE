@@ -12,9 +12,48 @@
   .fc {
     @apply font-['Pretendard'] text-gray-900;
   }
-  /* 헤더 스타일 */
+
+  /* 모바일에서 캘린더 높이 제한 */
+  @media (max-width: 768px) {
+    .fc {
+      min-height: 70vh;
+      min-width: 400px;
+    }
+  }
+  /* 헤더 스타일 - 두 줄로 나누기 */
   .fc-toolbar {
-    @apply mb-6 flex items-center justify-between;
+    @apply mb-0 flex flex-col gap-2;
+  }
+
+  /* 첫 번째 줄: 왼쪽과 오른쪽 버튼들을 한 줄에 배치 */
+  .fc-toolbar-chunk:first-child,
+  .fc-toolbar-chunk:last-child {
+    @apply flex items-center gap-3;
+  }
+
+  /* 두 번째 줄: 중앙 네비게이션을 별도 줄에 배치 */
+  .fc-toolbar-chunk:nth-child(2) {
+    @apply flex justify-center items-center;
+  }
+
+  /* 첫 번째 줄을 가로로 배치 */
+  .fc-toolbar-chunk:first-child {
+    @apply justify-start;
+  }
+
+  .fc-toolbar-chunk:last-child {
+    @apply justify-end;
+  }
+
+  /* 첫 번째 줄을 가로로 배치하기 위한 래퍼 */
+  .fc-toolbar-chunk:first-child::after {
+    content: '';
+    flex: 1;
+  }
+
+  .fc-toolbar-chunk:last-child::before {
+    content: '';
+    flex: 1;
   }
 
   .fc-toolbar-title {
