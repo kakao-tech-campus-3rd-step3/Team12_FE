@@ -83,12 +83,7 @@ const RecommendTimes: React.FC = () => {
       </div>
 
       <div className="mt-4 sm:mt-6">
-        <Button
-          handleSubmit={() => {}}
-          text="더 많은 시간 확인하기"
-          fullWidth={true}
-          className="px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base rounded-lg transition-all duration-200 focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
-        />
+        <Button handleSubmit={() => {}} text="더 많은 시간 확인하기" fullWidth={true} />
       </div>
     </div>
   );
