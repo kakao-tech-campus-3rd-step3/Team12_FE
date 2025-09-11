@@ -16,13 +16,13 @@ const TimeSelector: React.FC<TimeSelectorProps> = ({
   className = '',
 }) => {
   return (
-    <div className={`mb-6 ${className}`}>
-      <label className="block text-sm font-medium text-gray-700 mb-2">{label}</label>
+    <div className={`mb-4 sm:mb-6 ${className}`}>
+      <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">{label}</label>
       <div className="relative">
         <select
           value={value}
           onChange={(e) => onChange(Number(e.target.value))}
-          className="w-full px-3 py-3 pr-10 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent bg-white appearance-none cursor-pointer"
+          className="w-full px-2 sm:px-3 py-2 sm:py-3 pr-8 sm:pr-10 border border-gray-200 rounded-lg text-xs sm:text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent bg-white appearance-none cursor-pointer transition-all duration-200"
         >
           {options.map((option) => (
             <option key={option.value} value={option.value}>
@@ -30,9 +30,9 @@ const TimeSelector: React.FC<TimeSelectorProps> = ({
             </option>
           ))}
         </select>
-        <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+        <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:pr-3 pointer-events-none">
           <svg
-            className="w-4 h-4 text-gray-400"
+            className="w-3 h-3 sm:w-4 sm:h-4 text-gray-400"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"

@@ -50,36 +50,41 @@ const RecommendTimes: React.FC = () => {
           />
         </div>
 
-        <div className="flex gap-4 overflow-x-auto pb-2 transition-all duration-300 ease-out">
+        {/* 반응형 카드 레이아웃 */}
+        <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 lg:gap-4 transition-all duration-300 ease-out">
           {mockTimeSlots.map((slot, index) => (
             <div
               key={slot.id}
-              className="bg-white border border-gray-200 rounded-lg p-3 flex-shrink-0 w-80 transform transition-all duration-300 ease-out"
+              className="min-w-0 bg-white border border-gray-200 rounded-lg p-2 sm:p-3 transform transition-all duration-300 ease-out min-w-0"
               style={{
                 transitionDelay: `${index * 50}ms`,
               }}
             >
-              <div className="flex justify-between items-center">
-                <div className="font-medium text-gray-800">{slot.day}</div>
+              <div className="flex justify-between items-center gap-2">
+                <div className="font-medium text-gray-800 text-xs sm:text-sm lg:text-base truncate flex-1 min-w-0">
+                  {slot.day}
+                </div>
                 <span
-                  className={`px-2 py-1 text-xs font-medium rounded-full transition-all duration-200 ${
+                  className={`px-1 py-0.5 sm:px-1.5 sm:py-0.5 lg:px-2 lg:py-1 text-xs font-medium rounded-full transition-all duration-200 flex-shrink-0 ${
                     slot.tag === '최적' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'
                   }`}
                 >
                   {slot.tag}
                 </span>
               </div>
-              <div className="text-sm text-gray-700 mt-2 font-medium">{slot.time}</div>
-              <div className="text-xs text-gray-500 mt-1">{slot.participants}</div>
+              <div className="text-xs sm:text-sm text-gray-700 mt-1 sm:mt-2 font-medium truncate">
+                {slot.time}
+              </div>
+              <div className="text-xs text-gray-500 mt-1 line-clamp-2">{slot.participants}</div>
             </div>
           ))}
         </div>
       </div>
 
-      <div className="mt-4">
+      <div className="mt-4 sm:mt-6">
         <button
           onClick={() => {}}
-          className="w-full px-4 py-3 font-medium text-white bg-blue-600 rounded-lg transition-colors hover:bg-blue-700 focus:outline-none focus:ring-blue-500 "
+          className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-medium text-white bg-blue-600 rounded-lg transition-all duration-200 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
         >
           더 많은 시간 확인하기
         </button>
