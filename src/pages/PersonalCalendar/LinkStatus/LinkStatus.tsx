@@ -22,8 +22,8 @@ const LinkStatus = () => {
           <Link className="w-4 h-4 text-mainBlue" />
           <h3 className="text-lg font-semibold text-mainBlue">연동 상태</h3>
         </div>
-        <div className="flex flex-row justify-between items-center bg-white">
-          <p className="text-sm font-medium text-[#1C398E]">에브리타임 연동</p>
+        <div className="flex flex-row gap-2 justify-between items-center bg-white">
+          <span className="text-sm text-nowrap font-medium text-[#1C398E]">에브리타임 연동</span>
           <div>
             {linkStatus ? (
               <p className="text-sm font-medium px-2 py-1 text-[#1C398E]">연동완료</p>
