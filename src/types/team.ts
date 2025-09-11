@@ -13,3 +13,11 @@ export interface TimeSlot {
   participants: string;
   tag: '최적' | '좋음';
 }
+
+export interface Team {
+  id: string;
+  name: string;
+  members: string[];
+  meetings: number;
+  color: string;
+}

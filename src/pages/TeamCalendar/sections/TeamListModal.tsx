@@ -1,4 +1,6 @@
 import { Settings, Users, Calendar, Plus, UserPlus } from 'lucide-react';
+import { mockTeams } from '@/mockdata/teamData';
+import Button from '@/components/atoms/Button';
 
 interface TeamListModalProps {
   isOpen: boolean;
@@ -7,48 +9,6 @@ interface TeamListModalProps {
 
 const TeamListModal = ({ isOpen, onClose }: TeamListModalProps) => {
   if (!isOpen) return null;
-
-  const teams = [
-    {
-      code: 'WEB2024',
-      name: '웹개발 팀플',
-      members: ['푸름이', '김철수', '이영희', '박민수'],
-      meetings: 2,
-      color: 'blue',
-    },
-    {
-      code: 'AI2024',
-      name: 'AI 공모전',
-      members: ['푸름이', '최지훈', '정수연'],
-      meetings: 1,
-      color: 'emerald',
-    },
-    {
-      code: 'STUDY2023',
-      name: '스터디 그룹',
-      members: ['푸름이', '한지민'],
-      meetings: 0,
-      color: 'amber',
-    },
-    {
-      code: 'STUDY2024',
-      name: '스터디 그룹',
-      members: ['푸름이', '한지민'],
-      meetings: 0,
-      color: 'amber',
-    },
-    {
-      code: 'STUDY2025',
-      name: '스터디 그룹',
-      members: ['푸름이', '한지민'],
-      meetings: 0,
-      color: 'amber',
-    },
-  ];
-
-  const getInviteCodeClasses = () => {
-    return 'bg-gray-100 border-gray-200 text-gray-600';
-  };
 
   return (
     <div
@@ -77,20 +37,30 @@ const TeamListModal = ({ isOpen, onClose }: TeamListModalProps) => {
             </div>
 
             <div className="flex gap-2">
-              <button className="flex items-center space-x-2 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 text-sm font-medium">
-                <Plus className="w-4 h-4" />
-                <span>새 팀 만들기</span>
-              </button>
-              <button className="flex items-center space-x-2 px-3 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-200 text-sm font-medium">
-                <UserPlus className="w-4 h-4" />
-                <span>팀 참여하기</span>
-              </button>
+              <Button
+                handleSubmit={() => {}}
+                text="새 팀 만들기"
+                icon={<Plus />}
+                size="sm"
+                noWrapper={true}
+              />
+              <Button
+                handleSubmit={() => {}}
+                text="팀 참여하기"
+                icon={<UserPlus />}
+                variant="outline"
+                size="sm"
+                noWrapper={true}
+              />
             </div>
           </div>
 
           <div className="space-y-3 max-h-[60vh] overflow-y-auto">
-            {teams.map((team) => (
-              <div className="border border-gray-200 rounded-xl p-4 bg-white hover:shadow-md hover:border-blue-200 transition-all duration-200 group">
+            {mockTeams.map((team) => (
+              <div
+                key={team.id}
+                className="border border-gray-200 rounded-xl p-4 bg-white shadow-sm hover:border-blue-400 transition-all duration-300 group relative hover:z-10"
+              >
                 <div className="flex justify-between items-start">
                   <div className="flex-1">
                     <div className="flex items-center space-x-3 mb-2">
@@ -135,10 +105,8 @@ const TeamListModal = ({ isOpen, onClose }: TeamListModalProps) => {
                   </div>
 
                   <div className="flex items-center space-x-2">
-                    <span
-                      className={`px-2 py-1 text-xs rounded-full font-medium border font-mono ${getInviteCodeClasses()}`}
-                    >
-                      {team.code}
+                    <span className="px-2 py-1 text-xs rounded-full font-medium border font-mono bg-gray-100 border-gray-200 text-gray-600">
+                      {team.id}
                     </span>
                     <button className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-all duration-200">
                       <Settings className="w-4 h-4" />
@@ -149,15 +117,13 @@ const TeamListModal = ({ isOpen, onClose }: TeamListModalProps) => {
             ))}
           </div>
 
-          {teams.length === 0 && (
+          {mockTeams.length === 0 && (
             <div className="text-center py-12">
               <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center rounded-full bg-gray-100">
                 <Users className="w-8 h-8 text-gray-400" />
               </div>
               <p className="text-gray-500 mb-4">참여 중인 팀이 없습니다</p>
-              <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 text-sm font-medium">
-                첫 번째 팀 만들기
-              </button>
+              <Button handleSubmit={() => {}} text="첫 번째 팀 만들기" size="sm" noWrapper={true} />
             </div>
           )}
         </div>

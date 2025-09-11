@@ -1,5 +1,4 @@
-import type { Member } from '@/types/team';
-import type { TimeSlot } from '@/types/team';
+import type { Member, TimeSlot, Team } from '@/types/team';
 
 export const mockMembers: Member[] = [
   { id: 1, name: '김민수', status: '온라인' },
@@ -40,5 +39,43 @@ export const mockTimeSlots: TimeSlot[] = [
     time: '15:00-17:00',
     participants: '6/8명 참석 가능',
     tag: '좋음',
+  },
+];
+
+export const mockTeams: Team[] = [
+  {
+    id: 'WEB2024',
+    name: '웹개발 팀플',
+    members: ['푸름이', '김철수', '이영희', '박민수'],
+    meetings: 2,
+    color: 'blue',
+  },
+  {
+    id: 'AI2024',
+    name: 'AI 공모전',
+    members: ['푸름이', '최지훈', '정수연'],
+    meetings: 1,
+    color: 'emerald',
+  },
+  {
+    id: 'STUDY2024',
+    name: '스터디 그룹',
+    members: ['푸름이', '한지민'],
+    meetings: 0,
+    color: 'amber',
+  },
+  {
+    id: 'STUDY2024',
+    name: '스터디 그룹',
+    members: ['푸름이', '한지민'],
+    meetings: 0,
+    color: 'amber',
+  },
+  {
+    id: 'STUDY2024',
+    name: '스터디 그룹',
+    members: ['푸름이', '한지민'],
+    meetings: 0,
+    color: 'amber',
   },
 ];
