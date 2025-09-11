@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { mockTimeSlots } from '@/mockdata/teamData';
 import TimeSelector from '@/components/atoms/TimeSelector';
+import Button from '@/components/atoms/Button';
 import { generateTimeOptions } from '@/utils/timeUtils';
 
 const RecommendTimes: React.FC = () => {
@@ -82,12 +83,12 @@ const RecommendTimes: React.FC = () => {
       </div>
 
       <div className="mt-4 sm:mt-6">
-        <button
-          onClick={() => {}}
-          className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-medium text-white bg-blue-600 rounded-lg transition-all duration-200 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
-        >
-          더 많은 시간 확인하기
-        </button>
+        <Button
+          handleSubmit={() => {}}
+          text="더 많은 시간 확인하기"
+          fullWidth={true}
+          className="px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base rounded-lg transition-all duration-200 focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+        />
       </div>
     </div>
   );
