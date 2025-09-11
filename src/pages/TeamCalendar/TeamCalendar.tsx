@@ -24,19 +24,21 @@ const TeamCalendarPage = () => {
 
       {/*모바일 뷰*/}
       <div className="xl:hidden block min-h-screen">
-        <Drawer>
-          <TeamMembers />
-        </Drawer>
+        <div className="flex flex-col min-h-screen">
+          <Drawer>
+            <TeamMembers />
+          </Drawer>
 
-        <div className="flex-1 flex flex-col">
-          <div className="p-4 bg-gray-50 border-b border-gray-200">
-            <div className="max-w-4xl mx-auto bg-white rounded-lg p-4 border border-gray-100">
-              <RecommendTimes />
+          <div className="flex-1 flex flex-col">
+            <div className="p-4 bg-gray-50 border-b border-gray-200">
+              <div className="max-w-4xl mx-auto bg-white rounded-lg p-4 border border-gray-100">
+                <RecommendTimes />
+              </div>
             </div>
-          </div>
 
-          <div className="flex-1 p-0">
-            <FullCalendar />
+            <div className="flex-1 p-0">
+              <FullCalendar />
+            </div>
           </div>
         </div>
       </div>
