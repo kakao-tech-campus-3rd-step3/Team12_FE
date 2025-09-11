@@ -3,7 +3,11 @@ import { ChevronDown, ChevronUp, Settings } from 'lucide-react';
 import { mockMembers } from '@/mockdata/teamData';
 import SearchBar from '@/components/atoms/SearchBar';
 
-const TeamMembers: React.FC = () => {
+interface TeamMembersProps {
+  onSettingsClick?: () => void;
+}
+
+const TeamMembers: React.FC<TeamMembersProps> = ({ onSettingsClick }) => {
   const [isOpen, setIsOpen] = useState(true);
   const LAST_NAME = (name: string) => name[0];
   const FULL_NAME = (name: string) => name;
@@ -19,7 +23,10 @@ const TeamMembers: React.FC = () => {
             <ChevronDown className="w-4 h-4 text-blue-500" />
           )}
         </div>
-        <button className="text-gray-400 hover:text-blue-600 transition-colors duration-200 p-2 hover:bg-blue-50 rounded-full">
+                <button 
+          className="text-gray-400 hover:text-blue-600 transition-colors duration-200 p-2 hover:bg-blue-50 rounded-full"
+          onClick={onSettingsClick}
+        >
           <Settings className="w-4 h-4" />
         </button>
       </div>
@@ -60,6 +67,7 @@ const TeamMembers: React.FC = () => {
           ))}
         </div>
       )}
+
     </div>
   );
 };
