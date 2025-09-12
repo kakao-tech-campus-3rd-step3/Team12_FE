@@ -27,7 +27,7 @@ const CreateTeam = ({ onBack, onCreateTeam }: CreateTeamProps) => {
   };
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col pt-10 pb-5 p-6 h-full">
       {/* 헤더 */}
       <div className="flex items-center mb-6">
         <button
@@ -72,7 +72,7 @@ const CreateTeam = ({ onBack, onCreateTeam }: CreateTeamProps) => {
         </div>
 
         {/* 버튼 */}
-        <div className="flex gap-3 pt-6">
+        <div className="flex gap-3 pt-4">
           <div className="flex-1">
             <Button
               handleSubmit={onBack}

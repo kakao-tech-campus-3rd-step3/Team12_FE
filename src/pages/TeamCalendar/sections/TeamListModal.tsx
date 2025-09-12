@@ -1,9 +1,10 @@
 import { useState, useMemo } from 'react';
-import { Users, Plus, UserPlus, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Users, Plus, UserPlus } from 'lucide-react';
 import { mockTeams } from '@/mockdata/teamData';
 import Button from '@/components/atoms/Button';
 import TeamListCard from '@/pages/TeamCalendar/components/TeamListCard';
 import CreateTeam from '@/pages/TeamCalendar/sections/CreateTeam';
+import Pagination from '@/components/common/Pagination/Pagination';
 
 interface TeamListModalProps {
   isOpen: boolean;
@@ -51,55 +52,6 @@ const TeamListModal = ({ isOpen, onClose }: TeamListModalProps) => {
     setCurrentPage(page);
   };
 
-  const handlePrevPage = () => {
-    if (paginationData.hasPrevPage) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
-  const handleNextPage = () => {
-    if (paginationData.hasNextPage) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const getVisiblePages = () => {
-    const totalPages = paginationData.totalPages;
-    const current = currentPage;
-
-    if (totalPages <= 7) {
-      return Array.from({ length: totalPages }, (_, i) => i + 1);
-    }
-
-    const delta = 1;
-    const rangeWithDots = [];
-
-    const left = Math.max(2, current - delta);
-    const right = Math.min(totalPages - 1, current + delta);
-
-    rangeWithDots.push(1);
-
-    if (left > 2) {
-      rangeWithDots.push('...');
-    }
-
-    for (let i = left; i <= right; i++) {
-      if (i !== 1 && i !== totalPages) {
-        rangeWithDots.push(i);
-      }
-    }
-
-    if (right < totalPages - 1) {
-      rangeWithDots.push('...');
-    }
-
-    if (totalPages > 1) {
-      rangeWithDots.push(totalPages);
-    }
-
-    return rangeWithDots;
-  };
-
   return (
     <div
       className="flex fixed top-0 left-0 z-50 justify-center items-center m-auto w-full h-full bg-gray-200/60"
@@ -111,7 +63,7 @@ const TeamListModal = ({ isOpen, onClose }: TeamListModalProps) => {
       >
         <button
           onClick={handleClose}
-          className="absolute top-4 right-4 z-10 text-gray-500 hover:text-gray-700 text-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 rounded"
+          className="absolute top-4 right-4 z-10 text-gray-500 hover:text-gray-700 text-2xl focus:outline-none focus-visible:ring-blue-500"
           aria-label="Close modal"
         >
           &times;
@@ -153,71 +105,24 @@ const TeamListModal = ({ isOpen, onClose }: TeamListModalProps) => {
                 </div>
 
                 {/* 팀 목록 */}
-                <div className="space-y-3 min-h-[400px]">
+                <div className="space-y-3 pb-4 min-h-[400px]">
                   {paginationData.currentItems.map((team) => (
                     <TeamListCard
                       key={team.code}
                       team={team}
-                      onSettingsClick={(teamCode) => {
-                        console.log('팀 설정 클릭:', teamCode);
+                      onSettingsClick={() => {
                         // TODO: 팀 설정 탭 추후 구현
-                        alert(`${teamCode} 팀 설정 기능은 준비 중입니다.`);
                       }}
                     />
                   ))}
                 </div>
 
                 {/* 페이지네이션 */}
-                {paginationData.totalPages > 1 && (
-                  <div className="flex items-center justify-center pt-6 border-t border-gray-200">
-                    <div className="flex items-center space-x-2">
-                      <button
-                        onClick={handlePrevPage}
-                        disabled={!paginationData.hasPrevPage}
-                        className={`flex items-center justify-center w-8 h-8 rounded-lg border transition-colors duration-200 ${
-                          paginationData.hasPrevPage
-                            ? 'border-gray-300 text-gray-600 hover:bg-gray-50 hover:border-gray-400'
-                            : 'border-gray-200 text-gray-400 cursor-not-allowed'
-                        }`}
-                      >
-                        <ChevronLeft className="w-4 h-4" />
-                      </button>
-
-                      {getVisiblePages().map((page, index) => (
-                        <div key={`${page}-${index}`}>
-                          {page === '...' ? (
-                            <span className="flex items-center justify-center w-8 h-8 text-gray-400 text-sm">
-                              ...
-                            </span>
-                          ) : (
-                            <button
-                              onClick={() => handlePageChange(Number(page))}
-                              className={`flex items-center justify-center w-8 h-8 rounded-lg border text-sm font-medium transition-colors duration-200 ${
-                                currentPage === page
-                                  ? 'border-blue-500 bg-blue-500 text-white'
-                                  : 'border-gray-300 text-gray-600 hover:bg-gray-50 hover:border-gray-400'
-                              }`}
-                            >
-                              {page}
-                            </button>
-                          )}
-                        </div>
-                      ))}
-
-                      <button
-                        onClick={handleNextPage}
-                        disabled={!paginationData.hasNextPage}
-                        className={`flex items-center justify-center w-8 h-8 rounded-lg border transition-colors duration-200 ${
-                          paginationData.hasNextPage
-                            ? 'border-gray-300 text-gray-600 hover:bg-gray-50 hover:border-gray-400'
-                            : 'border-gray-200 text-gray-400 cursor-not-allowed'
-                        }`}
-                      >
-                        <ChevronRight className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </div>
-                )}
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={paginationData.totalPages}
+                  onPageChange={handlePageChange}
+                />
 
                 {mockTeams.length === 0 && (
                   <div className="text-center py-12">
@@ -236,10 +141,8 @@ const TeamListModal = ({ isOpen, onClose }: TeamListModalProps) => {
               </div>
             </div>
 
-            <div className="w-1/2 p-6 overflow-y-auto max-h-[95vh]">
-              <div className="pt-10 pb-10 h-full">
-                <CreateTeam onBack={() => setCurrentView('list')} onCreateTeam={handleCreateTeam} />
-              </div>
+            <div className="w-1/2 overflow-y-auto max-h-[95vh]">
+              <CreateTeam onBack={() => setCurrentView('list')} onCreateTeam={handleCreateTeam} />
             </div>
           </div>
         </div>
