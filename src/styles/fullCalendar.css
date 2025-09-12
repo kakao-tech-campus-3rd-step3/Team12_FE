@@ -17,7 +17,7 @@
   @media (max-width: 768px) {
     .fc {
       min-height: 70vh;
-      min-width: 400px;
+      min-width: 350px;
     }
   }
   /* 헤더 스타일 - 두 줄로 나누기 */

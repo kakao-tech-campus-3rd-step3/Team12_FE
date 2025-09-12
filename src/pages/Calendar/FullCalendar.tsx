@@ -3,7 +3,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 type CalendarEvent = {
   id: string;
@@ -20,7 +20,7 @@ const CalendarPage = () => {
 
   const calendarRef = useRef<any>(null);
   const [searchParams, setSearchParams] = useSearchParams();
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
   const isInitialized = useRef(false);
 
   const plugins = useMemo(() => [dayGridPlugin, timeGridPlugin, interactionPlugin], []);
