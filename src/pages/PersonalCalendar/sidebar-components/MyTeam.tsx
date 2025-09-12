@@ -1,4 +1,4 @@
-import { teams } from '@/mockdata/schedule';
+import { teams } from '@/mockdata/scheduleData';
 
 const MyTeam = () => {
   return (

@@ -1,4 +1,4 @@
-import { upcomingSchedule } from '@/mockdata/schedule';
+import { upcomingSchedule } from '@/mockdata/scheduleData';
 import { UpcomingScheduleItem } from './UpcomingScheduleItem';
 
 export const UpcomingScheduleList = () => {

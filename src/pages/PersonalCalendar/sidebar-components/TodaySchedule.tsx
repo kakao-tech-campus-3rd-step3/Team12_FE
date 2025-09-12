@@ -1,4 +1,4 @@
-import { classSchedules } from '@/mockdata/schedule';
+import { classSchedules } from '@/mockdata/scheduleData';
 import { MapPin } from 'lucide-react';
 const TodaySchedule = () => {
   return (

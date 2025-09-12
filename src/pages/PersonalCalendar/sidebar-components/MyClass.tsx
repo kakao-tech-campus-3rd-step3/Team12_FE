@@ -1,4 +1,4 @@
-import { classes } from '@/mockdata/schedule';
+import { classes } from '@/mockdata/scheduleData';
 
 const MyClass = () => {
   return (
