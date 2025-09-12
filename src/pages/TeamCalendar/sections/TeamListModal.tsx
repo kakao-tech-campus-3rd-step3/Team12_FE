@@ -12,8 +12,9 @@ interface TeamListModalProps {
 }
 
 const TeamListModal = ({ isOpen, onClose }: TeamListModalProps) => {
-  const [currentView, setCurrentView] = useState<'list' | 'create'>('list');
+  const [currentView, setCurrentView] = useState<'list' | 'create' | 'join'>('list');
   const [currentPage, setCurrentPage] = useState(1);
+  const [inviteCode, setInviteCode] = useState('');
   const itemsPerPage = 3;
 
   const paginationData = useMemo(() => {
@@ -42,14 +43,37 @@ const TeamListModal = ({ isOpen, onClose }: TeamListModalProps) => {
     setCurrentView('list');
   };
 
+  const handleJoinTeam = () => {
+    if (!inviteCode.trim()) {
+      alert('초대코드를 입력해주세요.');
+      return;
+    }
+    console.log('팀 참여 시도:', inviteCode);
+    alert(`초대코드 "${inviteCode}"로 팀 참여를 시도합니다.`);
+    setInviteCode('');
+    setCurrentView('list');
+  };
+
   const handleClose = () => {
     setCurrentView('list');
     setCurrentPage(1);
+    setInviteCode('');
     onClose();
   };
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
+  };
+
+  const getTransformValue = () => {
+    switch (currentView) {
+      case 'create':
+        return '0%';
+      case 'join':
+        return '-66.66%';
+      default:
+        return '-33.33%';
+    }
   };
 
   return (
@@ -63,7 +87,7 @@ const TeamListModal = ({ isOpen, onClose }: TeamListModalProps) => {
       >
         <button
           onClick={handleClose}
-          className="absolute top-4 right-4 z-10 text-gray-500 hover:text-gray-700 text-2xl focus:outline-none focus-visible:ring-blue-500"
+          className="absolute top-4 right-4 z-10 text-gray-500 hover:text-gray-700 text-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 rounded"
           aria-label="Close modal"
         >
           &times;
@@ -72,11 +96,17 @@ const TeamListModal = ({ isOpen, onClose }: TeamListModalProps) => {
         <div className="relative w-full h-full">
           {/* 슬라이드 기능 */}
           <div
-            className="flex w-[200%] h-full transition-transform duration-300 ease-in-out"
-            style={{ transform: `translateX(${currentView === 'create' ? '-50%' : '0%'})` }}
+            className="flex w-[300%] h-full transition-transform duration-300 ease-in-out"
+            style={{ transform: `translateX(${getTransformValue()})` }}
           >
-            <div className="w-1/2 p-6 overflow-y-auto">
-              <div className="pt-8">
+            {/* 팀 생성 뷰 */}
+            <div className="w-1/3 overflow-y-auto max-h-[95vh]">
+              <CreateTeam onBack={() => setCurrentView('list')} onCreateTeam={handleCreateTeam} />
+            </div>
+
+            {/* 팀 목록 뷰 */}
+            <div className="w-1/3 p-6 overflow-y-auto">
+              <div className="pt-8 pb-0">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex flex-col">
                     <h2 className="text-xl font-semibold text-gray-900">팀 관리</h2>
@@ -94,7 +124,7 @@ const TeamListModal = ({ isOpen, onClose }: TeamListModalProps) => {
                       noWrapper={true}
                     />
                     <Button
-                      handleSubmit={() => {}}
+                      handleSubmit={() => setCurrentView('join')}
                       text="팀 참여하기"
                       icon={<UserPlus />}
                       variant="outline"
@@ -141,8 +171,64 @@ const TeamListModal = ({ isOpen, onClose }: TeamListModalProps) => {
               </div>
             </div>
 
-            <div className="w-1/2 overflow-y-auto max-h-[95vh]">
-              <CreateTeam onBack={() => setCurrentView('list')} onCreateTeam={handleCreateTeam} />
+            {/* 팀 참여하기 뷰 */}
+            <div className="w-1/3 p-6 overflow-y-auto">
+              <div className="pt-8 pb-0">
+                <div className="flex items-center mb-6">
+                  <button
+                    onClick={() => setCurrentView('list')}
+                    className="mr-4 text-gray-600 hover:text-gray-800 transition-colors"
+                  >
+                    ←
+                  </button>
+                  <h2 className="text-xl font-semibold text-gray-900">팀 참여하기</h2>
+                </div>
+
+                <div className="flex flex-col items-center justify-center min-h-[400px]">
+                  <div className="w-full max-w-sm space-y-6">
+                    <div className="text-center mb-8">
+                      <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center rounded-full bg-blue-50">
+                        <UserPlus className="w-8 h-8 text-blue-500" />
+                      </div>
+                      <p className="text-gray-600 text-sm">
+                        팀 관리자로부터 받은 초대코드를 입력해주세요.
+                      </p>
+                    </div>
+
+                    <div>
+                      <label
+                        htmlFor="inviteCode"
+                        className="block text-sm font-medium text-gray-700 mb-2"
+                      >
+                        초대코드
+                      </label>
+                      <input
+                        id="inviteCode"
+                        type="text"
+                        value={inviteCode}
+                        onChange={(e) => setInviteCode(e.target.value)}
+                        placeholder="초대코드를 입력하세요"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-blue-500 outline-none transition-colors"
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            handleJoinTeam();
+                          }
+                        }}
+                      />
+                    </div>
+
+                    <div>
+                      <Button
+                        handleSubmit={handleJoinTeam}
+                        text="가입하기"
+                        size="md"
+                        noWrapper={true}
+                        className="w-full h-12 flex items-center justify-center"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
