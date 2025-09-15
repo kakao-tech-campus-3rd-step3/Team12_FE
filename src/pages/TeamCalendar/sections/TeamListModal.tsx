@@ -111,14 +111,14 @@ const TeamListModal = ({ isOpen, onClose }: TeamListModalProps) => {
 
                   <div className="flex gap-2">
                     <Button
-                      handleSubmit={() => setCurrentView('create')}
+                      onClick={() => setCurrentView('create')}
                       text="새 팀 만들기"
                       icon={<Plus />}
                       size="sm"
                       noWrapper={true}
                     />
                     <Button
-                      handleSubmit={() => setCurrentView('join')}
+                      onClick={() => setCurrentView('join')}
                       text="팀 참여하기"
                       icon={<UserPlus />}
                       variant="outline"
@@ -155,7 +155,7 @@ const TeamListModal = ({ isOpen, onClose }: TeamListModalProps) => {
                     </div>
                     <p className="text-gray-500 mb-4">참여 중인 팀이 없습니다</p>
                     <Button
-                      handleSubmit={() => setCurrentView('create')}
+                      onClick={() => setCurrentView('create')}
                       text="첫 번째 팀 만들기"
                       size="sm"
                       noWrapper={true}

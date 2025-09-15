@@ -75,7 +75,7 @@ const CreateTeam = ({ onBack, onCreateTeam }: CreateTeamProps) => {
         <div className="flex gap-3 pt-4">
           <div className="flex-1">
             <Button
-              handleSubmit={onBack}
+              onClick={onBack}
               text="취소"
               variant="outline"
               size="md"
@@ -85,7 +85,7 @@ const CreateTeam = ({ onBack, onCreateTeam }: CreateTeamProps) => {
           </div>
           <div className="flex-1">
             <Button
-              handleSubmit={handleCreateTeam}
+              onClick={handleCreateTeam}
               text="팀 생성하기"
               variant="primary"
               size="md"
