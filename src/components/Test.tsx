@@ -19,7 +19,7 @@ const Test = () => {
     //*/
     <div className="grid grid-cols-2 gap-4 p-4 m-4 text-white bg-red-500 rounded-md border border-gray-300 transition-all duration-200 hover:bg-red-600">
       <TimeTableModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
-      <Button handleSubmit={() => setIsOpen(true)} text="모달 켜기" />
+      <Button onClick={() => setIsOpen(true)} text="모달 켜기" />
 
       <Link
         to="/personal-calendar"

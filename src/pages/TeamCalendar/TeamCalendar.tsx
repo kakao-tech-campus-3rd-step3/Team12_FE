@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Drawer from '@/components/common/Drawer/Drawer';
+import Drawer from '@/components/organisms/Drawer';
 import TeamMembers from '@/pages/TeamCalendar/sections/TeamMembers';
 import RecommendTimes from '@/pages/TeamCalendar/sections/RecommendTimes';
 import FullCalendar from '@/pages/Calendar/FullCalendar';

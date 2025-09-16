@@ -1,4 +1,4 @@
-import Drawer from '@/components/common/Drawer/Drawer';
+import Drawer from '@/components/organisms/Drawer';
 import FullCalendar from '@/pages/Calendar/FullCalendar';
 import LinkStatus from '@/pages/PersonalCalendar/LinkStatus/LinkStatus';
 import MyClass from '@/pages/PersonalCalendar/sidebar-components/MyClass';

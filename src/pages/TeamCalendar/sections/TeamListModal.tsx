@@ -5,7 +5,7 @@ import Button from '@/components/atoms/Button';
 import TeamListCard from '@/pages/TeamCalendar/components/TeamListCard';
 import CreateTeam from '@/pages/TeamCalendar/sections/CreateTeam';
 import JoinTeam from '@/pages/TeamCalendar/sections/JoinTeam';
-import Pagination from '@/components/common/Pagination/Pagination';
+import Pagination from '@/components/molecules/Pagination';
 
 interface TeamListModalProps {
   isOpen: boolean;

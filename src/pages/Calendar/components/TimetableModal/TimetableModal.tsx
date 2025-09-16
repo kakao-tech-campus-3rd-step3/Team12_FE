@@ -1,6 +1,6 @@
 import Button from '@/components/atoms/Button';
-import Modal from '@/components/common/Modal/Modal';
-import ModalHeader from '@/components/common/Modal/ModalHeader';
+import Modal from '@/components/molecules/Modal';
+import ModalHeader from '@/components/atoms/ModalHeader';
 import ImageInput from '@/pages/Calendar/components/TimetableModal/ImageInput';
 import React, { useEffect, useState } from 'react';
 
@@ -83,7 +83,7 @@ const TimeTableModal: React.FC<TimeTableModalProps> = ({ isOpen, onClose }) => {
         </div>
       </div>
 
-      <Button handleSubmit={handleSubmit} text="등록하기" />
+      <Button onClick={handleSubmit} text="등록하기" />
     </Modal>
   );
 };
