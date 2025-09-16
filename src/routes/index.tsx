@@ -15,14 +15,6 @@ export const router = createBrowserRouter([
         index: true,
         element: <PersonalCalendarPage />,
       },
-      // {
-      //   path: RouterPath.PERSONAL_CALENDAR, // '/personal-calendar'
-      //   element: <PersonalCalendarPage />,
-      // },
-      // {
-      //   path: RouterPath.PERSONAL_CALENDAR_VIEW, // '/personal-calendar/:view/:date'
-      //   element: <PersonalCalendarPage />,
-      // },
       {
         path: RouterPath.TEAM_CALENDAR.DEFAULT,
         element: <TeamCalendarPage />,
