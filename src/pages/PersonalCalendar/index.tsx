@@ -9,7 +9,7 @@ import UpcomingSchedule from '@/pages/PersonalCalendar/components/UpcomingSchedu
 
 const PersonalCalendarPage = () => {
   return (
-    <div className="flex">
+    <div className="min-h-screen">
       <Drawer>
         <QuickActions />
         <MyClass />
