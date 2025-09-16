@@ -48,7 +48,7 @@ const CalendarPage = () => {
   }, [currentDate, currentView]);
 
   return (
-    <div className="p-4">
+    <div className="p-2">
       <div className="mx-auto max-w-7xl">
         {/* <div className="mb-8">
           <h1 className="mb-2 text-3xl font-bold text-gray-900">일정 관리</h1>
@@ -56,7 +56,7 @@ const CalendarPage = () => {
         </div> */}
 
         <div className="overflow-hidden bg-white rounded-2xl shadow-xl">
-          <div className="p-6">
+          <div className="p-1 py-4 sm:p-6">
             <FullCalendar
               ref={calendarRef}
               plugins={plugins}

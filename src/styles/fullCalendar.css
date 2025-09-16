@@ -170,7 +170,7 @@
 
   /* 날짜 셀 스타일 */
   .fc-daygrid-day {
-    @apply !rounded-none !m-0 !p-1 !overflow-visible !border-none;
+    @apply !rounded-none !m-0 !p-1 !overflow-visible !border-none text-sm;
   }
 
   .fc-daygrid-day-frame {
