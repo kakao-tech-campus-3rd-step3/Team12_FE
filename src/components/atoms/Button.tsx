@@ -5,9 +5,11 @@ interface ButtonProps {
   onClick: () => void;
   text: string;
   className?: string;
+  /**너비 100% 여부**/
   fullWidth?: boolean;
   icon?: ReactNode;
   iconPosition?: 'left' | 'right';
+  /**주요 버튼 형태 구분**/
   variant?: 'primary' | 'secondary' | 'outline';
   size?: 'sm' | 'md' | 'lg';
   wrapperClassName?: string;

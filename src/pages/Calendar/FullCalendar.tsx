@@ -18,7 +18,7 @@ const CalendarPage = () => {
     { id: '1', title: '팀미팅', start: new Date().toISOString(), allDay: false },
   ]);
 
-  const calendarRef = useRef<any>(null);
+  const calendarRef = useRef<FullCalendar>(null);
   const [searchParams, setSearchParams] = useSearchParams();
   //const navigate = useNavigate();
   const isInitialized = useRef(false);
@@ -89,6 +89,7 @@ const CalendarPage = () => {
                   text: '오늘',
                   click: () => {
                     const calendarApi = calendarRef.current?.getApi();
+                    if (!calendarApi) return;
                     const currentView = calendarApi.view.type;
                     const today = new Date().toISOString().split('T')[0];
                     calendarApi.gotoDate(today);
@@ -99,6 +100,7 @@ const CalendarPage = () => {
                   text: '월간',
                   click: () => {
                     const calendarApi = calendarRef.current?.getApi();
+                    if (!calendarApi) return;
                     const currentDate = calendarApi.getDate().toISOString().split('T')[0];
                     calendarApi.changeView('dayGridMonth');
                     updateURL(currentDate, 'dayGridMonth');
@@ -108,6 +110,7 @@ const CalendarPage = () => {
                   text: '주간',
                   click: () => {
                     const calendarApi = calendarRef.current?.getApi();
+                    if (!calendarApi) return;
                     const currentDate = calendarApi.getDate().toISOString().split('T')[0];
                     calendarApi.changeView('timeGridWeek');
                     updateURL(currentDate, 'timeGridWeek');
@@ -117,6 +120,7 @@ const CalendarPage = () => {
                   text: '일간',
                   click: () => {
                     const calendarApi = calendarRef.current?.getApi();
+                    if (!calendarApi) return;
                     const currentDate = calendarApi.getDate().toISOString().split('T')[0];
                     calendarApi.changeView('timeGridDay');
                     updateURL(currentDate, 'timeGridDay');

@@ -6,13 +6,13 @@ import FullCalendar from '@/pages/Calendar/FullCalendar';
 import TeamListModal from '@/pages/TeamCalendar/sections/TeamListModal';
 
 const TeamCalendarPage = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isTeamListModalOpen, setIsTeamListModalOpen] = useState(false);
 
   return (
     <div className="min-h-screen">
       <div className="hidden xl:flex min-h-screen transition-all duration-500 ease-in-out">
         <Drawer>
-          <TeamMembers onSettingsClick={() => setIsModalOpen(true)} />
+          <TeamMembers onSettingsClick={() => setIsTeamListModalOpen(true)} />
         </Drawer>
 
         <div className="flex-1 p-0 transition-all duration-500 ease-in-out">
@@ -30,7 +30,7 @@ const TeamCalendarPage = () => {
       <div className="xl:hidden block min-h-screen">
         <div className="flex flex-col min-h-screen">
           <Drawer>
-            <TeamMembers onSettingsClick={() => setIsModalOpen(true)} />
+            <TeamMembers onSettingsClick={() => setIsTeamListModalOpen(true)} />
           </Drawer>
 
           <div className="flex-1 flex flex-col">
@@ -47,7 +47,7 @@ const TeamCalendarPage = () => {
         </div>
       </div>
 
-      <TeamListModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <TeamListModal isOpen={isTeamListModalOpen} onClose={() => setIsTeamListModalOpen(false)} />
     </div>
   );
 };
