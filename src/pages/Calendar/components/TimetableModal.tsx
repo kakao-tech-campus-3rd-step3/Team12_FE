@@ -1,6 +1,6 @@
 import Button from '@/components/atoms/Button';
-import Modal from '@/components/common/Modal/Modal';
-import ModalHeader from '@/components/common/Modal/ModalHeader';
+import Modal from '@/components/molecules/Modal';
+import ModalHeader from '@/components/atoms/ModalHeader';
 import { FormInput } from '@/components/form/FormInput';
 import ImageInput from '@/pages/Calendar/components/TimetableModal/ImageInput';
 import React, { useEffect, useState } from 'react';
