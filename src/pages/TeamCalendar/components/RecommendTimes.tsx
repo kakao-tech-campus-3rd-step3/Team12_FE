@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { mockTimeSlots } from '@/mockdata/teamData';
-import TimeSelector from '@/components/atoms/TimeSelector';
+import TimeSelector from '@/components/atoms/SelectBox';
 import Button from '@/components/atoms/Button';
 import { generateTimeOptions } from '@/utils/timeUtils';
 
