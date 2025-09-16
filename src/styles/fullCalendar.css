@@ -57,7 +57,7 @@
   }
 
   .fc-toolbar-title {
-    @apply text-xl font-semibold text-gray-900;
+    @apply text-xl font-semibold text-gray-900 w-[160px];
   }
 
   /* 헤더 버튼 그룹 스타일 */
