@@ -82,8 +82,7 @@ const TimeTableModal: React.FC<TimeTableModalProps> = ({ isOpen, onClose }) => {
           </div>
         </div>
       </div>
-
-      <Button handleSubmit={handleSubmit} text="등록하기" />
+      <Button handleSubmit={handleSubmit} text="등록하기" className="flex justify-center w-full" />
     </Modal>
   );
 };
