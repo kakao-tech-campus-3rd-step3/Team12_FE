@@ -3,8 +3,8 @@ import { Users, Plus, UserPlus } from 'lucide-react';
 import { mockTeams } from '@/mockdata/teamData';
 import Button from '@/components/atoms/Button';
 import TeamListCard from '@/pages/TeamCalendar/components/TeamListCard';
-import CreateTeam from '@/pages/TeamCalendar/sections/CreateTeam';
-import JoinTeam from '@/pages/TeamCalendar/sections/JoinTeam';
+import CreateTeam from '@/pages/TeamCalendar/components/CreateTeam';
+import JoinTeam from '@/pages/TeamCalendar/components/JoinTeam';
 import Pagination from '@/components/molecules/Pagination';
 
 interface TeamListModalProps {

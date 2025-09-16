@@ -1,7 +1,7 @@
 import Button from '@/components/atoms/Button';
 import Modal from '@/components/molecules/Modal';
 import ModalHeader from '@/components/atoms/ModalHeader';
-import ImageInput from '@/pages/Calendar/components/TimetableModal/ImageInput';
+import ImageInput from '@/pages/Calendar/components/ImageInput';
 import React, { useEffect, useState } from 'react';
 
 interface TimeTableModalProps {

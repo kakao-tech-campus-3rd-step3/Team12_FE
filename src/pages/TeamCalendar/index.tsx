@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import Drawer from '@/components/organisms/Drawer';
-import TeamMembers from '@/pages/TeamCalendar/sections/TeamMembers';
-import RecommendTimes from '@/pages/TeamCalendar/sections/RecommendTimes';
+import TeamMembers from '@/pages/TeamCalendar/components/TeamMembers';
+import RecommendTimes from '@/pages/TeamCalendar/components/RecommendTimes';
 import FullCalendar from '@/pages/Calendar/FullCalendar';
-import TeamListModal from '@/pages/TeamCalendar/sections/TeamListModal';
+import TeamListModal from '@/pages/TeamCalendar/components/TeamListModal';
 
 const TeamCalendarPage = () => {
   const [isTeamListModalOpen, setIsTeamListModalOpen] = useState(false);

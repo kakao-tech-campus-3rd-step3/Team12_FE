@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import Button from '@/components/atoms/Button';
-import { FormInput } from '@/components/form/FormInput';
-import { FormTextarea } from '@/components/form/FormTextarea';
+import { FormInput } from '@/components/atoms/FormInput';
+import { FormTextarea } from '@/components/atoms/FormTextarea';
 
 interface CreateTeamProps {
   onBack: () => void;
