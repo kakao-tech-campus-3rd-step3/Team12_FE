@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import Button from '@/components/atoms/Button';
-import { FormInput } from '@/components/form/FormInput';
-import { FormTextarea } from '@/components/form/FormTextarea';
+import { FormInput } from '@/components/atoms/FormInput';
+import { FormTextarea } from '@/components/atoms/FormTextarea';
 
 interface CreateTeamProps {
   onBack: () => void;
@@ -75,7 +75,7 @@ const CreateTeam = ({ onBack, onCreateTeam }: CreateTeamProps) => {
         <div className="flex gap-3 pt-4">
           <div className="flex-1">
             <Button
-              handleSubmit={onBack}
+              onClick={onBack}
               text="취소"
               variant="outline"
               size="md"
@@ -85,7 +85,7 @@ const CreateTeam = ({ onBack, onCreateTeam }: CreateTeamProps) => {
           </div>
           <div className="flex-1">
             <Button
-              handleSubmit={handleCreateTeam}
+              onClick={handleCreateTeam}
               text="팀 생성하기"
               variant="primary"
               size="md"

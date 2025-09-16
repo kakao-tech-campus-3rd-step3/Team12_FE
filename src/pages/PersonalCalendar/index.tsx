@@ -1,11 +1,11 @@
-import Drawer from '@/components/common/Drawer/Drawer';
+import Drawer from '@/components/organisms/Drawer';
 import FullCalendar from '@/pages/Calendar/FullCalendar';
-import LinkStatus from '@/pages/PersonalCalendar/LinkStatus/LinkStatus';
-import MyClass from '@/pages/PersonalCalendar/sidebar-components/MyClass';
-import MyTeam from '@/pages/PersonalCalendar/sidebar-components/MyTeam';
-import QuickActions from '@/pages/PersonalCalendar/sidebar-components/QuickActions';
-import TodaySchedule from '@/pages/PersonalCalendar/sidebar-components/TodaySchedule';
-import UpcomingSchedule from '@/pages/PersonalCalendar/UpcomingSchedule/UpcomingSchedule';
+import LinkStatus from '@/pages/PersonalCalendar/components/LinkStatus';
+import MyClass from '@/pages/PersonalCalendar/components/MyClass';
+import MyTeam from '@/pages/PersonalCalendar/components/MyTeam';
+import QuickActions from '@/pages/PersonalCalendar/components/QuickActions';
+import TodaySchedule from '@/pages/PersonalCalendar/components/TodaySchedule';
+import UpcomingSchedule from '@/pages/PersonalCalendar/components/UpcomingSchedule';
 
 const PersonalCalendarPage = () => {
   return (

@@ -2,12 +2,14 @@ import { twMerge } from 'tailwind-merge';
 import type { ReactNode } from 'react';
 
 interface ButtonProps {
-  handleSubmit: () => void;
+  onClick: () => void;
   text: string;
   className?: string;
+  /**너비 100% 여부**/
   fullWidth?: boolean;
   icon?: ReactNode;
   iconPosition?: 'left' | 'right';
+  /**주요 버튼 형태 구분**/
   variant?: 'primary' | 'secondary' | 'outline';
   size?: 'sm' | 'md' | 'lg';
   wrapperClassName?: string;
@@ -15,7 +17,7 @@ interface ButtonProps {
 }
 
 const Button = ({
-  handleSubmit,
+  onClick,
   text,
   className,
   fullWidth = false,
@@ -32,7 +34,8 @@ const Button = ({
   const variantStyles = {
     primary: 'text-white bg-blue-600 hover:bg-blue-700 focus-visible:ring-blue-500',
     secondary: 'text-gray-700 bg-gray-100 hover:bg-gray-200 focus-visible:ring-gray-500',
-    outline: 'text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 focus-visible:ring-blue-500',
+    outline:
+      'text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 focus-visible:ring-blue-500',
   };
 
   const sizeStyles = {
@@ -49,7 +52,7 @@ const Button = ({
 
   const buttonContent = (
     <button
-      onClick={handleSubmit}
+      onClick={onClick}
       className={twMerge(
         baseStyles,
         variantStyles[variant],

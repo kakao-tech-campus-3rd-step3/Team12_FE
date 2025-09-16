@@ -17,7 +17,12 @@ const TimeSelector: React.FC<TimeSelectorProps> = ({
 }) => {
   return (
     <div className={`mb-4 sm:mb-6 ${className}`}>
-      <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">{label}</label>
+      <label
+        htmlFor={`time-selector-${label}`}
+        className="block text-xs sm:text-sm font-medium text-gray-700 mb-2"
+      >
+        {label}
+      </label>
       <div className="relative">
         <select
           value={value}
