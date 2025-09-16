@@ -1,8 +1,8 @@
 import Button from '@/components/atoms/Button';
 import Modal from '@/components/molecules/Modal';
 import ModalHeader from '@/components/atoms/ModalHeader';
-import { FormInput } from '@/components/form/FormInput';
-import ImageInput from '@/pages/Calendar/components/TimetableModal/ImageInput';
+import { FormInput } from '@/components/atoms/FormInput';
+import ImageInput from '@/pages/Calendar/components/ImageInput';
 import React, { useEffect, useState } from 'react';
 
 interface TimeTableModalProps {
@@ -15,7 +15,7 @@ const TimeTableModal: React.FC<TimeTableModalProps> = ({ isOpen, onClose }) => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [startDate, setStartDate] = useState<Date>(new Date('2025-03-01'));
   const [endDate, setEndDate] = useState<Date>(new Date('2025-12-21'));
-  const [evrytimeTable, setEvrytimeTable] = useState<string>('');
+  const [everytimeTable, setEverytimeTable] = useState<string>('');
   // 언마운트 시 이미지 URL 정리
   useEffect(() => {
     return () => {
@@ -55,10 +55,10 @@ const TimeTableModal: React.FC<TimeTableModalProps> = ({ isOpen, onClose }) => {
             handleImageSelect={handleImageSelect}
           />
           <FormInput
-            id="evrytimeTable"
+            id="everytimeTable"
             label="에브리타임 시간표 링크"
-            value={evrytimeTable}
-            onChange={setEvrytimeTable}
+            value={everytimeTable}
+            onChange={setEverytimeTable}
             placeholder="https://everytime.kr/@..."
             type="text"
             className="mt-4"

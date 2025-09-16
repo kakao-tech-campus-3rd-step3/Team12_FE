@@ -1,4 +1,4 @@
-import Header from '@/components/common/Header/Header';
+import Header from '@/components/organisms/Header';
 import { Outlet } from 'react-router-dom';
 
 const RootLayout = () => {

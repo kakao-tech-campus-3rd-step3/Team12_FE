@@ -3,9 +3,9 @@ import { Users, Plus, UserPlus } from 'lucide-react';
 import { mockTeams } from '@/mockdata/teamData';
 import Button from '@/components/atoms/Button';
 import TeamListCard from '@/pages/TeamCalendar/components/TeamListCard';
-import CreateTeam from '@/pages/TeamCalendar/sections/CreateTeam';
-import JoinTeam from '@/pages/TeamCalendar/sections/JoinTeam';
-import Pagination from '@/components/common/Pagination/Pagination';
+import CreateTeam from '@/pages/TeamCalendar/components/CreateTeam';
+import JoinTeam from '@/pages/TeamCalendar/components/JoinTeam';
+import Pagination from '@/components/molecules/Pagination';
 
 interface TeamListModalProps {
   isOpen: boolean;
@@ -111,14 +111,14 @@ const TeamListModal = ({ isOpen, onClose }: TeamListModalProps) => {
 
                   <div className="flex gap-2">
                     <Button
-                      handleSubmit={() => setCurrentView('create')}
+                      onClick={() => setCurrentView('create')}
                       text="새 팀 만들기"
                       icon={<Plus />}
                       size="sm"
                       noWrapper={true}
                     />
                     <Button
-                      handleSubmit={() => setCurrentView('join')}
+                      onClick={() => setCurrentView('join')}
                       text="팀 참여하기"
                       icon={<UserPlus />}
                       variant="outline"
@@ -155,7 +155,7 @@ const TeamListModal = ({ isOpen, onClose }: TeamListModalProps) => {
                     </div>
                     <p className="text-gray-500 mb-4">참여 중인 팀이 없습니다</p>
                     <Button
-                      handleSubmit={() => setCurrentView('create')}
+                      onClick={() => setCurrentView('create')}
                       text="첫 번째 팀 만들기"
                       size="sm"
                       noWrapper={true}

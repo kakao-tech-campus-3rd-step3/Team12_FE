@@ -38,16 +38,11 @@ const JoinTeam = ({ onBack, onJoinTeam }: JoinTeamProps) => {
               <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center rounded-full bg-blue-50">
                 <UserPlus className="w-8 h-8 text-blue-500" />
               </div>
-              <p className="text-gray-600 text-sm">
-                팀 관리자로부터 받은 초대코드를 입력해주세요.
-              </p>
+              <p className="text-gray-600 text-sm">팀 관리자로부터 받은 초대코드를 입력해주세요.</p>
             </div>
 
             <div>
-              <label
-                htmlFor="inviteCode"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
+              <label htmlFor="inviteCode" className="block text-sm font-medium text-gray-700 mb-2">
                 초대코드
               </label>
               <input
@@ -67,7 +62,7 @@ const JoinTeam = ({ onBack, onJoinTeam }: JoinTeamProps) => {
 
             <div>
               <Button
-                handleSubmit={handleJoinTeam}
+                onClick={handleJoinTeam}
                 text="가입하기"
                 size="md"
                 noWrapper={true}
@@ -81,4 +76,4 @@ const JoinTeam = ({ onBack, onJoinTeam }: JoinTeamProps) => {
   );
 };
 
-export default JoinTeam; 
+export default JoinTeam;

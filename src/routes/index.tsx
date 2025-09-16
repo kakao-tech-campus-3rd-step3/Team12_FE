@@ -1,8 +1,8 @@
 import RootLayout from '@/layout/RootLayout';
-import Login from '@/pages/Login/Login';
-import PersonalCalendarPage from '@/pages/PersonalCalendar/PersonalCalendar';
-import Signup from '@/pages/Signup/Signup';
-import TeamCalendarPage from '@/pages/TeamCalendar/TeamCalendar';
+import Login from '@/pages/Login';
+import PersonalCalendarPage from '@/pages/PersonalCalendar';
+import TeamCalendarPage from '@/pages/TeamCalendar';
+import Signup from '@/pages/Signup';
 import { createBrowserRouter, Link } from 'react-router-dom';
 import { RouterPath } from './path';
 
