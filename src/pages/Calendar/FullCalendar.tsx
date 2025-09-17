@@ -1,3 +1,7 @@
+import { useEvents, useModal } from '@/hooks';
+import { formatLocalDate } from '@/hooks/calendar/useEvents';
+import DateModal from '@/pages/Calendar/components/DateModal';
+import { type CalendarEvent } from '@/types/calendar';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import FullCalendar from '@fullcalendar/react';
@@ -5,28 +9,22 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-type CalendarEvent = {
-  id: string;
-  title: string;
-  start: string | Date;
-  end?: string | Date;
-  allDay?: boolean;
-};
-
 const CalendarPage = () => {
-  const [events, setEvents] = useState<CalendarEvent[]>([
-    { id: '1', title: '팀미팅', start: new Date().toISOString(), allDay: false },
-  ]);
+  const { setModalType, setIsOpen, isOpen, modalType } = useModal();
+  const { events, addEvent, removeEvent, updateEvent, handleEventDrop, handleEventResize } =
+    useEvents();
 
   const calendarRef = useRef<FullCalendar>(null);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | undefined>();
+  const [selectedDate, setSelectedDate] = useState<string | undefined>();
   //const navigate = useNavigate();
   const isInitialized = useRef(false);
 
   const plugins = useMemo(() => [dayGridPlugin, timeGridPlugin, interactionPlugin], []);
 
   // URL에서 현재 날짜와 뷰 정보 읽기
-  const currentDate = searchParams.get('date') || new Date().toISOString().split('T')[0];
+  const currentDate = searchParams.get('date') || formatLocalDate(new Date());
   const currentView = searchParams.get('view') || 'dayGridMonth';
 
   // URL 파라미터 업데이트 함수
@@ -46,6 +44,20 @@ const CalendarPage = () => {
       isInitialized.current = true;
     }
   }, [currentDate, currentView]);
+
+  // 모달에서 이벤트 저장 핸들러
+  const handleSaveEvent = (eventData: Omit<CalendarEvent, 'id'>) => {
+    if (modalType === 'add') {
+      addEvent(eventData);
+    } else if (modalType === 'edit' && selectedEvent) {
+      updateEvent(selectedEvent.id, eventData);
+    }
+  };
+
+  // 모달에서 이벤트 삭제 핸들러
+  const handleDeleteEvent = (eventId: string) => {
+    removeEvent(eventId);
+  };
 
   return (
     <div className="p-2">
@@ -74,15 +86,11 @@ const CalendarPage = () => {
                   click: () => {
                     const title = prompt('일정 제목을 입력하세요');
                     if (!title) return;
-                    setEvents((prev) => [
-                      ...prev,
-                      {
-                        id: crypto.randomUUID(),
-                        title,
-                        start: new Date().toISOString(),
-                        allDay: true,
-                      },
-                    ]);
+                    addEvent({
+                      title,
+                      start: formatLocalDate(new Date()),
+                      private: false,
+                    });
                   },
                 },
                 today: {
@@ -91,7 +99,7 @@ const CalendarPage = () => {
                     const calendarApi = calendarRef.current?.getApi();
                     if (!calendarApi) return;
                     const currentView = calendarApi.view.type;
-                    const today = new Date().toISOString().split('T')[0];
+                    const today = formatLocalDate(new Date());
                     calendarApi.gotoDate(today);
                     updateURL(today, currentView);
                   },
@@ -101,7 +109,7 @@ const CalendarPage = () => {
                   click: () => {
                     const calendarApi = calendarRef.current?.getApi();
                     if (!calendarApi) return;
-                    const currentDate = calendarApi.getDate().toISOString().split('T')[0];
+                    const currentDate = formatLocalDate(calendarApi.getDate());
                     calendarApi.changeView('dayGridMonth');
                     updateURL(currentDate, 'dayGridMonth');
                   },
@@ -111,7 +119,7 @@ const CalendarPage = () => {
                   click: () => {
                     const calendarApi = calendarRef.current?.getApi();
                     if (!calendarApi) return;
-                    const currentDate = calendarApi.getDate().toISOString().split('T')[0];
+                    const currentDate = formatLocalDate(calendarApi.getDate());
                     calendarApi.changeView('timeGridWeek');
                     updateURL(currentDate, 'timeGridWeek');
                   },
@@ -121,7 +129,7 @@ const CalendarPage = () => {
                   click: () => {
                     const calendarApi = calendarRef.current?.getApi();
                     if (!calendarApi) return;
-                    const currentDate = calendarApi.getDate().toISOString().split('T')[0];
+                    const currentDate = formatLocalDate(calendarApi.getDate());
                     calendarApi.changeView('timeGridDay');
                     updateURL(currentDate, 'timeGridDay');
                   },
@@ -155,53 +163,30 @@ const CalendarPage = () => {
                 month: 'long', // 월을 긴 형태로 표시 (1월, 2월...)
               }}
               dateClick={(info) => {
-                const title = prompt('일정 제목을 입력하세요');
-                if (!title) return;
-                setEvents((prev) => [
-                  ...prev,
-                  {
-                    id: crypto.randomUUID(), // 고유 ID 생성
-                    title,
-                    start: info.dateStr, // 클릭한 날짜
-                    allDay: true, // 종일 이벤트
-                  },
-                ]);
+                setSelectedDate(info.dateStr);
+                setSelectedEvent(undefined);
+                setModalType('add');
+                setIsOpen(true);
               }}
               eventClick={(info) => {
-                if (confirm(`"${info.event.title}" 일정을 삭제할까요?`)) {
-                  setEvents((prev) => prev.filter((e) => e.id !== info.event.id));
+                const event = events.find((e) => e.id === info.event.id);
+                if (event) {
+                  setSelectedEvent(event);
+                  setSelectedDate(undefined);
+                  setModalType('edit');
+                  setIsOpen(true);
                 }
               }}
               eventDrop={(info) => {
-                setEvents((prev) =>
-                  prev.map((e) =>
-                    e.id === info.event.id
-                      ? {
-                          ...e,
-                          start: info.event.start!, // 새로운 시작 시간
-                          end: info.event.end ?? undefined, // 새로운 종료 시간
-                        }
-                      : e,
-                  ),
-                );
+                handleEventDrop(info.event.id, info.event.start!);
               }}
               eventResize={(info) => {
-                setEvents((prev) =>
-                  prev.map((e) =>
-                    e.id === info.event.id
-                      ? {
-                          ...e,
-                          start: info.event.start!, // 새로운 시작 시간
-                          end: info.event.end ?? undefined, // 새로운 종료 시간
-                        }
-                      : e,
-                  ),
-                );
+                handleEventResize(info.event.id, info.event.start!);
               }}
               // 날짜 변경 시 URL 업데이트 (무한 루프 방지)
               datesSet={(info) => {
                 if (isInitialized.current) {
-                  const currentDate = info.start.toISOString().split('T')[0];
+                  const currentDate = formatLocalDate(info.start);
                   const currentView = info.view.type;
                   const urlDate = searchParams.get('date');
                   const urlView = searchParams.get('view');
@@ -216,6 +201,16 @@ const CalendarPage = () => {
           </div>
         </div>
       </div>
+      <DateModal
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        modalType={modalType}
+        selectedEvent={selectedEvent}
+        selectedDate={selectedDate}
+        onSave={handleSaveEvent}
+        onDelete={handleDeleteEvent}
+        onChangeModalType={setModalType}
+      />
     </div>
   );
 };
