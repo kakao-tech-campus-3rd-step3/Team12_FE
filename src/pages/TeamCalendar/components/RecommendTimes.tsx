@@ -1,12 +1,24 @@
 import React, { useState } from 'react';
+import type { DateRange } from 'react-day-picker';
+import '@/styles/datapicker.css';
 import { mockTimeSlots } from '@/mockdata/teamData';
 import TimeBox from '@/components/atoms/SelectBox';
 import Button from '@/components/atoms/Button';
 import { generateTimeOptions } from '@/utils/timeUtils';
+import SelectDurationCalendar from '@/pages/TeamCalendar/components/SelectDurationCalendar';
 
 const RecommendTimes: React.FC = () => {
   const [selectedDuration, setSelectedDuration] = useState(60);
   const timeOptions = generateTimeOptions(4);
+  const [range, setRange] = useState<DateRange | undefined>();
+
+  const handleSearch = () => {
+    if (!range?.from || !range?.to) {
+      alert('날짜 범위를 선택해주세요!');
+      return;
+    }
+    alert(`선택된 기간: ${range.from.toDateString()} ~ ${range.to.toDateString()}`);
+  };
 
   return (
     <div className="w-full bg-white overflow-hidden p-6 rounded-xl border shadow-lg border-mainBlue/70">
@@ -19,7 +31,6 @@ const RecommendTimes: React.FC = () => {
           onChange={setSelectedDuration}
           options={timeOptions}
         />
-
         <div className="space-y-3">
           {mockTimeSlots.map((slot) => (
             <div className="border border-gray-200 rounded-lg p-3">
@@ -50,7 +61,8 @@ const RecommendTimes: React.FC = () => {
             className="mb-4"
           />
         </div>
-
+        {/*날짜 기간 선택*/}
+        <SelectDurationCalendar range={range} setRange={setRange} onSearch={handleSearch} />
         {/* 반응형 카드 레이아웃 */}
         <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 lg:gap-4 transition-all duration-300 ease-out">
           {mockTimeSlots.map((slot, index) => (
