@@ -1,11 +1,11 @@
+import Header from '@/components/organisms/Header';
 import { Outlet } from 'react-router-dom';
-import Navigation from '@/components/common/Header/Header';
 
 const RootLayout = () => {
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      <Navigation />
-      <main className="flex-1 flex items-center justify-center">
+    <div className="flex flex-col min-h-screen">
+      <Header />
+      <main className="flex-1 w-full">
         <Outlet />
       </main>
     </div>

@@ -2,7 +2,8 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 type CalendarEvent = {
   id: string;
@@ -17,29 +18,56 @@ const CalendarPage = () => {
     { id: '1', title: '팀미팅', start: new Date().toISOString(), allDay: false },
   ]);
 
-  const calendarRef = useRef<any>(null);
+  const calendarRef = useRef<FullCalendar>(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+  //const navigate = useNavigate();
+  const isInitialized = useRef(false);
 
   const plugins = useMemo(() => [dayGridPlugin, timeGridPlugin, interactionPlugin], []);
 
+  // URL에서 현재 날짜와 뷰 정보 읽기
+  const currentDate = searchParams.get('date') || new Date().toISOString().split('T')[0];
+  const currentView = searchParams.get('view') || 'dayGridMonth';
+
+  // URL 파라미터 업데이트 함수
+  const updateURL = (date: string, view: string) => {
+    const newSearchParams = new URLSearchParams(searchParams);
+    newSearchParams.set('date', date);
+    newSearchParams.set('view', view);
+    setSearchParams(newSearchParams);
+  };
+
+  // 캘린더 초기화 시 URL 파라미터 적용
+  useEffect(() => {
+    if (calendarRef.current && !isInitialized.current) {
+      const calendarApi = calendarRef.current.getApi();
+      calendarApi.changeView(currentView);
+      calendarApi.gotoDate(currentDate);
+      isInitialized.current = true;
+    }
+  }, [currentDate, currentView]);
+
   return (
-    <div className="p-6 min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="p-2">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-8">
+        {/* <div className="mb-8">
           <h1 className="mb-2 text-3xl font-bold text-gray-900">일정 관리</h1>
           <p className="text-gray-600">팀 일정을 효율적으로 관리하세요</p>
-        </div>
+        </div> */}
 
         <div className="overflow-hidden bg-white rounded-2xl shadow-xl">
-          <div className="p-6">
+          <div className="p-1 py-4 sm:p-6">
             <FullCalendar
               ref={calendarRef}
               plugins={plugins}
-              initialView="dayGridMonth"
+              initialView={currentView}
               headerToolbar={{
-                left: 'addEvent today', // 새 일정, 오늘 버튼
-                center: 'prev title next', // 이전, 제목, 다음 버튼
-                right: 'dayGridMonth,timeGridWeek,timeGridDay', // 월/주/일 뷰
+                left: 'prev title next',
+                right: 'today dayGridMonth,timeGridWeek,timeGridDay',
               }}
+              // 모바일에서 더 작은 헤더 높이
+              height="auto"
+              aspectRatio={1.8}
               customButtons={{
                 addEvent: {
                   text: '+ 새 일정',
@@ -60,30 +88,46 @@ const CalendarPage = () => {
                 today: {
                   text: '오늘',
                   click: () => {
-                    calendarRef.current?.getApi().gotoToday();
+                    const calendarApi = calendarRef.current?.getApi();
+                    if (!calendarApi) return;
+                    const currentView = calendarApi.view.type;
+                    const today = new Date().toISOString().split('T')[0];
+                    calendarApi.gotoDate(today);
+                    updateURL(today, currentView);
                   },
                 },
                 dayGridMonth: {
                   text: '월간',
                   click: () => {
-                    calendarRef.current?.getApi().changeView('dayGridMonth');
+                    const calendarApi = calendarRef.current?.getApi();
+                    if (!calendarApi) return;
+                    const currentDate = calendarApi.getDate().toISOString().split('T')[0];
+                    calendarApi.changeView('dayGridMonth');
+                    updateURL(currentDate, 'dayGridMonth');
                   },
                 },
                 timeGridWeek: {
                   text: '주간',
                   click: () => {
-                    calendarRef.current?.getApi().changeView('timeGridWeek');
+                    const calendarApi = calendarRef.current?.getApi();
+                    if (!calendarApi) return;
+                    const currentDate = calendarApi.getDate().toISOString().split('T')[0];
+                    calendarApi.changeView('timeGridWeek');
+                    updateURL(currentDate, 'timeGridWeek');
                   },
                 },
                 timeGridDay: {
                   text: '일간',
                   click: () => {
-                    calendarRef.current?.getApi().changeView('timeGridDay');
+                    const calendarApi = calendarRef.current?.getApi();
+                    if (!calendarApi) return;
+                    const currentDate = calendarApi.getDate().toISOString().split('T')[0];
+                    calendarApi.changeView('timeGridDay');
+                    updateURL(currentDate, 'timeGridDay');
                   },
                 },
               }}
               locale="ko"
-              height="auto"
               selectable // 날짜 선택 가능 (새 일정 추가)
               editable // 이벤트 편집 가능 (드래그, 리사이즈)
               events={events}
@@ -153,6 +197,20 @@ const CalendarPage = () => {
                       : e,
                   ),
                 );
+              }}
+              // 날짜 변경 시 URL 업데이트 (무한 루프 방지)
+              datesSet={(info) => {
+                if (isInitialized.current) {
+                  const currentDate = info.start.toISOString().split('T')[0];
+                  const currentView = info.view.type;
+                  const urlDate = searchParams.get('date');
+                  const urlView = searchParams.get('view');
+
+                  // URL과 현재 상태가 다를 때만 업데이트
+                  if (urlDate !== currentDate || urlView !== currentView) {
+                    updateURL(currentDate, currentView);
+                  }
+                }
               }}
             />
           </div>
