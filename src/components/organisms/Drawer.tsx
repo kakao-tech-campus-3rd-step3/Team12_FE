@@ -42,6 +42,7 @@ const Drawer = ({ children, className = '' }: DrawerProps) => {
         className={`
           fixed xl:relative top-0 left-0 z-50 xl:z-auto
           transform transition-transform duration-300 ease-in-out
+          min-w-60
           ${isOpen ? 'translate-x-0' : '-translate-x-full xl:translate-x-0'}
           ${className}
         `}

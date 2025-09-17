@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ChevronDown, ChevronUp, Settings } from 'lucide-react';
 import { mockMembers } from '@/mockdata/teamData';
-import SearchBar from '@/components/atoms/SearchBar';
+//import SearchBar from '@/components/atoms/SearchBar';
 
 interface TeamMembersProps {
   onSettingsClick?: () => void;
@@ -23,7 +23,7 @@ const TeamMembers: React.FC<TeamMembersProps> = ({ onSettingsClick }) => {
             <ChevronDown className="w-4 h-4 text-blue-500" />
           )}
         </div>
-                <button 
+        <button
           className="text-gray-400 hover:text-blue-600 transition-colors duration-200 p-2 hover:bg-blue-50 rounded-full"
           onClick={onSettingsClick}
         >
@@ -31,11 +31,13 @@ const TeamMembers: React.FC<TeamMembersProps> = ({ onSettingsClick }) => {
         </button>
       </div>
 
+      {/**
       {isOpen && (
         <div className="mt-4">
           <SearchBar placeholder="팀원 검색하기" />
         </div>
       )}
+      **/}
 
       {isOpen && (
         <div className="mt-4 max-h-60 overflow-y-auto space-y-2">
@@ -68,6 +70,9 @@ const TeamMembers: React.FC<TeamMembersProps> = ({ onSettingsClick }) => {
         </div>
       )}
 
+      {isOpen && mockMembers.length > 5 && (
+        <p className="text-xs text-center text-gray-400 mt-2">스크롤하여 팀원 더보기</p>
+      )}
     </div>
   );
 };
