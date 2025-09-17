@@ -10,7 +10,7 @@ const TeamCalendarPage = () => {
   const [isTeamListModalOpen, setIsTeamListModalOpen] = useState(false);
 
   return (
-    <div className="min-h-[calc(100vh-70px)] flex">
+    <div className="min-h-[calc(100vh-70px)]">
       <div className="hidden transition-all duration-500 uration-500 ease-in-out bg-gradient-to-br from-blue-50 to-indigo-100 ease-in-out xl:flex">
         <Drawer>
           <TeamMembers onSettingsClick={() => setIsTeamListModalOpen(true)} />
@@ -21,7 +21,7 @@ const TeamCalendarPage = () => {
           <FullCalendar />
         </div>
 
-        <div className="pr-4 pt-2 pl-2 w-80 transition-all duration-500 ease-in-out transform">
+        <div className="pr-4 pt-2 pl-2 w-[400px] transition-all duration-500 ease-in-out transform">
           <div className="transition-all duration-300 ease-out transform">
             <RecommendTimes />
           </div>
@@ -36,7 +36,7 @@ const TeamCalendarPage = () => {
             <UpcomingTeamSchedule />
           </Drawer>
 
-          <div className="flex flex-col flex-1">
+          <div className="flex flex-col">
             <div className="overflow-x-auto order-b border-gray-200">
               <div className="p-2 rounded-lg border border-gray-100">
                 <RecommendTimes />

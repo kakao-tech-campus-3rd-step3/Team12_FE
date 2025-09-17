@@ -31,23 +31,31 @@ const RecommendTimes: React.FC = () => {
           onChange={setSelectedDuration}
           options={timeOptions}
         />
-        <div className="space-y-3">
-          {mockTimeSlots.map((slot) => (
-            <div className="border border-gray-200 rounded-lg p-3">
-              <div className="flex justify-between items-center">
-                <div className="font-medium text-gray-800">{slot.day}</div>
-                <span
-                  className={`px-2 py-1 text-xs font-medium rounded-full ${
-                    slot.tag === '최적' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'
-                  }`}
-                >
-                  {slot.tag}
-                </span>
-              </div>
-              <div className="text-sm text-gray-700 mt-2 font-medium">{slot.time}</div>
-              <div className="text-xs text-gray-500 mt-1">{slot.participants}</div>
+        <div className="flex flex-col">
+          {/*날짜 기간 선택*/}
+          <div className="mb-3">
+            <div className="border border-gray-200 p-4 rounded-lg">
+              <SelectDurationCalendar range={range} setRange={setRange} onSearch={handleSearch} />
             </div>
-          ))}
+          </div>
+          <div className="space-y-3">
+            {mockTimeSlots.map((slot) => (
+              <div className="border border-gray-200 rounded-lg p-3">
+                <div className="flex justify-between items-center">
+                  <div className="font-medium text-gray-800">{slot.day}</div>
+                  <span
+                    className={`px-2 py-1 text-xs font-medium rounded-full ${
+                      slot.tag === '최적' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'
+                    }`}
+                  >
+                    {slot.tag}
+                  </span>
+                </div>
+                <div className="text-sm text-gray-700 mt-2 font-medium">{slot.time}</div>
+                <div className="text-xs text-gray-500 mt-1">{slot.participants}</div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
