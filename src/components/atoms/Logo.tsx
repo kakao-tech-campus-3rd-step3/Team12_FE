@@ -11,7 +11,7 @@ const Logo = ({ className }: LogoProps) => {
   return (
     <div
       className={`flex flex-col justify-center items-center cursor-pointer ${className ?? ''}`}
-      onClick={() => navigate(RouterPath.HOME)}
+      onClick={() => navigate(RouterPath.HOME.DEFAULT)}
     >
       <div className="flex items-center space-x-2">
         <GraduationCap className="w-8 h-8 text-blue-600" />
