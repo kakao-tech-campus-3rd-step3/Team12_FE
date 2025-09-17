@@ -1,6 +1,7 @@
 import Button from '@/components/atoms/Button';
 import Modal from '@/components/molecules/Modal';
 import ModalHeader from '@/components/atoms/ModalHeader';
+import { FormInput } from '@/components/atoms/FormInput';
 import ImageInput from '@/pages/Calendar/components/ImageInput';
 import React, { useEffect, useState } from 'react';
 
@@ -14,7 +15,7 @@ const TimeTableModal: React.FC<TimeTableModalProps> = ({ isOpen, onClose }) => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [startDate, setStartDate] = useState<Date>(new Date('2025-03-01'));
   const [endDate, setEndDate] = useState<Date>(new Date('2025-12-21'));
-
+  const [everytimeTable, setEverytimeTable] = useState<string>('');
   // 언마운트 시 이미지 URL 정리
   useEffect(() => {
     return () => {
@@ -53,6 +54,15 @@ const TimeTableModal: React.FC<TimeTableModalProps> = ({ isOpen, onClose }) => {
             imagePreview={imagePreview}
             handleImageSelect={handleImageSelect}
           />
+          <FormInput
+            id="everytimeTable"
+            label="에브리타임 시간표 링크"
+            value={everytimeTable}
+            onChange={setEverytimeTable}
+            placeholder="https://everytime.kr/@..."
+            type="text"
+            className="mt-4"
+          />
         </div>
 
         {/* 날짜 입력 필드 */}
@@ -82,8 +92,7 @@ const TimeTableModal: React.FC<TimeTableModalProps> = ({ isOpen, onClose }) => {
           </div>
         </div>
       </div>
-
-      <Button onClick={handleSubmit} text="등록하기" />
+      <Button handleSubmit={handleSubmit} text="등록하기" className="flex justify-center w-full" />
     </Modal>
   );
 };
