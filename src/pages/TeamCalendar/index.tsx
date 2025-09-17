@@ -1,18 +1,20 @@
+import { useState } from 'react';
 import Drawer from '@/components/organisms/Drawer';
 import FullCalendar from '@/pages/Calendar/FullCalendar';
 import RecommendTimes from '@/pages/TeamCalendar/components/RecommendTimes';
 import TeamListModal from '@/pages/TeamCalendar/components/TeamListModal';
 import TeamMembers from '@/pages/TeamCalendar/components/TeamMembers';
-import { useState } from 'react';
+import UpcomingTeamSchedule from '@/pages/TeamCalendar/components/UpcomingTeamSchedule';
 
 const TeamCalendarPage = () => {
   const [isTeamListModalOpen, setIsTeamListModalOpen] = useState(false);
 
   return (
-    <div className="min-h-screen">
-      <div className="hidden min-h-screen transition-all duration-500 uration-500 ease-in-out bg-gradient-to-br from-blue-50 to-indigo-100 ease-in-out xl:flex">
+    <div className="min-h-[calc(100vh-70px)] flex">
+      <div className="hidden transition-all duration-500 uration-500 ease-in-out bg-gradient-to-br from-blue-50 to-indigo-100 ease-in-out xl:flex">
         <Drawer>
           <TeamMembers onSettingsClick={() => setIsTeamListModalOpen(true)} />
+          <UpcomingTeamSchedule />
         </Drawer>
 
         <div className="flex-1 transition-all duration-500 ease-in-out">
@@ -31,6 +33,7 @@ const TeamCalendarPage = () => {
         <div className="flex flex-col min-h-screen uration-500 ease-in-out bg-gradient-to-br from-blue-50 to-indigo-100">
           <Drawer>
             <TeamMembers onSettingsClick={() => setIsTeamListModalOpen(true)} />
+            <UpcomingTeamSchedule />
           </Drawer>
 
           <div className="flex flex-col flex-1">
