@@ -1,14 +1,14 @@
-import type { TimeOption } from '@/utils/timeUtils';
+import type { SelectOption } from '@/utils/timeUtils';
 
-interface TimeSelectorProps {
+interface SelectBoxProps {
   label: string;
   value: number;
   onChange: (value: number) => void;
-  options: TimeOption[];
+  options: SelectOption[];
   className?: string;
 }
 
-const TimeSelector: React.FC<TimeSelectorProps> = ({
+const SelectBox: React.FC<SelectBoxProps> = ({
   label,
   value,
   onChange,
@@ -18,7 +18,7 @@ const TimeSelector: React.FC<TimeSelectorProps> = ({
   return (
     <div className={`mb-4 sm:mb-6 ${className}`}>
       <label
-        htmlFor={`time-selector-${label}`}
+        htmlFor={`select-box-${label}`}
         className="block text-xs sm:text-sm font-medium text-gray-700 mb-2"
       >
         {label}
@@ -50,4 +50,4 @@ const TimeSelector: React.FC<TimeSelectorProps> = ({
   );
 };
 
-export default TimeSelector;
+export default SelectBox;
