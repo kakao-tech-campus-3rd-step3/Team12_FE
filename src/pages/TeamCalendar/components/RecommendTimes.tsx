@@ -9,7 +9,7 @@ const RecommendTimes: React.FC = () => {
   const timeOptions = generateTimeOptions(4);
 
   return (
-    <div className="w-full">
+    <div className="w-full bg-white overflow-hidden p-6 rounded-xl border shadow-lg border-mainBlue/70">
       <h2 className="text-lg font-semibold text-gray-800 mb-4">가장 빠른 팀 일정 추천</h2>
 
       <div className="xl:block hidden">
