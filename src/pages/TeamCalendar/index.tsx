@@ -36,7 +36,7 @@ const TeamCalendarPage = () => {
             <UpcomingTeamSchedule />
           </Drawer>
 
-          <div className="flex flex-col">
+          <div className="flex flex-col flex-1">
             <div className="overflow-x-auto order-b border-gray-200">
               <div className="p-2 rounded-lg border border-gray-100">
                 <RecommendTimes />
