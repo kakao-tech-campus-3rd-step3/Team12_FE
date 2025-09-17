@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { mockTimeSlots } from '@/mockdata/teamData';
-import TimeSelector from '@/components/atoms/SelectBox';
+import TimeBox from '@/components/atoms/SelectBox';
 import Button from '@/components/atoms/Button';
 import { generateTimeOptions } from '@/utils/timeUtils';
 
@@ -13,7 +13,7 @@ const RecommendTimes: React.FC = () => {
       <h2 className="text-lg font-semibold text-gray-800 mb-4">가장 빠른 팀 일정 추천</h2>
 
       <div className="xl:block hidden">
-        <TimeSelector
+        <TimeBox
           label="최소 요구 시간"
           value={selectedDuration}
           onChange={setSelectedDuration}
@@ -42,7 +42,7 @@ const RecommendTimes: React.FC = () => {
 
       <div className="xl:hidden block">
         <div className="mb-4">
-          <TimeSelector
+          <TimeBox
             label="최소 요구 시간"
             value={selectedDuration}
             onChange={setSelectedDuration}
