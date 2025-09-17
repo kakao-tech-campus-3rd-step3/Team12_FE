@@ -21,7 +21,7 @@ const TeamCalendarPage = () => {
           <FullCalendar />
         </div>
 
-        <div className="pr-4 pt-2 pl-2 w-[400px] transition-all duration-500 ease-in-out transform">
+        <div className="px-2 py-2 pr-4 w-[400px] transition-all duration-500 ease-in-out transform">
           <div className="transition-all duration-300 ease-out transform">
             <RecommendTimes />
           </div>
