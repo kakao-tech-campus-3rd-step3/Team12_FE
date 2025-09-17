@@ -61,39 +61,49 @@ const RecommendTimes: React.FC = () => {
             className="mb-4"
           />
         </div>
-        {/*날짜 기간 선택*/}
-        <div className="border border-gray-200 p-4 rounded-lg mb-3">
-          <SelectDurationCalendar range={range} setRange={setRange} onSearch={handleSearch} />
-        </div>
-        {/* 반응형 카드 레이아웃 */}
-        <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 lg:gap-4 transition-all duration-300 ease-out">
-          {mockTimeSlots.map((slot, index) => (
-            <div
-              key={slot.id}
-              className="min-w-0 bg-white border border-gray-200 rounded-lg p-2 sm:p-3 transform transition-all duration-300 ease-out min-w-0"
-              style={{
-                transitionDelay: `${index * 50}ms`,
-              }}
-            >
-              <div className="flex justify-between items-center gap-2">
-                <div className="font-medium text-gray-800 flex-1 min-w-0">{slot.day}</div>
-                <span
-                  className={`px-1 py-0.5 sm:px-1.5 sm:py-0.5 lg:px-2 lg:py-1 text-xs font-medium rounded-full transition-all duration-200 flex-shrink-0 ${
-                    slot.tag === '최적' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'
-                  }`}
-                >
-                  {slot.tag}
-                </span>
-              </div>
-              <div className="text-xs text-gray-700 mt-1 sm:mt-2 font-medium">{slot.time}</div>
-              <div className="text-xs text-gray-500 mt-1 line-clamp-2">{slot.participants}</div>
-            </div>
-          ))}
-        </div>
-      </div>
 
-      <div className="mt-4 sm:mt-6">
-        <Button onClick={() => {}} text="더 많은 시간 확인하기" fullWidth={true} />
+        {/* 반응형 레이아웃: 작은 화면에서는 세로, 큰 화면에서는 가로 */}
+        <div className="flex flex-col lg:flex-row lg:gap-6">
+          {/*날짜 기간 선택*/}
+          <div className="lg:w-1/2 mb-3 lg:mb-0">
+            <div className="border border-gray-200 p-4 rounded-lg">
+              <SelectDurationCalendar range={range} setRange={setRange} onSearch={handleSearch} />
+            </div>
+          </div>
+
+          {/* 반응형 카드 레이아웃 */}
+          <div className="lg:w-1/2 mt-1">
+            <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-2 sm:gap-3 lg:gap-4 transition-all duration-300 ease-out">
+              {/* 4개까지만 화면에 띄움 */}
+              {mockTimeSlots.slice(0, 4).map((slot, index) => (
+                <div
+                  key={slot.id}
+                  className="min-w-0 bg-white border border-gray-200 rounded-lg p-2 sm:p-3 transform transition-all duration-300 ease-out min-w-0"
+                  style={{
+                    transitionDelay: `${index * 50}ms`,
+                  }}
+                >
+                  <div className="flex justify-between items-center gap-2">
+                    <div className="font-medium text-gray-800 flex-1 min-w-0">{slot.day}</div>
+                    <span
+                      className={`px-1 py-0.5 sm:px-1.5 sm:py-0.5 lg:px-2 lg:py-1 text-xs font-medium rounded-full transition-all duration-200 flex-shrink-0 ${
+                        slot.tag === '최적' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'
+                      }`}
+                    >
+                      {slot.tag}
+                    </span>
+                  </div>
+                  <div className="text-xs text-gray-700 mt-1 sm:mt-2 font-medium">{slot.time}</div>
+                  <div className="text-xs text-gray-500 mt-1 line-clamp-2">{slot.participants}</div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-4 sm:mt-6">
+              <Button onClick={() => {}} text="더 많은 시간 확인하기" fullWidth={true} />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
