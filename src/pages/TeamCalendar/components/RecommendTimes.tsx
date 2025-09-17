@@ -62,7 +62,9 @@ const RecommendTimes: React.FC = () => {
           />
         </div>
         {/*날짜 기간 선택*/}
-        <SelectDurationCalendar range={range} setRange={setRange} onSearch={handleSearch} />
+        <div className="border border-gray-200 p-4 rounded-lg mb-3">
+          <SelectDurationCalendar range={range} setRange={setRange} onSearch={handleSearch} />
+        </div>
         {/* 반응형 카드 레이아웃 */}
         <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 lg:gap-4 transition-all duration-300 ease-out">
           {mockTimeSlots.map((slot, index) => (

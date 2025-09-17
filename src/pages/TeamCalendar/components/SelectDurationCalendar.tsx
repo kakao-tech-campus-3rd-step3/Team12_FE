@@ -63,6 +63,36 @@ const SelectDurationCalendar: React.FC<Props> = ({ range, setRange, onSearch }) 
           today: 'text-black underline underline-offset-4',
         }}
       />
+
+      <div className="mt-6 space-y-4">
+        {/* 선택된 날짜 표시 */}
+        <div className="flex items-center gap-3">
+          <div className="flex-1 bg-gray-50 border border-gray-200 rounded-lg p-3 text-center">
+            <div className="text-xs text-gray-500 mb-1">시작일</div>
+            <div className="text-sm font-medium text-gray-800">
+              {range?.from ? range.from.toLocaleDateString('ko-KR') : '날짜 선택'}
+            </div>
+          </div>
+
+          <div className="text-gray-400">→</div>
+
+          <div className="flex-1 bg-gray-50 border border-gray-200 rounded-lg p-3 text-center">
+            <div className="text-xs text-gray-500 mb-1">종료일</div>
+            <div className="text-sm font-medium text-gray-800">
+              {range?.to ? range.to.toLocaleDateString('ko-KR') : '날짜 선택'}
+            </div>
+          </div>
+        </div>
+
+        {/* 검색 버튼 */}
+        <Button
+          onClick={range?.from && range?.to ? onSearch : () => {}}
+          text="일정 검색하기"
+          fullWidth={true}
+          variant={range?.from && range?.to ? 'primary' : 'secondary'}
+          className={`${!range?.from || !range?.to ? 'cursor-not-allowed opacity-50' : ''}`}
+        />
+      </div>
     </div>
   );
 };
