@@ -1,4 +1,5 @@
 import Button from '@/components/atoms/Button';
+import { FormInput } from '@/components/atoms/FormInput';
 import ModalHeader from '@/components/atoms/ModalHeader';
 import Modal from '@/components/molecules/Modal';
 import { useEventForm, useFormData } from '@/hooks';
@@ -80,41 +81,31 @@ const DateModal: React.FC<DateModalProps> = ({
       ) : (
         <form onSubmit={handleFormSubmit} className="p-6">
           <div className="space-y-4">
-            <div>
-              <label className="block mb-1 text-sm font-medium text-gray-700">일정 제목</label>
-              <input
-                type="text"
-                value={formData.title}
-                onChange={(e) => updateFormData({ title: e.target.value })}
-                className="px-3 py-2 w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="일정 제목을 입력하세요"
-                required
-              />
-            </div>
+            <FormInput
+              id="title"
+              label="일정 제목"
+              value={formData.title}
+              onChange={(value) => updateFormData({ title: value })}
+              placeholder="일정 제목을 입력하세요"
+              required
+            />
 
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="private"
-                checked={formData.private}
-                onChange={(e) => updateFormData({ private: e.target.checked })}
-                className="mr-2"
-              />
-              <label htmlFor="private" className="text-sm text-gray-700">
-                비공개 여부
-              </label>
-            </div>
+            <FormInput
+              id="start-date"
+              label="시작 날짜"
+              value={formData.start}
+              onChange={(value) => updateFormData({ start: value })}
+              type="date"
+              required
+            />
 
-            <div>
-              <label className="block mb-1 text-sm font-medium text-gray-700">시작 날짜</label>
-              <input
-                type="date"
-                value={formData.start}
-                onChange={(e) => updateFormData({ start: e.target.value })}
-                className="px-3 py-2 w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
-            </div>
+            <FormInput
+              id="private"
+              label="비공개 여부"
+              value={formData.private.toString()}
+              onChange={(value) => updateFormData({ private: value === 'true' })}
+              type="checkbox"
+            />
           </div>
 
           <div
