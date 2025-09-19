@@ -20,7 +20,6 @@ const RecommendTimes: React.FC = () => {
     }
     alert(`선택된 기간: ${range.from.toDateString()} ~ ${range.to.toDateString()}`);
   };
-
   // 모든 뷰에서 사용되는 공통 컴포넌트
   const DatePickerSection = ({ forceShow = false }: { forceShow?: boolean }) => (
     <>
@@ -122,7 +121,6 @@ const RecommendTimes: React.FC = () => {
             className="mb-4"
           />
         </div>
-
         <div className="flex flex-col lg:flex-row lg:gap-6">
           <div className="lg:w-1/2 mb-3 lg:mb-0">
             {/* 모바일: 토글 버튼 O, 태블릿: datepicker 항상 표시 , 데스크탑: 토글 버튼 O */}
