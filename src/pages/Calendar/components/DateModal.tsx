@@ -3,7 +3,10 @@ import { FormInput } from '@/components/atoms/FormInput';
 import ModalHeader from '@/components/atoms/ModalHeader';
 import Modal from '@/components/molecules/Modal';
 import { useEventForm, useFormData } from '@/hooks';
+import SelectDuration from '@/pages/Calendar/components/SelectDuration';
 import { type CalendarEvent, type ModalType } from '@/types/calendar';
+import { useEffect, useState } from 'react';
+import { type DateRange } from 'react-day-picker';
 
 interface DateModalProps {
   isOpen: boolean;
@@ -26,6 +29,8 @@ const DateModal: React.FC<DateModalProps> = ({
   onDelete,
   onChangeModalType,
 }) => {
+  const [range, setRange] = useState<DateRange | undefined>();
+
   const { formData, updateFormData } = useFormData({
     isOpen,
     modalType,
@@ -37,6 +42,16 @@ const DateModal: React.FC<DateModalProps> = ({
     onSave,
     onClose,
   });
+
+  // range가 변경될 때마다 formData의 start, end 업데이트
+  useEffect(() => {
+    if (range?.from && range?.to) {
+      // 로컬 시간을 사용하여 날짜 형식 변환 (YYYY-MM-DD)
+      const startDate = `${range.from.getFullYear()}-${String(range.from.getMonth() + 1).padStart(2, '0')}-${String(range.from.getDate()).padStart(2, '0')}`;
+      const endDate = `${range.to.getFullYear()}-${String(range.to.getMonth() + 1).padStart(2, '0')}-${String(range.to.getDate()).padStart(2, '0')}`;
+      updateFormData({ start: startDate, end: endDate });
+    }
+  }, [range?.from, range?.to]);
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -80,36 +95,32 @@ const DateModal: React.FC<DateModalProps> = ({
         </div>
       ) : (
         <form onSubmit={handleFormSubmit} className="p-6">
-          <div className="space-y-4">
-            <FormInput
-              id="title"
-              label="일정 제목"
-              value={formData.title}
-              onChange={(value) => updateFormData({ title: value })}
-              placeholder="일정 제목을 입력하세요"
-              required
-            />
+          <div className="flex overflow-y-auto flex-col gap-4 space-y-4 md:flex-row md:w-full">
+            <SelectDuration range={range} setRange={setRange} />
+            <div className="">
+              <FormInput
+                id="title"
+                label="일정 제목"
+                value={formData.title}
+                onChange={(value) => updateFormData({ title: value })}
+                placeholder="일정 제목을 입력하세요"
+                required
+                className="p-4"
+              />
 
-            <FormInput
-              id="start-date"
-              label="시작 날짜"
-              value={formData.start}
-              onChange={(value) => updateFormData({ start: value })}
-              type="date"
-              required
-            />
-
-            <FormInput
-              id="private"
-              label="비공개 여부"
-              value={formData.private.toString()}
-              onChange={(value) => updateFormData({ private: value === 'true' })}
-              type="checkbox"
-            />
+              <FormInput
+                id="private"
+                label="비공개 여부"
+                value={formData.private.toString()}
+                onChange={(value) => updateFormData({ private: value === 'true' })}
+                type="checkbox"
+                className="p-4"
+              />
+            </div>
           </div>
 
           <div
-            className={`flex gap-2 mt-6 ${modalType === 'edit' ? 'justify-between' : 'justify-end'}`}
+            className={`flex gap-2 mt-2 ${modalType === 'edit' ? 'justify-around' : 'justify-center'}`}
           >
             {modalType === 'edit' && (
               <Button
@@ -122,7 +133,7 @@ const DateModal: React.FC<DateModalProps> = ({
               />
             )}
             <Button
-              onClick={() => {}}
+              type="submit"
               text={modalType === 'add' ? '추가' : '수정'}
               variant="primary"
               size="md"

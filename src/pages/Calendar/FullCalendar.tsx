@@ -86,9 +86,11 @@ const CalendarPage = () => {
                   click: () => {
                     const title = prompt('일정 제목을 입력하세요');
                     if (!title) return;
+                    const today = formatLocalDate(new Date());
                     addEvent({
                       title,
-                      start: formatLocalDate(new Date()),
+                      start: today,
+                      end: today,
                       private: false,
                     });
                   },
@@ -139,9 +141,13 @@ const CalendarPage = () => {
               selectable // 날짜 선택 가능 (새 일정 추가)
               editable // 이벤트 편집 가능 (드래그, 리사이즈)
               events={events}
-              dayMaxEvents={3} // 하루에 최대 3개 이벤트만 표시
+              dayMaxEvents={false} // 모든 이벤트 표시 (끊김 방지)
               moreLinkClick="popover" // 더 많은 이벤트는 팝오버로 표시
               eventDisplay="block" // 이벤트를 블록 형태로 표시
+              displayEventTime={true} // 이벤트 시간 표시
+              eventMinHeight={30} // 최소 높이 설정
+              eventOrderStrict={true} // 이벤트 순서 고정
+              nextDayThreshold="00:00:00" // 다음 날 기준점 설정
               eventTimeFormat={{
                 hour: '2-digit', // 시간을 2자리로 표시 (09, 14)
                 minute: '2-digit', // 분을 2자리로 표시 (05, 30)
@@ -150,6 +156,8 @@ const CalendarPage = () => {
               views={{
                 dayGridMonth: {
                   dayHeaderFormat: { weekday: 'short' }, // 월 뷰에서는 요일만
+                  eventLimit: false, // 이벤트 제한 없음
+                  eventLimitClick: 'popover',
                 },
                 timeGridWeek: {
                   dayHeaderFormat: { weekday: 'short', day: 'numeric' }, // 주 뷰에서는 요일과 날짜
@@ -178,10 +186,10 @@ const CalendarPage = () => {
                 }
               }}
               eventDrop={(info) => {
-                handleEventDrop(info.event.id, info.event.start!);
+                handleEventDrop(info.event.id, info.event.start!, info.event.end || undefined);
               }}
               eventResize={(info) => {
-                handleEventResize(info.event.id, info.event.start!);
+                handleEventResize(info.event.id, info.event.start!, info.event.end || undefined);
               }}
               // 날짜 변경 시 URL 업데이트 (무한 루프 방지)
               datesSet={(info) => {

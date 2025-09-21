@@ -1,8 +1,8 @@
-import { twMerge } from 'tailwind-merge';
 import type { ReactNode } from 'react';
+import { twMerge } from 'tailwind-merge';
 
 interface ButtonProps {
-  onClick: () => void;
+  onClick?: () => void;
   text: string;
   className?: string;
   /**너비 100% 여부**/
@@ -14,6 +14,7 @@ interface ButtonProps {
   size?: 'sm' | 'md' | 'lg';
   wrapperClassName?: string;
   noWrapper?: boolean;
+  type?: 'button' | 'submit' | 'reset';
 }
 
 const Button = ({
@@ -27,6 +28,7 @@ const Button = ({
   size = 'md',
   wrapperClassName,
   noWrapper = false,
+  type = 'button',
 }: ButtonProps) => {
   const baseStyles =
     'font-medium rounded-md transition-colors text-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2';
@@ -52,6 +54,7 @@ const Button = ({
 
   const buttonContent = (
     <button
+      type={type}
       onClick={onClick}
       className={twMerge(
         baseStyles,
