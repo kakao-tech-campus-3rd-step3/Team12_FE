@@ -129,7 +129,7 @@ const DateModal: React.FC<DateModalProps> = ({
                 value={formData.private.toString()}
                 onChange={(value) => updateFormData({ private: value === 'true' })}
                 type="checkbox"
-                className="p-4 pt-0"
+                className="px-4 py-2"
               />
 
               <Button
@@ -141,11 +141,11 @@ const DateModal: React.FC<DateModalProps> = ({
                   toggleShowTime();
                 }}
                 // Form Input이 아니라서 margin으로 위치 조정
-                className="flex justify-center mx-4 items-center w-[45%] h-[40px] border border-mainBlue bg-white text-mainBlue hover:bg-gray-50 hover:text-gray-500 hover:cursor-pointer"
+                className="flex justify-center mx-4 mt-4 items-center w-[45%] h-[40px] border border-mainBlue bg-white text-mainBlue hover:bg-gray-50 hover:text-gray-500 hover:cursor-pointer"
               />
 
               <div
-                className={`transition-all duration-300 ease-in-out p-4 overflow-hidden ${
+                className={`transition-all duration-300 ease-in-out p-4 pt-1 overflow-hidden ${
                   showTime ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
                 }`}
               >
