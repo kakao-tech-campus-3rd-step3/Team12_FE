@@ -11,6 +11,9 @@ const useEventForm = ({ onSave, onClose }: UseEventFormProps) => {
     start: string;
     end: string;
     private: boolean;
+    allDay?: boolean;
+    startTime?: string;
+    endTime?: string;
   }) => {
     if (!formData.title.trim()) {
       alert('일정 제목을 입력해주세요.');
@@ -22,6 +25,8 @@ const useEventForm = ({ onSave, onClose }: UseEventFormProps) => {
       start: formData.start,
       end: formData.end,
       private: formData.private,
+      allDay: formData.allDay,
+      time: formData.allDay ? [] : [formData.startTime || '09:00', formData.endTime || '10:00'],
     };
 
     onSave(eventData);

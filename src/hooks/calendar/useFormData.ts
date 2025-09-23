@@ -3,7 +3,7 @@
  */
 
 import { formatLocalDate } from '@/hooks/calendar/useEvents';
-import { type CalendarEvent } from '@/types/calendar';
+import { type CalendarEvent, type RepeatType } from '@/types/calendar';
 import { useEffect, useState } from 'react';
 
 // FullCalendar에서 받은 종료 날짜에서 하루를 빼는 헬퍼 함수 (표시용)
@@ -21,6 +21,10 @@ interface FormData {
   start: string;
   end: string;
   private: boolean;
+  allDay: boolean;
+  repeat: RepeatType;
+  startTime?: string;
+  endTime?: string;
 }
 
 interface UseFormDataProps {
@@ -31,11 +35,16 @@ interface UseFormDataProps {
 }
 
 const useFormData = ({ isOpen, modalType, selectedEvent, selectedDate }: UseFormDataProps) => {
+  const [showTime, setShowTime] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     title: '',
     start: '',
     end: '',
     private: false,
+    allDay: false,
+    repeat: 'none',
+    startTime: '09:00',
+    endTime: '10:00',
   });
 
   // 모달이 열릴 때마다 폼 초기화
@@ -48,6 +57,10 @@ const useFormData = ({ isOpen, modalType, selectedEvent, selectedDate }: UseForm
           // 편집 모드에서는 종료 날짜에서 하루를 빼서 사용자에게 올바른 날짜를 보여줌
           end: subtractDayFromEndDate(formatLocalDate(selectedEvent.end)),
           private: selectedEvent.private ?? false,
+          allDay: selectedEvent.allDay ?? false,
+          repeat: selectedEvent.repeat ?? 'none',
+          startTime: selectedEvent.time?.[0] ?? '09:00',
+          endTime: selectedEvent.time?.[1] ?? '10:00',
         });
       } else if (modalType === 'add' && selectedDate) {
         setFormData({
@@ -55,6 +68,10 @@ const useFormData = ({ isOpen, modalType, selectedEvent, selectedDate }: UseForm
           start: selectedDate,
           end: selectedDate,
           private: false,
+          allDay: false,
+          repeat: 'none',
+          startTime: '09:00',
+          endTime: '10:00',
         });
       } else {
         setFormData({
@@ -62,6 +79,10 @@ const useFormData = ({ isOpen, modalType, selectedEvent, selectedDate }: UseForm
           start: formatLocalDate(new Date()),
           end: formatLocalDate(new Date()),
           private: false,
+          allDay: false,
+          repeat: 'none',
+          startTime: '09:00',
+          endTime: '10:00',
         });
       }
     }
@@ -70,10 +91,14 @@ const useFormData = ({ isOpen, modalType, selectedEvent, selectedDate }: UseForm
   const updateFormData = (updates: Partial<FormData>) => {
     setFormData((prev) => ({ ...prev, ...updates }));
   };
-
+  const toggleShowTime = () => {
+    setShowTime(!showTime);
+  };
   return {
     formData,
+    showTime,
     updateFormData,
+    toggleShowTime,
   };
 };
 

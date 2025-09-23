@@ -4,7 +4,7 @@ import ModalHeader from '@/components/atoms/ModalHeader';
 import Modal from '@/components/molecules/Modal';
 import { useEventForm, useFormData } from '@/hooks';
 import SelectDuration from '@/pages/Calendar/components/SelectDuration';
-import { type CalendarEvent, type ModalType } from '@/types/calendar';
+import { type CalendarEvent, type ModalType, type RepeatType } from '@/types/calendar';
 import { useEffect, useState } from 'react';
 import { type DateRange } from 'react-day-picker';
 
@@ -31,7 +31,7 @@ const DateModal: React.FC<DateModalProps> = ({
 }) => {
   const [range, setRange] = useState<DateRange | undefined>();
 
-  const { formData, updateFormData } = useFormData({
+  const { formData, showTime, updateFormData, toggleShowTime } = useFormData({
     isOpen,
     modalType,
     selectedEvent,
@@ -95,7 +95,7 @@ const DateModal: React.FC<DateModalProps> = ({
         </div>
       ) : (
         <form onSubmit={handleFormSubmit} className="p-6">
-          <div className="flex overflow-y-auto flex-col gap-4 space-y-4 md:flex-row md:w-full">
+          <div className="flex overflow-y-auto flex-col space-y-2 md:flex-row md:w-full">
             <SelectDuration range={range} setRange={setRange} />
             <div className="">
               <FormInput
@@ -108,14 +108,97 @@ const DateModal: React.FC<DateModalProps> = ({
                 className="p-4"
               />
 
+              {/* <FormInput
+                id="repeat"
+                label="반복 여부"
+                value={formData.repeat}
+                onChange={(value) => updateFormData({ repeat: value as RepeatType })}
+                className="p-4"
+                type="select"
+                options={[
+                  { label: '없음', value: 'none' },
+                  { label: '매일', value: 'daily' },
+                  { label: '매주', value: 'weekly' },
+                  { label: '매월', value: 'monthly' },
+                ]}
+              /> */}
+
               <FormInput
                 id="private"
                 label="비공개 여부"
                 value={formData.private.toString()}
                 onChange={(value) => updateFormData({ private: value === 'true' })}
                 type="checkbox"
-                className="p-4"
+                className="p-4 pt-0"
               />
+
+              <Button
+                text="시간 추가"
+                variant="primary"
+                size="md"
+                noWrapper={true}
+                onClick={() => {
+                  toggleShowTime();
+                }}
+                // Form Input이 아니라서 margin으로 위치 조정
+                className="flex justify-center mx-4 items-center w-[45%] h-[40px] border border-mainBlue bg-white text-mainBlue hover:bg-gray-50 hover:text-gray-500 hover:cursor-pointer"
+              />
+
+              <div
+                className={`transition-all duration-300 ease-in-out p-4 overflow-hidden ${
+                  showTime ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                }`}
+              >
+                <div className="flex justify-between items-center">
+                  <FormInput
+                    id="allDay"
+                    label="종일"
+                    value={formData.allDay.toString()}
+                    onChange={(value) => updateFormData({ allDay: value === 'true' })}
+                    type="checkbox"
+                    className=""
+                  />
+                  <FormInput
+                    id="repeat"
+                    label=""
+                    value={formData.repeat}
+                    onChange={(value) => updateFormData({ repeat: value as RepeatType })}
+                    type="select"
+                    options={[
+                      { label: '반복 없음', value: 'none' },
+                      { label: '매일', value: 'daily' },
+                      { label: '매주', value: 'weekly' },
+                      { label: '매월', value: 'monthly' },
+                    ]}
+                    className=""
+                  />
+                </div>
+
+                {!formData.allDay && (
+                  <div className="flex flex-col gap-2">
+                    <div className="flex-1">
+                      <FormInput
+                        id="startTime"
+                        label="시작 시간"
+                        value={formData.startTime || '09:00'}
+                        onChange={(value) => updateFormData({ startTime: value })}
+                        type="time"
+                        className=""
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <FormInput
+                        id="endTime"
+                        label="종료 시간"
+                        value={formData.endTime || '10:00'}
+                        onChange={(value) => updateFormData({ endTime: value })}
+                        type="time"
+                        className=""
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 
