@@ -1,3 +1,5 @@
+import { ChevronDown } from 'lucide-react';
+
 export interface FormInputProps {
   id: string;
   label: string;
@@ -9,8 +11,9 @@ export interface FormInputProps {
   helpText?: string;
   error?: string;
   disabled?: boolean;
-  type?: 'text' | 'email' | 'password' | 'tel' | 'date' | 'checkbox';
+  type?: 'text' | 'email' | 'password' | 'tel' | 'date' | 'checkbox' | 'select' | 'time';
   className?: string;
+  options?: { label: string; value: string }[];
 }
 
 export const FormInput = ({
@@ -26,6 +29,7 @@ export const FormInput = ({
   disabled = false,
   type = 'text',
   className = '',
+  options,
 }: FormInputProps) => {
   // 체크박스인 경우 별도 렌더링
   if (type === 'checkbox') {
@@ -47,7 +51,8 @@ export const FormInput = ({
               className={`w-5 h-5 border-2 rounded transition-all duration-200 cursor-pointer flex items-center justify-center ${
                 isChecked ? 'bg-blue-500 border-blue-500' : 'border-gray-300 hover:border-gray-400'
               } ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-sm'} ${
-                error ? 'border-red-300' : ''}`}
+                error ? 'border-red-300' : ''
+              }`}
               onClick={() => !disabled && onChange((!isChecked).toString())}
             >
               {isChecked && (
@@ -89,18 +94,54 @@ export const FormInput = ({
       <label htmlFor={id} className="block mb-2 text-sm font-medium text-gray-700 text-nowrap">
         {label} {required && <span className="text-red-500">*</span>}
       </label>
-      <input
-        type={type}
-        id={id}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder={placeholder}
-        maxLength={maxLength}
-        disabled={disabled}
-        className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
-          error ? 'border-red-300 focus:ring-red-500' : 'border-gray-300'
-        } ${disabled ? 'text-gray-500 bg-gray-50 cursor-not-allowed' : ''}`}
-      />
+      {type === 'select' ? (
+        <div className="relative">
+          <select
+            id={id}
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            className={`w-full px-4 py-2 pr-10 border rounded-lg appearance-none focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
+              error ? 'border-red-300 focus:ring-red-500' : 'border-gray-300'
+            } ${disabled ? 'text-gray-500 bg-gray-50 cursor-not-allowed' : 'cursor-pointer'}`}
+          >
+            {options?.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+          {/** 아래 방향 화살표 */}
+          <div className="flex absolute inset-y-0 right-0 items-center pr-3 pointer-events-none">
+            <ChevronDown className="w-4 h-4 text-gray-400" />
+          </div>
+        </div>
+      ) : type === 'time' ? (
+        <input
+          type="time"
+          id={id}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={placeholder}
+          maxLength={maxLength}
+          disabled={disabled}
+          className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
+            error ? 'border-red-300 focus:ring-red-500' : 'border-gray-300'
+          } ${disabled ? 'text-gray-500 bg-gray-50 cursor-not-allowed' : ''}`}
+        />
+      ) : (
+        <input
+          type={type}
+          id={id}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={placeholder}
+          maxLength={maxLength}
+          disabled={disabled}
+          className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
+            error ? 'border-red-300 focus:ring-red-500' : 'border-gray-300'
+          } ${disabled ? 'text-gray-500 bg-gray-50 cursor-not-allowed' : ''}`}
+        />
+      )}
       <div className="flex justify-between items-center mt-1">
         <div>
           {error ? (
