@@ -4,14 +4,22 @@ import type { LoginRequest, LoginResponse, SignupRequest } from '@/apis/types/au
 
 //테스트용 console
 export const authAPI = {
-  //회원가입
+  //회원가입 & 디버깅용 콘솔 메세지
   signup: (userData: SignupRequest) => {
     return apiClient
       .post(AUTH_ENDPOINTS.SIGNUP, userData)
       .then((response) => {
+        console.log('회원가입 API 연결 완료', response);
         return response;
       })
       .catch((error) => {
+        console.error('API 에러:', error);
+        console.error('에러 상세:', {
+          message: error.message,
+          code: error.code,
+          status: error.response?.status,
+          data: error.response?.data,
+        });
         throw error;
       });
   },
@@ -23,7 +31,7 @@ export const authAPI = {
     return apiClient
       .post<LoginResponse>(AUTH_ENDPOINTS.LOGIN, credentials)
       .then((response) => {
-        console.log('API 연결 완료:', response);
+        console.log('로그인 API 연결 완료:', response);
         return response;
       })
       .catch((error) => {
