@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { authAPI } from '@/apis/index';
-import type { LoginRequest, User } from '@/apis/index';
+import type { LoginRequest, SignupRequest, User } from '@/apis';
 
 interface AuthState {
   user: User | null;
@@ -10,6 +10,7 @@ interface AuthState {
   refreshToken: string | null;
   error: string | null;
 
+  signup: (userData: SignupRequest) => Promise<void>;
   login: (credentials: LoginRequest) => Promise<void>;
   logout: () => void;
 }
@@ -23,6 +24,21 @@ export const useAuthStore = create<AuthState>()(
       accessToken: null,
       refreshToken: null,
       error: null,
+
+      //회원가입
+      signup: (userData: SignupRequest) => {
+        set({ error: null });
+        return authAPI
+          .signup(userData)
+          .then(() => {
+            set({ error: null });
+          })
+          .catch((error) => {
+            const errorMessage = error.response?.data?.message || '회원가입에 실패했습니다';
+            set({ error: errorMessage });
+            throw error;
+          });
+      },
 
       //로그인
       login: (credentials: LoginRequest) => {

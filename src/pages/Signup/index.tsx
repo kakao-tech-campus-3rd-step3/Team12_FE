@@ -1,16 +1,43 @@
-import Logo from '@/components/atoms/Logo';
-import { RouterPath } from '@/routes/path';
 import { KeyRound, Lock, Mail, User } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Logo from '@/components/atoms/Logo';
+import { RouterPath } from '@/routes/path';
+import { useAuthStore } from '@/store/useAuthStore';
 
 const Signup = () => {
   const [showVerification, setShowVerification] = useState(false);
   const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    nickname: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  });
+
+  const { signup } = useAuthStore();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     navigate(RouterPath.LOGIN);
+
+    if (formData.password != formData.confirmPassword) {
+      alert('비밀번호가 일치하지 않습니다!');
+      return;
+    }
+
+    signup({
+      nickname: formData.nickname,
+      email: formData.email,
+      password: formData.password,
+    })
+      .then(() => {
+        alert('회원가입이 완료되었습니다. 로그인해주세요!');
+        navigate(RouterPath.LOGIN);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (
@@ -25,7 +52,9 @@ const Signup = () => {
               <User className="w-5 h-5 text-gray-400 mr-2" />
               <input
                 type="text"
-                placeholder="이름"
+                value={formData.nickname}
+                onChange={(e) => setFormData((prev) => ({ ...prev, nickname: e.target.value }))}
+                placeholder="닉네임"
                 className="flex-1 outline-none border-none bg-transparent"
               />
             </div>
@@ -35,6 +64,8 @@ const Signup = () => {
                 <Mail className="w-5 h-5 text-gray-400 mr-2" />
                 <input
                   type="email"
+                  value={formData.email}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))}
                   placeholder="이메일"
                   className="flex-1 outline-none border-none bg-transparent"
                 />
@@ -79,6 +110,8 @@ const Signup = () => {
               <Lock className="w-5 h-5 text-gray-400 mr-2" />
               <input
                 type="password"
+                value={formData.password}
+                onChange={(e) => setFormData((prev) => ({ ...prev, password: e.target.value }))}
                 placeholder="비밀번호"
                 className="flex-1 outline-none border-none bg-transparent"
               />
@@ -88,6 +121,10 @@ const Signup = () => {
               <Lock className="w-5 h-5 text-gray-400 mr-2" />
               <input
                 type="password"
+                value={formData.confirmPassword}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, confirmPassword: e.target.value }))
+                }
                 placeholder="비밀번호 확인"
                 className="flex-1 outline-none border-none bg-transparent"
               />

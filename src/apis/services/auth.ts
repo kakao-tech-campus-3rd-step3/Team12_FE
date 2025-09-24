@@ -1,9 +1,22 @@
 import { apiClient } from '@/apis/client/apiClients';
 import { AUTH_ENDPOINTS } from '@/apis/constants/endpoints';
-import type { LoginRequest, LoginResponse } from '@/apis/types/auth';
+import type { LoginRequest, LoginResponse, SignupRequest } from '@/apis/types/auth';
 
 //테스트용 console
 export const authAPI = {
+  //회원가입
+  signup: (userData: SignupRequest) => {
+    return apiClient
+      .post(AUTH_ENDPOINTS.SIGNUP, userData)
+      .then((response) => {
+        return response;
+      })
+      .catch((error) => {
+        throw error;
+      });
+  },
+
+  //로그인 & 디버깅용 콘솔 메세지
   login: (credentials: LoginRequest) => {
     console.log('API 요청 시작:', credentials);
 
