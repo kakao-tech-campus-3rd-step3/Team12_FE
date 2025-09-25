@@ -5,7 +5,7 @@ import ModalHeader from '@/components/atoms/ModalHeader';
 import { FormInput } from '@/components/atoms/FormInput';
 import ImageInput from '@/pages/Calendar/components/ImageInput';
 import { everytimeAPI } from '@/apis';
-import type { TimetableResponse } from '@/apis';
+import type { TimetableResponse, TimetableDetailResponse } from '@/apis';
 
 interface TimeTableModalProps {
   isOpen: boolean;
@@ -23,6 +23,21 @@ const TimeTableModal: React.FC<TimeTableModalProps> = ({ isOpen, onClose }) => {
   const [timetableList, setTimetableList] = useState<TimetableResponse[]>([]);
   const [selectedTimetable, setSelectedTimetable] = useState<TimetableResponse | null>(null);
   const [timetableError, setTimetableError] = useState<string>('');
+
+  //시간표 상세 정보
+  const [timetableDetail, setTimetableDetail] = useState<TimetableDetailResponse | null>(null);
+  const [detailError, setDetailError] = useState<string>('');
+
+  //요일 변환 함수
+  const getDayOfWeek = (dayOfWeek: number) => {
+    const days = ['일', '월', '화', '수', '목', '금', '토'];
+    return days[dayOfWeek];
+  };
+
+  //시간 변환 함수
+  const formatTime = (time: string) => {
+    return time.substring(0, 5);
+  };
 
   // 언마운트 시 이미지 URL 정리
   useEffect(() => {
@@ -80,14 +95,39 @@ const TimeTableModal: React.FC<TimeTableModalProps> = ({ isOpen, onClose }) => {
     }
   };
 
+  //시간표 상세 조회
+  const getTimetableDetail = (identifier: string) => {
+    setTimetableDetail(null);
+    setDetailError('');
+
+    everytimeAPI
+      .getTimetableDetail({ identifier })
+      .then((detail) => {
+        setTimetableDetail(detail);
+      })
+      .catch((error) => {
+        console.error('시간표 상세 조회 실패:', error);
+        setDetailError('시간표 상세 정보를 불러오는데 실패했습니다.');
+      });
+  };
+
+  //시간표가 변경될 때 상세 정보 조회
+  useEffect(() => {
+    if (selectedTimetable?.identifier) {
+      getTimetableDetail(selectedTimetable.identifier);
+    }
+  }, [selectedTimetable]);
+
   const handleSubmit = () => {
     if (selectedTimetable) {
       console.log('선택된 시간표:', selectedTimetable);
+      console.log('시간표 상세 정보:', timetableDetail);
       console.log('시간표 등록:', {
         selectedImage,
         startDate,
         endDate,
         timetableInfo: selectedTimetable,
+        timetableDetail,
         everytimeUrl: everytimeTable,
       });
     } else {
@@ -149,6 +189,30 @@ const TimeTableModal: React.FC<TimeTableModalProps> = ({ isOpen, onClose }) => {
         )}
         {timetableError && (
           <div className="m-3 text-sm text-center text-red-600">{timetableError}</div>
+        )}
+
+        {/* 시간표 상세 정보 */}
+        {detailError && <div className="mb-4 p-4 text-center text-red-600">{detailError}</div>}
+
+        {timetableDetail && (
+          <div className="mb-4">
+            <label className="block mb-2 text-sm font-bold text-gray-700">
+              시간표 정보 ({timetableDetail.year}년 {timetableDetail.semester}학기)
+            </label>
+            <div className="max-h-60 overflow-y-auto border border-gray-200 rounded-md p-3 bg-gray-50">
+              {timetableDetail.subjects.map((subject, index) => (
+                <div key={index} className="mb-3 last:mb-0">
+                  <div className="font-semibold text-gray-800 mb-1">{subject.name}</div>
+                  {subject.times.map((time, timeIndex) => (
+                    <div key={timeIndex} className="ml-2 text-sm text-gray-600">
+                      {getDayOfWeek(time.dayOfWeek)} {formatTime(time.startTime)} -{' '}
+                      {formatTime(time.endTime)}
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
         )}
 
         {/* 날짜 입력 필드 */}
