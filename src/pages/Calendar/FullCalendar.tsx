@@ -1,3 +1,4 @@
+import { calendarAPI } from '@/apis';
 import { useEvents, useModal } from '@/hooks';
 import DateModal from '@/pages/Calendar/components/DateModal';
 import { type CalendarEvent } from '@/types/calendar';
@@ -10,8 +11,15 @@ import { useSearchParams } from 'react-router-dom';
 
 const CalendarPage = () => {
   const { setModalType, setIsOpen, isOpen, modalType } = useModal();
-  const { events, addEvent, removeEvent, updateEvent, handleEventDrop, handleEventResize } =
-    useEvents();
+  const {
+    events,
+    getEvents,
+    addEvent,
+    removeEvent,
+    updateEvent,
+    handleEventDrop,
+    handleEventResize,
+  } = useEvents();
 
   const notNull = <T,>(value: T | null): value is T => value !== null;
 
@@ -79,18 +87,26 @@ const CalendarPage = () => {
     }
   }, [currentDate, currentView]);
 
+  // 마운트 시 이벤트 초기 로딩
+  useEffect(() => {
+    void getEvents();
+  }, [getEvents]);
+
   // 모달에서 이벤트 저장 핸들러
   const handleSaveEvent = (eventData: Omit<CalendarEvent, 'event_id'>) => {
     if (modalType === 'add') {
       addEvent(eventData);
+      calendarAPI.addEvent({ ...eventData, event_id: Date.now() });
     } else if (modalType === 'edit' && selectedEvent) {
       updateEvent(selectedEvent.event_id, eventData);
+      calendarAPI.modifyEvent({ ...eventData, event_id: selectedEvent.event_id });
     }
   };
 
   // 모달에서 이벤트 삭제 핸들러
   const handleDeleteEvent = (eventId: number) => {
     removeEvent(eventId);
+    calendarAPI.deleteEvent(eventId);
   };
 
   return (

@@ -1,5 +1,5 @@
-import axios from 'axios';
 import { API_BASE_URL } from '@/apis/constants/endpoints';
+import axios from 'axios';
 
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -19,6 +19,14 @@ apiClient.interceptors.request.use(
         const { state } = JSON.parse(authStorage);
         if (state?.accessToken) {
           config.headers.Authorization = `Bearer ${state.accessToken}`;
+          // 디버그: 요청에 토큰이 포함되는지 확인
+          if (import.meta.env.DEV) {
+            // 토큰 전체를 출력하지 않도록 앞/뒤만 확인
+            const masked = `${state.accessToken.slice(0, 10)}...${state.accessToken.slice(-5)}`;
+            console.log('[api][request]', config.method?.toUpperCase(), config.url, {
+              authorization: `Bearer ${masked}`,
+            });
+          }
         }
       } catch (error) {
         //콘솔
@@ -36,7 +44,9 @@ apiClient.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    const status = error.response?.status;
+    // 401에서만 리프레시 시도 (403은 권한 거부로 간주하고 재시도하지 않음)
+    if (status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
       try {
@@ -79,6 +89,7 @@ apiClient.interceptors.response.use(
         return Promise.reject(refreshError);
       }
     }
+    // 403 등 기타 오류는 그대로 반환 (스토리지 삭제/리다이렉트하지 않음)
     return Promise.reject(error);
   },
 );
