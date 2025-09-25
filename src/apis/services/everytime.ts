@@ -38,9 +38,27 @@ export const everytimeAPI = {
       })
       .then((response) => {
         console.log('시간표 상세 조회 성공', response.data);
-        return response.data as TimetableDetailResponse;
+        const data = response.data as TimetableDetailResponse;
+
+        // 빈 시간표인 경우 빈 배열로 처리
+        if (!data.subjects || data.subjects.length === 0) {
+          return {
+            ...data,
+            subjects: [],
+          };
+        }
+
+        return data;
       })
       .catch((error) => {
+        //403 에러 - 빈 시간표의 경우를 예외처리
+        if (error.response?.status === 403) {
+          return {
+            year: '',
+            semester: '',
+            subjects: [],
+          };
+        }
         console.error('시간표 상세 조회 에러:', error);
         console.error('에러 상세:', {
           message: error.message,

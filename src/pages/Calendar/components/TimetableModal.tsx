@@ -178,7 +178,6 @@ const TimeTableModal: React.FC<TimeTableModalProps> = ({ isOpen, onClose }) => {
               }}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent"
             >
-              <option value="">시간표를 선택하세요</option>
               {timetableList.map((timetable) => (
                 <option key={timetable.identifier} value={timetable.identifier}>
                   {timetable.year}년 {timetable.semester}학기
@@ -192,25 +191,30 @@ const TimeTableModal: React.FC<TimeTableModalProps> = ({ isOpen, onClose }) => {
         )}
 
         {/* 시간표 상세 정보 */}
-        {detailError && <div className="mb-4 p-4 text-center text-red-600">{detailError}</div>}
-
         {timetableDetail && (
           <div className="mb-4">
             <label className="block mb-2 text-sm font-bold text-gray-700">
-              시간표 정보 ({timetableDetail.year}년 {timetableDetail.semester}학기)
+              시간표 정보
+              {timetableDetail.year &&
+                timetableDetail.semester &&
+                ` (${timetableDetail.year}년 ${timetableDetail.semester}학기)`}
             </label>
             <div className="max-h-60 overflow-y-auto border border-gray-200 rounded-md p-3 bg-gray-50">
-              {timetableDetail.subjects.map((subject, index) => (
-                <div key={index} className="mb-3 last:mb-0">
-                  <div className="font-semibold text-gray-800 mb-1">{subject.name}</div>
-                  {subject.times.map((time, timeIndex) => (
-                    <div key={timeIndex} className="ml-2 text-sm text-gray-600">
-                      {getDayOfWeek(time.dayOfWeek)} {formatTime(time.startTime)} -{' '}
-                      {formatTime(time.endTime)}
-                    </div>
-                  ))}
-                </div>
-              ))}
+              {timetableDetail.subjects.length === 0 ? (
+                <div className="text-center text-sm text-gray-500 py-4">등록된 수업이 없습니다</div>
+              ) : (
+                timetableDetail.subjects.map((subject, index) => (
+                  <div key={index} className="mb-3 last:mb-0">
+                    <div className="font-semibold text-gray-800 mb-1">{subject.name}</div>
+                    {subject.times.map((time, timeIndex) => (
+                      <div key={timeIndex} className="ml-2 text-sm text-gray-600">
+                        {getDayOfWeek(time.dayOfWeek)} {formatTime(time.startTime)} -{' '}
+                        {formatTime(time.endTime)}
+                      </div>
+                    ))}
+                  </div>
+                ))
+              )}
             </div>
           </div>
         )}
