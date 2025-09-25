@@ -1,14 +1,16 @@
 export type ModalType = 'add' | 'edit' | 'delete';
 
+export type RepeatType = 'none' | 'daily' | 'weekly' | 'monthly';
+
 export type CalendarEvent = {
-  id: string;
+  event_id: number;
   title: string;
-  start: string | Date;
-  end: string | Date;
-  private?: boolean;
-  allDay?: boolean;
-  repeat?: RepeatType;
-  time?: string[];
+  description: string;
+  start_time: string; // ISO string e.g. 2025-09-18T10:00:00
+  end_time: string; // ISO string e.g. 2025-09-18T11:00:00
+  is_private: boolean;
 };
 
-export type RepeatType = 'none' | 'daily' | 'weekly' | 'monthly';
+export type getCalendarEventsResponse = {
+  events: CalendarEvent[];
+};

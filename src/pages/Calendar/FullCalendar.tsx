@@ -1,5 +1,4 @@
 import { useEvents, useModal } from '@/hooks';
-import { formatLocalDate } from '@/hooks/calendar/useEvents';
 import DateModal from '@/pages/Calendar/components/DateModal';
 import { type CalendarEvent } from '@/types/calendar';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -13,6 +12,41 @@ const CalendarPage = () => {
   const { setModalType, setIsOpen, isOpen, modalType } = useModal();
   const { events, addEvent, removeEvent, updateEvent, handleEventDrop, handleEventResize } =
     useEvents();
+
+  const notNull = <T,>(value: T | null): value is T => value !== null;
+
+  // 날짜를 YYYY-MM-DD 형식으로 변환하는 헬퍼 함수
+  const formatLocalDate = (date: Date | string): string => {
+    const d = typeof date === 'string' ? new Date(date) : date;
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  // CalendarEvent를 FullCalendar 형식으로 변환
+  const formatEventsForCalendar = (events: CalendarEvent[]) => {
+    return events
+      .map((event) => {
+        // ISO 문자열을 FullCalendar가 이해할 수 있는 형식으로 변환
+        const startDate = new Date(event.start_time);
+        const endDate = new Date(event.end_time);
+
+        // 유효한 날짜인지 확인
+        if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+          console.warn('Invalid date format:', event);
+          return null;
+        }
+
+        return {
+          id: event.event_id.toString(),
+          title: event.title,
+          start: startDate.toISOString(),
+          end: endDate.toISOString(),
+        };
+      })
+      .filter(notNull); // null 값 제거 (타입 가드)
+  };
 
   const calendarRef = useRef<FullCalendar>(null);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -46,16 +80,16 @@ const CalendarPage = () => {
   }, [currentDate, currentView]);
 
   // 모달에서 이벤트 저장 핸들러
-  const handleSaveEvent = (eventData: Omit<CalendarEvent, 'id'>) => {
+  const handleSaveEvent = (eventData: Omit<CalendarEvent, 'event_id'>) => {
     if (modalType === 'add') {
       addEvent(eventData);
     } else if (modalType === 'edit' && selectedEvent) {
-      updateEvent(selectedEvent.id, eventData);
+      updateEvent(selectedEvent.event_id, eventData);
     }
   };
 
   // 모달에서 이벤트 삭제 핸들러
-  const handleDeleteEvent = (eventId: string) => {
+  const handleDeleteEvent = (eventId: number) => {
     removeEvent(eventId);
   };
 
@@ -89,9 +123,10 @@ const CalendarPage = () => {
                     const today = formatLocalDate(new Date());
                     addEvent({
                       title,
-                      start: today,
-                      end: today,
-                      private: false,
+                      description: '',
+                      start_time: `${today}T09:00:00`,
+                      end_time: `${today}T10:00:00`,
+                      is_private: false,
                     });
                   },
                 },
@@ -140,9 +175,8 @@ const CalendarPage = () => {
               locale="ko"
               selectable // 날짜 선택 가능 (새 일정 추가)
               editable // 이벤트 편집 가능 (드래그, 리사이즈)
-              events={events}
+              events={events ? formatEventsForCalendar(events) : []}
               dayMaxEvents={false} // 모든 이벤트 표시 (끊김 방지)
-              moreLinkClick="popover" // 더 많은 이벤트는 팝오버로 표시
               eventDisplay="block" // 이벤트를 블록 형태로 표시
               displayEventTime={true} // 이벤트 시간 표시
               eventMinHeight={30} // 최소 높이 설정
@@ -156,8 +190,6 @@ const CalendarPage = () => {
               views={{
                 dayGridMonth: {
                   dayHeaderFormat: { weekday: 'short' }, // 월 뷰에서는 요일만
-                  eventLimit: false, // 이벤트 제한 없음
-                  eventLimitClick: 'popover',
                 },
                 timeGridWeek: {
                   dayHeaderFormat: { weekday: 'short', day: 'numeric' }, // 주 뷰에서는 요일과 날짜
@@ -177,7 +209,8 @@ const CalendarPage = () => {
                 setIsOpen(true);
               }}
               eventClick={(info) => {
-                const event = events.find((e) => e.id === info.event.id);
+                if (!events) return;
+                const event = events.find((e) => e.event_id.toString() === info.event.id);
                 if (event) {
                   setSelectedEvent(event);
                   setSelectedDate(undefined);
@@ -186,10 +219,12 @@ const CalendarPage = () => {
                 }
               }}
               eventDrop={(info) => {
-                handleEventDrop(info.event.id, info.event.start!, info.event.end || undefined);
+                const eventId = parseInt(info.event.id);
+                handleEventDrop(eventId, info.event.start!, info.event.end || undefined);
               }}
               eventResize={(info) => {
-                handleEventResize(info.event.id, info.event.start!, info.event.end || undefined);
+                const eventId = parseInt(info.event.id);
+                handleEventResize(eventId, info.event.start!, info.event.end || undefined);
               }}
               // 날짜 변경 시 URL 업데이트 (무한 루프 방지)
               datesSet={(info) => {

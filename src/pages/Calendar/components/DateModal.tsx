@@ -14,8 +14,8 @@ interface DateModalProps {
   modalType: ModalType;
   selectedEvent?: CalendarEvent;
   selectedDate?: string;
-  onSave: (event: Omit<CalendarEvent, 'id'>) => void;
-  onDelete?: (eventId: string) => void;
+  onSave: (event: Omit<CalendarEvent, 'event_id'>) => void;
+  onDelete?: (eventId: number) => void;
   onChangeModalType?: (type: ModalType) => void;
 }
 
@@ -43,13 +43,41 @@ const DateModal: React.FC<DateModalProps> = ({
     onClose,
   });
 
+  const toDateOnly = (dateLike: Date): string => {
+    const year = dateLike.getFullYear();
+    const month = String(dateLike.getMonth() + 1).padStart(2, '0');
+    const day = String(dateLike.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  const getDatePart = (value?: string): string => {
+    if (!value) return '';
+    if (value.includes('T')) return value.split('T')[0];
+    return value.length === 10 ? value : '';
+  };
+
+  const getTimePart = (value?: string): string => {
+    if (!value) return '';
+    if (value.includes('T')) return value.split('T')[1].slice(0, 5);
+    return value.length === 5 ? value : '';
+  };
+
+  const buildIsoFromDateAndTime = (
+    current: string | undefined,
+    fallbackDate: Date | undefined,
+    time: string,
+  ): string => {
+    const dateStr = getDatePart(current) || (fallbackDate ? toDateOnly(fallbackDate) : '');
+    return dateStr ? `${dateStr}T${time}:00` : time;
+  };
+
   // range가 변경될 때마다 formData의 start, end 업데이트
   useEffect(() => {
     if (range?.from && range?.to) {
       // 로컬 시간을 사용하여 날짜 형식 변환 (YYYY-MM-DD)
       const startDate = `${range.from.getFullYear()}-${String(range.from.getMonth() + 1).padStart(2, '0')}-${String(range.from.getDate()).padStart(2, '0')}`;
       const endDate = `${range.to.getFullYear()}-${String(range.to.getMonth() + 1).padStart(2, '0')}-${String(range.to.getDate()).padStart(2, '0')}`;
-      updateFormData({ start: startDate, end: endDate });
+      updateFormData({ startTime: startDate, endTime: endDate });
     }
   }, [range?.from, range?.to]);
 
@@ -60,7 +88,7 @@ const DateModal: React.FC<DateModalProps> = ({
 
   const handleDelete = () => {
     if (selectedEvent && onDelete) {
-      onDelete(selectedEvent.id);
+      onDelete(selectedEvent.event_id);
       onClose();
     }
   };
@@ -96,7 +124,10 @@ const DateModal: React.FC<DateModalProps> = ({
       ) : (
         <form onSubmit={handleFormSubmit} className="p-6">
           <div className="flex overflow-y-auto flex-col space-y-2 md:flex-row md:w-full">
+            {/** 기간 선택 (모달 좌측) */}
             <SelectDuration range={range} setRange={setRange} />
+
+            {/** 일정 제목, 비공개 여부, 시간 추가 (모달 우측) */}
             <div className="">
               <FormInput
                 id="title"
@@ -107,21 +138,6 @@ const DateModal: React.FC<DateModalProps> = ({
                 required
                 className="p-4"
               />
-
-              {/* <FormInput
-                id="repeat"
-                label="반복 여부"
-                value={formData.repeat}
-                onChange={(value) => updateFormData({ repeat: value as RepeatType })}
-                className="p-4"
-                type="select"
-                options={[
-                  { label: '없음', value: 'none' },
-                  { label: '매일', value: 'daily' },
-                  { label: '매주', value: 'weekly' },
-                  { label: '매월', value: 'monthly' },
-                ]}
-              /> */}
 
               <FormInput
                 id="private"
@@ -180,8 +196,16 @@ const DateModal: React.FC<DateModalProps> = ({
                       <FormInput
                         id="startTime"
                         label="시작 시간"
-                        value={formData.startTime || '09:00'}
-                        onChange={(value) => updateFormData({ startTime: value })}
+                        value={getTimePart(formData.startTime) || '09:00'}
+                        onChange={(value) =>
+                          updateFormData({
+                            startTime: buildIsoFromDateAndTime(
+                              formData.startTime,
+                              range?.from,
+                              value,
+                            ),
+                          })
+                        }
                         type="time"
                         className=""
                       />
@@ -190,8 +214,16 @@ const DateModal: React.FC<DateModalProps> = ({
                       <FormInput
                         id="endTime"
                         label="종료 시간"
-                        value={formData.endTime || '10:00'}
-                        onChange={(value) => updateFormData({ endTime: value })}
+                        value={getTimePart(formData.endTime) || '10:00'}
+                        onChange={(value) =>
+                          updateFormData({
+                            endTime: buildIsoFromDateAndTime(
+                              formData.endTime,
+                              range?.to ?? range?.from,
+                              value,
+                            ),
+                          })
+                        }
                         type="time"
                         className=""
                       />
@@ -202,6 +234,7 @@ const DateModal: React.FC<DateModalProps> = ({
             </div>
           </div>
 
+          {/** 삭제 버튼과 저장 버튼 */}
           <div
             className={`flex gap-2 mt-2 ${modalType === 'edit' ? 'justify-around' : 'justify-center'}`}
           >
