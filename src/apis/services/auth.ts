@@ -1,8 +1,12 @@
 import { apiClient } from '@/apis/client/apiClients';
 import { AUTH_ENDPOINTS } from '@/apis/constants/endpoints';
-import type { LoginRequest, LoginResponse, SignupRequest } from '@/apis/types/auth';
+import type {
+  SignupRequest,
+  LoginRequest,
+  LoginResponse,
+  RefreshTokenResponse,
+} from '@/apis/types/auth';
 
-//테스트용 console
 export const authAPI = {
   //회원가입 & 디버깅용 콘솔 메세지
   signup: (userData: SignupRequest) => {
@@ -42,6 +46,20 @@ export const authAPI = {
           status: error.response?.status,
           data: error.response?.data,
         });
+        throw error;
+      });
+  },
+
+  //리프레시 토큰 발급
+  refreshToken: (refreshToken: string) => {
+    return apiClient
+      .post<RefreshTokenResponse>(AUTH_ENDPOINTS.REFRESH, {
+        refresh_token: refreshToken,
+      })
+      .then((response) => {
+        return response;
+      })
+      .catch((error) => {
         throw error;
       });
   },

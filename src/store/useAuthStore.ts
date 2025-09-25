@@ -12,12 +12,14 @@ interface AuthState {
 
   signup: (userData: SignupRequest) => Promise<void>;
   login: (credentials: LoginRequest) => Promise<void>;
+  getRefreshToken: () => Promise<void>;
   logout: () => void;
+  setTokens: (accessToken: string, refreshToken: string) => void;
 }
 
 export const useAuthStore = create<AuthState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       //초기 상태
       user: null,
       isAuthenticated: false,
@@ -65,6 +67,39 @@ export const useAuthStore = create<AuthState>()(
             set({ error: errorMessage });
             throw error;
           });
+      },
+
+      //토큰 갱신
+      getRefreshToken: () => {
+        const { refreshToken } = get();
+
+        if (!refreshToken) {
+          throw new Error('리프레시 토큰이 없습니다!');
+        }
+        return authAPI
+          .refreshToken(refreshToken)
+          .then((response) => {
+            const { access_token, refresh_token } = response.data;
+            set({
+              accessToken: access_token,
+              refreshToken: refresh_token,
+              error: null,
+            });
+          })
+          .catch((error) => {
+            set({
+              user: null,
+              isAuthenticated: false,
+              accessToken: null,
+              refreshToken: null,
+              error: '세션이 만료되었습니다. 다시 로그인해주세요.',
+            });
+            throw error;
+          });
+      },
+
+      setTokens: (accessToken: string, refreshToken: string) => {
+        set({ accessToken, refreshToken });
       },
 
       //로그아웃
