@@ -1,7 +1,7 @@
 import { calendarAPI } from '@/apis';
 import { useEvents, useModal } from '@/hooks';
 import DateModal from '@/pages/Calendar/components/DateModal';
-import { type CalendarEvent, type modifyCalendarEventRequest } from '@/types/calendar';
+import type { CalendarEvent, modifyCalendarEventRequest } from '@/types/calendar';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import FullCalendar from '@fullcalendar/react';

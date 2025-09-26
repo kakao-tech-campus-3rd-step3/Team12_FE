@@ -1,5 +1,4 @@
-import { apiClient } from '@/apis/client/apiClients';
-import { CALENDAR_ENDPOINTS } from '@/apis/constants/endpoints';
+import { CALENDAR_ENDPOINTS, apiClient } from '@/apis';
 import type {
   addCalendarEventRequest,
   addCalendarEventResponse,
