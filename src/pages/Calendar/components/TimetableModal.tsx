@@ -33,6 +33,27 @@ const TimeTableModal: React.FC<TimeTableModalProps> = ({ isOpen, onClose }) => {
   const [parsedTimetable, setParsedTimetable] = useState<TimetableImageResponse | null>(null);
   const [imageParseError, setImageParseError] = useState<string>('');
 
+  //데이터 검증 함수
+  const validateTimetableData = (subjects: any[]) => {
+    if (!subjects || subjects.length === 0) {
+      return { isValid: false, message: '등록된 수업이 없습니다' };
+    }
+
+    for (const subject of subjects) {
+      if (!subject.times || subject.times.length === 0) {
+        continue;
+      }
+
+      for (const time of subject.times) {
+        if (!time.startTime || !time.endTime) {
+          return { isValid: false, message: '인식된 시간표가 없습니다' };
+        }
+      }
+    }
+
+    return { isValid: true, message: '' };
+  };
+
   //요일 변환 함수
   const getDayOfWeek = (dayOfWeek: number) => {
     const days = ['일', '월', '화', '수', '목', '금', '토'];
@@ -142,7 +163,7 @@ const TimeTableModal: React.FC<TimeTableModalProps> = ({ isOpen, onClose }) => {
       })
       .catch((error) => {
         if (error.response?.status !== 403) {
-          setImageParseError(`이미지 분석 실패: ${error.message}`);
+          setImageParseError(`이미지 분석 실패`);
         }
       })
       .finally(() => {
@@ -219,10 +240,14 @@ const TimeTableModal: React.FC<TimeTableModalProps> = ({ isOpen, onClose }) => {
                   ` (${parsedTimetable.year} ${parsedTimetable.semester})`}
               </label>
               <div className="max-h-60 overflow-y-auto border border-gray-200 rounded-md p-3 bg-gray-50">
-                {parsedTimetable.subjects.length === 0 ? (
-                  <div className="text-center text-gray-500 py-4">등록된 수업이 없습니다</div>
-                ) : (
-                  parsedTimetable.subjects.map((subject, index) => (
+                {(() => {
+                  const validation = validateTimetableData(parsedTimetable.subjects);
+                  if (!validation.isValid) {
+                    return (
+                      <div className="text-center text-red-500 py-4">{validation.message}</div>
+                    );
+                  }
+                  return parsedTimetable.subjects.map((subject, index) => (
                     <div key={index} className="mb-3 last:mb-0">
                       <div className="font-semibold text-gray-800 mb-1">{subject.name}</div>
                       {subject.times.map((time, timeIndex) => (
@@ -232,8 +257,8 @@ const TimeTableModal: React.FC<TimeTableModalProps> = ({ isOpen, onClose }) => {
                         </div>
                       ))}
                     </div>
-                  ))
-                )}
+                  ));
+                })()}
               </div>
             </div>
           )}
@@ -286,10 +311,12 @@ const TimeTableModal: React.FC<TimeTableModalProps> = ({ isOpen, onClose }) => {
                 ` (${timetableDetail.year}년 ${timetableDetail.semester}학기)`}
             </label>
             <div className="max-h-60 overflow-y-auto border border-gray-200 rounded-md p-3 bg-gray-50">
-              {timetableDetail.subjects.length === 0 ? (
-                <div className="text-center text-sm text-gray-500 py-4">등록된 수업이 없습니다</div>
-              ) : (
-                timetableDetail.subjects.map((subject, index) => (
+              {(() => {
+                const validation = validateTimetableData(timetableDetail.subjects);
+                if (!validation.isValid) {
+                  return <div className="text-center text-red-500 py-4">{validation.message}</div>;
+                }
+                return timetableDetail.subjects.map((subject, index) => (
                   <div key={index} className="mb-3 last:mb-0">
                     <div className="font-semibold text-gray-800 mb-1">{subject.name}</div>
                     {subject.times.map((time, timeIndex) => (
@@ -299,8 +326,8 @@ const TimeTableModal: React.FC<TimeTableModalProps> = ({ isOpen, onClose }) => {
                       </div>
                     ))}
                   </div>
-                ))
-              )}
+                ));
+              })()}
             </div>
           </div>
         )}
