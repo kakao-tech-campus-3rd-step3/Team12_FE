@@ -1,9 +1,10 @@
 import { apiClient } from '@/apis/client/apiClients';
 import { CALENDAR_ENDPOINTS } from '@/apis/constants/endpoints';
 import type {
-  CalendarEvent,
   addCalendarEventRequest,
   addCalendarEventResponse,
+  modifyCalendarEventRequest,
+  modifyCalendarEventResponse,
 } from '@/types/calendar';
 
 export const calendarAPI = {
@@ -19,10 +20,9 @@ export const calendarAPI = {
     );
   },
   addEvent: (event: addCalendarEventRequest): Promise<addCalendarEventResponse> => {
-    console.log('event:', event);
     return apiClient.post(CALENDAR_ENDPOINTS.ADD_EVENT, event);
   },
-  modifyEvent: (event: CalendarEvent) => {
+  modifyEvent: (event: modifyCalendarEventRequest): Promise<modifyCalendarEventResponse> => {
     return apiClient.patch(CALENDAR_ENDPOINTS.MODIFY_EVENT, event);
   },
   deleteEvent: (eventId: number) => {

@@ -1,7 +1,7 @@
 import { calendarAPI } from '@/apis';
 import { useEvents, useModal } from '@/hooks';
 import DateModal from '@/pages/Calendar/components/DateModal';
-import { type CalendarEvent } from '@/types/calendar';
+import { type CalendarEvent, type modifyCalendarEventRequest } from '@/types/calendar';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import FullCalendar from '@fullcalendar/react';
@@ -106,11 +106,32 @@ const CalendarPage = () => {
         end_time: eventData.end_time,
         is_private: eventData.is_private,
       });
-      console.log('eventData:', eventData);
       addEvent(eventData);
     } else if (modalType === 'edit' && selectedEvent) {
+      // API 명세서에 따라 event_id만 필수, 나머지는 수정할 필드만 포함
+      const modifyData: modifyCalendarEventRequest = { event_id: selectedEvent.event_id };
+
+      // 변경된 필드만 포함
+      if (eventData.title !== selectedEvent.title) {
+        modifyData.title = eventData.title;
+      }
+      if (eventData.description !== selectedEvent.description) {
+        modifyData.description = eventData.description;
+      }
+      if (eventData.start_time !== selectedEvent.start_time) {
+        modifyData.start_time = eventData.start_time;
+      }
+      if (eventData.end_time !== selectedEvent.end_time) {
+        modifyData.end_time = eventData.end_time;
+      }
+      if (eventData.is_private !== selectedEvent.is_private) {
+        modifyData.is_private = eventData.is_private;
+      }
+
+      console.log('modify payload:', modifyData);
+
+      calendarAPI.modifyEvent(modifyData);
       updateEvent(selectedEvent.event_id, eventData);
-      calendarAPI.modifyEvent({ ...eventData, event_id: selectedEvent.event_id });
     }
   };
 
