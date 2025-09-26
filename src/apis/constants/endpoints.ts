@@ -12,3 +12,9 @@ export const CALENDAR_ENDPOINTS = {
   MODIFY_EVENT: '/api/events/modify',
   DELETE_EVENT: '/api/events/:eventId',
 } as const;
+
+export const EVERYTIME_ENDPOINTS = {
+  TIMETABLES: '/api/everytime/timetables',
+  TIMETABLE_DETAIL: '/api/everytime/timetable',
+  TIMETABLE_IMAGE: '/api/everytime/timetable',
+} as const;
