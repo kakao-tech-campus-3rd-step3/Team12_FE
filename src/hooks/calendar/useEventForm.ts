@@ -1,55 +1,56 @@
+import { type FormData } from '@/hooks/calendar/useFormData';
 import { type CalendarEvent } from '@/types/calendar';
 
 interface UseEventFormProps {
-  onSave: (event: Omit<CalendarEvent, 'id'>) => void;
+  onSave: (event: Omit<CalendarEvent, 'event_id'>) => void;
   onClose: () => void;
 }
 
 const useEventForm = ({ onSave, onClose }: UseEventFormProps) => {
-  const handleSubmit = (formData: {
-    title: string;
-    start: string;
-    end: string;
-    private: boolean;
-    allDay?: boolean;
-    startTime?: string;
-    endTime?: string;
-  }) => {
+  const handleSubmit = (formData: FormData) => {
     if (!formData.title.trim()) {
       alert('일정 제목을 입력해주세요.');
       return;
     }
 
-    const eventData = {
+    // 시간이 설정되지 않은 경우 기본값 설정
+    let startTime = formData.startTime || '';
+    let endTime = formData.endTime || '';
+
+    // 시간 부분이 없는 경우 (날짜만 있는 경우) 기본 시간 추가
+    if (startTime && !startTime.includes('T')) {
+      startTime = `${startTime}T09:00:00`;
+    }
+    if (endTime && !endTime.includes('T')) {
+      endTime = `${endTime}T10:00:00`;
+    }
+
+    const eventData: Omit<CalendarEvent, 'event_id'> = {
       title: formData.title,
-      start: formData.start,
-      end: formData.end,
-      private: formData.private,
-      allDay: formData.allDay,
-      time: formData.allDay ? [] : [formData.startTime || '09:00', formData.endTime || '10:00'],
+      description: '',
+      start_time: startTime,
+      end_time: endTime,
+      is_private: formData.private,
     };
 
     onSave(eventData);
     onClose();
   };
 
-  const validateForm = (formData: {
-    title: string;
-    start: string;
-    end: string;
-    private: boolean;
-  }) => {
-    if (!formData.title.trim()) {
+  const validateForm = (
+    formData: Pick<FormData, 'title' | 'startTime' | 'endTime' | 'private'>,
+  ) => {
+    if (!formData.title?.trim()) {
       alert('일정 제목을 입력해주세요.');
       return false;
     }
 
-    if (!formData.start) {
+    if (!formData.startTime) {
       alert('시작 날짜를 선택해주세요.');
       return false;
     }
 
-    if (!formData.end) {
+    if (!formData.endTime) {
       alert('종료 날짜를 선택해주세요.');
       return false;
     }

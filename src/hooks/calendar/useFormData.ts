@@ -2,24 +2,20 @@
  * @description 폼 데이터 관리
  */
 
-import { formatLocalDate } from '@/hooks/calendar/useEvents';
 import { type CalendarEvent, type RepeatType } from '@/types/calendar';
 import { useEffect, useState } from 'react';
 
-// FullCalendar에서 받은 종료 날짜에서 하루를 빼는 헬퍼 함수 (표시용)
-const subtractDayFromEndDate = (dateString: string): string => {
-  const date = new Date(dateString + 'T00:00:00');
-  date.setDate(date.getDate() - 1);
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
+// ISO 문자열 또는 Date를 YYYY-MM-DD로 변환
+const toDateOnly = (dateLike: string | Date): string => {
+  const d = typeof dateLike === 'string' ? new Date(dateLike) : dateLike;
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
 };
 
-interface FormData {
+export interface FormData {
   title: string;
-  start: string;
-  end: string;
   private: boolean;
   allDay: boolean;
   repeat: RepeatType;
@@ -38,13 +34,11 @@ const useFormData = ({ isOpen, modalType, selectedEvent, selectedDate }: UseForm
   const [showTime, setShowTime] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     title: '',
-    start: '',
-    end: '',
+    startTime: '',
+    endTime: '',
     private: false,
     allDay: false,
     repeat: 'none',
-    startTime: '09:00',
-    endTime: '10:00',
   });
 
   // 모달이 열릴 때마다 폼 초기화
@@ -53,36 +47,31 @@ const useFormData = ({ isOpen, modalType, selectedEvent, selectedDate }: UseForm
       if (modalType === 'edit' && selectedEvent) {
         setFormData({
           title: selectedEvent.title,
-          start: formatLocalDate(selectedEvent.start),
-          // 편집 모드에서는 종료 날짜에서 하루를 빼서 사용자에게 올바른 날짜를 보여줌
-          end: subtractDayFromEndDate(formatLocalDate(selectedEvent.end)),
-          private: selectedEvent.private ?? false,
-          allDay: selectedEvent.allDay ?? false,
-          repeat: selectedEvent.repeat ?? 'none',
-          startTime: selectedEvent.time?.[0] ?? '09:00',
-          endTime: selectedEvent.time?.[1] ?? '10:00',
+          startTime: toDateOnly(selectedEvent.start_time),
+          endTime: toDateOnly(selectedEvent.end_time),
+          private: selectedEvent.is_private ?? false,
+          allDay: false,
+          repeat: 'none',
+          // startTime: new Date(selectedEvent.start_time).toTimeString().slice(0, 5),
+          // endTime: new Date(selectedEvent.end_time).toTimeString().slice(0, 5),
         });
       } else if (modalType === 'add' && selectedDate) {
         setFormData({
           title: '',
-          start: selectedDate,
-          end: selectedDate,
+          startTime: selectedDate,
+          endTime: selectedDate,
           private: false,
           allDay: false,
           repeat: 'none',
-          startTime: '09:00',
-          endTime: '10:00',
         });
       } else {
         setFormData({
           title: '',
-          start: formatLocalDate(new Date()),
-          end: formatLocalDate(new Date()),
+          startTime: toDateOnly(new Date()),
+          endTime: toDateOnly(new Date()),
           private: false,
           allDay: false,
           repeat: 'none',
-          startTime: '09:00',
-          endTime: '10:00',
         });
       }
     }
