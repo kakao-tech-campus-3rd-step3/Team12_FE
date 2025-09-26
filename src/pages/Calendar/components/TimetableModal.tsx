@@ -5,7 +5,7 @@ import ModalHeader from '@/components/atoms/ModalHeader';
 import { FormInput } from '@/components/atoms/FormInput';
 import ImageInput from '@/pages/Calendar/components/ImageInput';
 import { everytimeAPI } from '@/apis';
-import type { TimetableResponse, TimetableDetailResponse } from '@/apis';
+import type { TimetableResponse, TimetableDetailResponse, TimetableImageResponse } from '@/apis';
 
 interface TimeTableModalProps {
   isOpen: boolean;
@@ -27,6 +27,11 @@ const TimeTableModal: React.FC<TimeTableModalProps> = ({ isOpen, onClose }) => {
   //시간표 상세 정보
   const [timetableDetail, setTimetableDetail] = useState<TimetableDetailResponse | null>(null);
   const [detailError, setDetailError] = useState<string>('');
+
+  //이미지 파싱 상태
+  const [imageParsing, setImageParsing] = useState<boolean>(false);
+  const [parsedTimetable, setParsedTimetable] = useState<TimetableImageResponse | null>(null);
+  const [imageParseError, setImageParseError] = useState<string>('');
 
   //요일 변환 함수
   const getDayOfWeek = (dayOfWeek: number) => {
@@ -88,10 +93,16 @@ const TimeTableModal: React.FC<TimeTableModalProps> = ({ isOpen, onClose }) => {
 
   const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
+
     if (file) {
       setSelectedImage(file);
       const previewUrl = URL.createObjectURL(file);
       setImagePreview(previewUrl);
+
+      setParsedTimetable(null);
+      parseImageTimetable(file);
+    } else {
+      console.log('파일이 없음');
     }
   };
 
@@ -118,6 +129,27 @@ const TimeTableModal: React.FC<TimeTableModalProps> = ({ isOpen, onClose }) => {
     }
   }, [selectedTimetable]);
 
+  //이미지 파싱 함수
+  const parseImageTimetable = (file: File) => {
+    setImageParsing(true);
+    setParsedTimetable(null);
+    setImageParseError('');
+
+    return everytimeAPI
+      .getTimetableDetailByImage({ image: file })
+      .then((result) => {
+        setParsedTimetable(result);
+      })
+      .catch((error) => {
+        if (error.response?.status !== 403) {
+          setImageParseError(`이미지 분석 실패: ${error.message}`);
+        }
+      })
+      .finally(() => {
+        setImageParsing(false);
+      });
+  };
+
   const handleSubmit = () => {
     if (selectedTimetable) {
       console.log('선택된 시간표:', selectedTimetable);
@@ -129,6 +161,14 @@ const TimeTableModal: React.FC<TimeTableModalProps> = ({ isOpen, onClose }) => {
         timetableInfo: selectedTimetable,
         timetableDetail,
         everytimeUrl: everytimeTable,
+      });
+    } else if (parsedTimetable) {
+      console.log('파싱된 시간표:', parsedTimetable);
+      console.log('시간표 등록:', {
+        selectedImage,
+        startDate,
+        endDate,
+        parsedTimetable,
       });
     } else {
       console.log('시간표 등록:', { selectedImage, startDate, endDate });
@@ -151,6 +191,52 @@ const TimeTableModal: React.FC<TimeTableModalProps> = ({ isOpen, onClose }) => {
             imagePreview={imagePreview}
             handleImageSelect={handleImageSelect}
           />
+
+          {/* 이미지 파싱 로딩 상태 */}
+          {imageParsing && (
+            <div className="mt-4 p-4 border border-blue-200 rounded-lg bg-blue-50">
+              <div className="flex items-center justify-center space-x-3">
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+                <div className="text-blue-700 font-medium">이미지를 분석하고 있습니다...</div>
+              </div>
+              <div className="mt-2 text-sm text-blue-600 text-center">
+                시간표 분석에 5-10초 정도 소요됩니다.
+              </div>
+            </div>
+          )}
+
+          {/* 이미지 파싱 에러 */}
+          {imageParseError && (
+            <div className="mt-2 text-center text-red-600">{imageParseError}</div>
+          )}
+
+          {parsedTimetable && (
+            <div className="mt-4">
+              <label className="block mb-2 text-sm font-bold text-gray-700">
+                시간표 정보
+                {parsedTimetable.year &&
+                  parsedTimetable.semester &&
+                  ` (${parsedTimetable.year} ${parsedTimetable.semester})`}
+              </label>
+              <div className="max-h-60 overflow-y-auto border border-gray-200 rounded-md p-3 bg-gray-50">
+                {parsedTimetable.subjects.length === 0 ? (
+                  <div className="text-center text-gray-500 py-4">등록된 수업이 없습니다</div>
+                ) : (
+                  parsedTimetable.subjects.map((subject, index) => (
+                    <div key={index} className="mb-3 last:mb-0">
+                      <div className="font-semibold text-gray-800 mb-1">{subject.name}</div>
+                      {subject.times.map((time, timeIndex) => (
+                        <div key={timeIndex} className="ml-2 text-sm text-gray-600">
+                          {getDayOfWeek(time.dayOfWeek)} {formatTime(time.startTime)} -{' '}
+                          {formatTime(time.endTime)}
+                        </div>
+                      ))}
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          )}
           <FormInput
             id="everytimeTable"
             label="에브리타임 시간표 링크"

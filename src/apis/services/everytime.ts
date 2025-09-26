@@ -5,6 +5,8 @@ import type {
   TimetableListResponse,
   TimetableDetailRequest,
   TimetableDetailResponse,
+  TimetableImageRequest,
+  TimetableImageResponse,
 } from '@/apis/types/timetable';
 
 export const everytimeAPI = {
@@ -65,6 +67,41 @@ export const everytimeAPI = {
           status: error.response?.status,
           data: error.response?.data,
         });
+        throw error;
+      });
+  },
+  getTimetableDetailByImage: (request: TimetableImageRequest) => {
+    const formData = new FormData();
+    formData.append('image', request.image);
+
+    return apiClient
+      .post(EVERYTIME_ENDPOINTS.TIMETABLE_IMAGE, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then((response) => {
+        console.log('시간표 이미지 파싱 성공', response.data);
+        return response.data as TimetableImageResponse;
+      })
+      .catch((error) => {
+        console.error('시간표 이미지 파싱 에러:', error);
+        console.error('에러 상세:', {
+          message: error.message,
+          status: error.response?.status,
+          data: error.response?.data,
+        });
+
+        // 403 에러인 경우 빈 시간표로 처리
+        if (error.response?.status === 403) {
+          console.log('이미지 파싱 권한이 없습니다. 빈 시간표로 처리합니다.');
+          return {
+            year: '',
+            semester: '',
+            subjects: [],
+          };
+        }
+
         throw error;
       });
   },
