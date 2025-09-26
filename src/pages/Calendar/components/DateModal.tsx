@@ -170,7 +170,26 @@ const DateModal: React.FC<DateModalProps> = ({
                     id="allDay"
                     label="종일"
                     value={formData.allDay.toString()}
-                    onChange={(value) => updateFormData({ allDay: value === 'true' })}
+                    onChange={(value) => {
+                      const isAllDay = value === 'true';
+                      if (isAllDay) {
+                        // 종일 선택 시 00:00 ~ 23:59로 설정
+                        const startDate =
+                          getDatePart(formData.startTime) ||
+                          (range?.from ? toDateOnly(range.from) : '');
+                        const endDate =
+                          getDatePart(formData.endTime) ||
+                          (range?.to ? toDateOnly(range.to) : '') ||
+                          startDate;
+                        updateFormData({
+                          allDay: true,
+                          startTime: startDate ? `${startDate}T00:00:00` : '',
+                          endTime: endDate ? `${endDate}T23:59:00` : '',
+                        });
+                      } else {
+                        updateFormData({ allDay: false });
+                      }
+                    }}
                     type="checkbox"
                     className=""
                   />

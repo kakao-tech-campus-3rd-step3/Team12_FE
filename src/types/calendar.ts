@@ -31,8 +31,22 @@ export type addCalendarEventResponse = {
   is_private: boolean;
 };
 
+export type modifyCalendarEventRequest = {
+  event_id: number;
+  title?: string;
+  description?: string;
+  start_time?: string;
+  end_time?: string;
+  is_private?: boolean;
+};
+
 export type modifyCalendarEventResponse = {
   event_id: number;
+  title: string;
+  description: string;
+  start_time: string;
+  end_time: string;
+  is_private: boolean;
 };
 
 export type deleteCalendarEventResponse = {
