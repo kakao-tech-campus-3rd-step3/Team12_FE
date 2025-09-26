@@ -4,8 +4,10 @@ import Modal from '@/components/molecules/Modal';
 import ModalHeader from '@/components/atoms/ModalHeader';
 import { FormInput } from '@/components/atoms/FormInput';
 import ImageInput from '@/pages/Calendar/components/ImageInput';
-import { everytimeAPI } from '@/apis';
-import type { TimetableResponse, TimetableDetailResponse, TimetableImageResponse } from '@/apis';
+import { useTimetableData } from '@/hooks/timetable/useTimetableData';
+import { useImageParsing } from '@/hooks/timetable/useImageParsing';
+import { useImageUpload } from '@/hooks/timetable/useImageUpload';
+import { validateTimetableData, getDayOfWeek, formatTime } from '@/utils/timetableUtils';
 
 interface TimeTableModalProps {
   isOpen: boolean;
@@ -13,164 +15,49 @@ interface TimeTableModalProps {
 }
 
 const TimeTableModal: React.FC<TimeTableModalProps> = ({ isOpen, onClose }) => {
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [startDate, setStartDate] = useState<Date>(new Date('2025-03-01'));
   const [endDate, setEndDate] = useState<Date>(new Date('2025-12-21'));
   const [everytimeTable, setEverytimeTable] = useState<string>('');
 
-  //시간표 목록
-  const [timetableList, setTimetableList] = useState<TimetableResponse[]>([]);
-  const [selectedTimetable, setSelectedTimetable] = useState<TimetableResponse | null>(null);
-  const [timetableError, setTimetableError] = useState<string>('');
+  // 시간표 데이터 hook
+  const {
+    timetableList,
+    selectedTimetable,
+    timetableError,
+    timetableDetail,
+    getTimetables,
+    setSelectedTimetable,
+  } = useTimetableData();
 
-  //시간표 상세 정보
-  const [timetableDetail, setTimetableDetail] = useState<TimetableDetailResponse | null>(null);
-  const [detailError, setDetailError] = useState<string>('');
+  // 이미지 파싱 hook
+  const { imageParsing, parsedTimetable, imageParseError, parseImageTimetable, clearParsedData } =
+    useImageParsing();
 
-  //이미지 파싱 상태
-  const [imageParsing, setImageParsing] = useState<boolean>(false);
-  const [parsedTimetable, setParsedTimetable] = useState<TimetableImageResponse | null>(null);
-  const [imageParseError, setImageParseError] = useState<string>('');
-
-  //데이터 검증 함수
-  const validateTimetableData = (subjects: any[]) => {
-    if (!subjects || subjects.length === 0) {
-      return { isValid: false, message: '등록된 수업이 없습니다' };
-    }
-
-    for (const subject of subjects) {
-      if (!subject.times || subject.times.length === 0) {
-        continue;
-      }
-
-      for (const time of subject.times) {
-        if (!time.startTime || !time.endTime) {
-          return { isValid: false, message: '인식된 시간표가 없습니다' };
-        }
-      }
-    }
-
-    return { isValid: true, message: '' };
-  };
-
-  //요일 변환 함수
-  const getDayOfWeek = (dayOfWeek: number) => {
-    const days = ['일', '월', '화', '수', '목', '금', '토'];
-    return days[dayOfWeek];
-  };
-
-  //시간 변환 함수
-  const formatTime = (time: string) => {
-    return time.substring(0, 5);
-  };
-
-  // 언마운트 시 이미지 URL 정리
-  useEffect(() => {
-    return () => {
-      if (imagePreview) {
-        URL.revokeObjectURL(imagePreview);
-      }
-    };
-  }, [imagePreview]);
-
-  //시간표 목록 조회
-  const getTimetables = (url: string) => {
-    if (!url.includes('everytime.kr')) {
-      setTimetableError('올바른 url을 입력해주세요.');
-      return;
-    }
-    setTimetableError('');
-    setTimetableList([]);
-    setSelectedTimetable(null);
-
-    everytimeAPI
-      .getTimetables({ url })
-      .then((timetables) => {
-        setTimetableList(timetables);
-        if (timetables.length > 0) {
-          setSelectedTimetable(timetables[0]);
-        }
-      })
-      .catch((error) => {
-        console.error('시간표 목록 조회 실패:', error);
-        setTimetableError('시간표 목록을 불러오는데 실패했습니다.');
-      });
-  };
+  // 이미지 업로드 hook
+  const { selectedImage, imagePreview, handleImageSelect } = useImageUpload();
 
   //url 입력 -> 자동 조회
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (everytimeTable && everytimeTable.includes('everytime.kr')) {
         getTimetables(everytimeTable);
-      } else {
-        setTimetableList([]);
-        setSelectedTimetable(null);
-        setTimetableError('');
       }
     }, 500);
     return () => clearTimeout(timeoutId);
-  }, [everytimeTable]);
+  }, [everytimeTable, getTimetables]);
 
-  const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+  // 이미지 선택 -> 파싱
+  const handleImageSelectWithParsing = (event: React.ChangeEvent<HTMLInputElement>) => {
+    handleImageSelect(event);
+
     const file = event.target.files?.[0];
-
     if (file) {
-      setSelectedImage(file);
-      const previewUrl = URL.createObjectURL(file);
-      setImagePreview(previewUrl);
-
-      setParsedTimetable(null);
+      clearParsedData();
       parseImageTimetable(file);
-    } else {
-      console.log('파일이 없음');
     }
   };
 
-  //시간표 상세 조회
-  const getTimetableDetail = (identifier: string) => {
-    setTimetableDetail(null);
-    setDetailError('');
-
-    everytimeAPI
-      .getTimetableDetail({ identifier })
-      .then((detail) => {
-        setTimetableDetail(detail);
-      })
-      .catch((error) => {
-        console.error('시간표 상세 조회 실패:', error);
-        setDetailError('시간표 상세 정보를 불러오는데 실패했습니다.');
-      });
-  };
-
-  //시간표가 변경될 때 상세 정보 조회
-  useEffect(() => {
-    if (selectedTimetable?.identifier) {
-      getTimetableDetail(selectedTimetable.identifier);
-    }
-  }, [selectedTimetable]);
-
-  //이미지 파싱 함수
-  const parseImageTimetable = (file: File) => {
-    setImageParsing(true);
-    setParsedTimetable(null);
-    setImageParseError('');
-
-    return everytimeAPI
-      .getTimetableDetailByImage({ image: file })
-      .then((result) => {
-        setParsedTimetable(result);
-      })
-      .catch((error) => {
-        if (error.response?.status !== 403) {
-          setImageParseError(`이미지 분석 실패`);
-        }
-      })
-      .finally(() => {
-        setImageParsing(false);
-      });
-  };
-
+  //데이터 확인용 콘솔
   const handleSubmit = () => {
     if (selectedTimetable) {
       console.log('선택된 시간표:', selectedTimetable);
@@ -210,7 +97,7 @@ const TimeTableModal: React.FC<TimeTableModalProps> = ({ isOpen, onClose }) => {
           <ImageInput
             selectedImage={selectedImage}
             imagePreview={imagePreview}
-            handleImageSelect={handleImageSelect}
+            handleImageSelect={handleImageSelectWithParsing}
           />
 
           {/* 이미지 파싱 로딩 상태 */}
