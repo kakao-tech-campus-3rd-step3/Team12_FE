@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { everytimeAPI } from '@/apis';
 import type { TimetableResponse, TimetableDetailResponse } from '@/apis';
 
@@ -13,7 +13,7 @@ export const useTimetableData = () => {
   const [detailError, setDetailError] = useState<string>('');
 
   // 시간표 목록 조회
-  const getTimetables = (url: string) => {
+  const getTimetables = useCallback((url: string) => {
     if (!url.includes('everytime.kr')) {
       setTimetableError('올바른 url을 입력해주세요.');
       return;
@@ -34,10 +34,10 @@ export const useTimetableData = () => {
         console.error('시간표 목록 조회 실패:', error);
         setTimetableError('시간표 목록을 불러오는데 실패했습니다.');
       });
-  };
+  }, []);
 
   // 시간표 상세 조회
-  const getTimetableDetail = (identifier: string) => {
+  const getTimetableDetail = useCallback((identifier: string) => {
     setTimetableDetail(null);
     setDetailError('');
 
@@ -50,14 +50,14 @@ export const useTimetableData = () => {
         console.error('시간표 상세 조회 실패:', error);
         setDetailError('시간표 상세 정보를 불러오는데 실패했습니다.');
       });
-  };
+  }, []);
 
   // 시간표가 변경될 때 상세 정보 조회
   useEffect(() => {
     if (selectedTimetable?.identifier) {
       getTimetableDetail(selectedTimetable.identifier);
     }
-  }, [selectedTimetable]);
+  }, [selectedTimetable, getTimetableDetail]);
 
   return {
     timetableList,
