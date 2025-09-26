@@ -5,3 +5,9 @@ export const AUTH_ENDPOINTS = {
   LOGIN: '/api/members/login',
   REFRESH: '/api/members/refresh',
 } as const;
+
+export const EVERYTIME_ENDPOINTS = {
+  TIMETABLES: '/api/everytime/timetables',
+  TIMETABLE_DETAIL: '/api/everytime/timetable',
+  TIMETABLE_IMAGE: '/api/everytime/timetable',
+} as const;
