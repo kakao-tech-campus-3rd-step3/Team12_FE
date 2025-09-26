@@ -14,3 +14,27 @@ export type CalendarEvent = {
 export type getCalendarEventsResponse = {
   events: CalendarEvent[];
 };
+
+export type addCalendarEventRequest = {
+  title: string;
+  description: string;
+  start_time: string;
+  end_time: string;
+  is_private: boolean;
+};
+export type addCalendarEventResponse = {
+  event_id: number;
+  title: string;
+  description: string;
+  start_time: string;
+  end_time: string;
+  is_private: boolean;
+};
+
+export type modifyCalendarEventResponse = {
+  event_id: number;
+};
+
+export type deleteCalendarEventResponse = {
+  event_id: number;
+};

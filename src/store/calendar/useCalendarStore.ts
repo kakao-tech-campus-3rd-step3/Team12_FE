@@ -13,38 +13,25 @@ interface CalendarState {
 
 export const useCalendarStore = create<CalendarState>((set, get) => ({
   // Test Data
-  events: [
-    {
-      event_id: 1,
-      title: '팀미팅',
-      description: '주간 팀 회의',
-      start_time: '2025-09-25T10:00:00',
-      end_time: '2025-09-25T11:00:00',
-      is_private: false,
-    },
-  ],
+  events: [],
   isAuthenticated: false,
   getEvents: async () => {
     try {
-      // 오늘 기준 -1개월 ~ +1개월 범위 계산
+      // 오늘 기준 저번달 1일부터 다음달 마지막 일까지 범위 계산
       const now = new Date();
-      const start = new Date(now);
-      start.setMonth(start.getMonth() - 1);
-      const end = new Date(now);
-      end.setMonth(end.getMonth() + 1);
+      const start = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+      const end = new Date(now.getFullYear(), now.getMonth() + 2, 0); // 다음달 마지막 일
 
-      const toIsoLocal = (d: Date) => {
-        const year = d.getFullYear();
-        const month = String(d.getMonth() + 1).padStart(2, '0');
-        const day = String(d.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
+      const toIsoString = (d: Date) => {
+        return d.toISOString();
       };
 
       const response = await calendarAPI.getEvents({
-        startAt: `${toIsoLocal(start)}`,
-        endAt: `${toIsoLocal(end)}`,
+        startAt: toIsoString(start),
+        endAt: toIsoString(end),
       });
-      const fetchedEvents = response.data?.events ?? null;
+      // API 응답이 배열을 직접 반환하므로 response.data를 사용
+      const fetchedEvents = response.data ?? null;
       if (fetchedEvents) {
         set({ events: fetchedEvents });
       } else {

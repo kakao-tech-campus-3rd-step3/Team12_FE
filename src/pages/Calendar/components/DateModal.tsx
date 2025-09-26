@@ -196,7 +196,7 @@ const DateModal: React.FC<DateModalProps> = ({
                       <FormInput
                         id="startTime"
                         label="시작 시간"
-                        value={getTimePart(formData.startTime) || '09:00'}
+                        value={getTimePart(formData.startTime) || ''}
                         onChange={(value) =>
                           updateFormData({
                             startTime: buildIsoFromDateAndTime(
@@ -208,13 +208,14 @@ const DateModal: React.FC<DateModalProps> = ({
                         }
                         type="time"
                         className=""
+                        placeholder="-- : --"
                       />
                     </div>
                     <div className="flex-1">
                       <FormInput
                         id="endTime"
                         label="종료 시간"
-                        value={getTimePart(formData.endTime) || '10:00'}
+                        value={getTimePart(formData.endTime) || ''}
                         onChange={(value) =>
                           updateFormData({
                             endTime: buildIsoFromDateAndTime(
@@ -226,6 +227,7 @@ const DateModal: React.FC<DateModalProps> = ({
                         }
                         type="time"
                         className=""
+                        placeholder="-- : --"
                       />
                     </div>
                   </div>

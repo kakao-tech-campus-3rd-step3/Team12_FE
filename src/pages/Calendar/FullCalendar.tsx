@@ -46,11 +46,15 @@ const CalendarPage = () => {
           return null;
         }
 
+        // 시간이 없는 경우 (종일 이벤트) 처리
+        const hasTime = event.start_time.includes('T') && event.end_time.includes('T');
+
         return {
           id: event.event_id.toString(),
           title: event.title,
-          start: startDate.toISOString(),
-          end: endDate.toISOString(),
+          start: hasTime ? startDate.toISOString() : formatLocalDate(startDate),
+          end: hasTime ? endDate.toISOString() : formatLocalDate(endDate),
+          allDay: !hasTime, // 시간이 없으면 종일 이벤트로 처리
         };
       })
       .filter(notNull); // null 값 제거 (타입 가드)
@@ -95,8 +99,15 @@ const CalendarPage = () => {
   // 모달에서 이벤트 저장 핸들러
   const handleSaveEvent = (eventData: Omit<CalendarEvent, 'event_id'>) => {
     if (modalType === 'add') {
+      calendarAPI.addEvent({
+        title: eventData.title,
+        description: eventData.description,
+        start_time: eventData.start_time,
+        end_time: eventData.end_time,
+        is_private: eventData.is_private,
+      });
+      console.log('eventData:', eventData);
       addEvent(eventData);
-      calendarAPI.addEvent({ ...eventData, event_id: Date.now() });
     } else if (modalType === 'edit' && selectedEvent) {
       updateEvent(selectedEvent.event_id, eventData);
       calendarAPI.modifyEvent({ ...eventData, event_id: selectedEvent.event_id });
