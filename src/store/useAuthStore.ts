@@ -1,10 +1,10 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { authAPI } from '@/apis/index';
-import type { LoginRequest, SignupRequest, User } from '@/apis';
+import type { LoginRequest, SignupRequest, UserInfoResponse } from '@/apis';
 
 interface AuthState {
-  user: User | null;
+  user: UserInfoResponse | null;
   isAuthenticated: boolean;
   accessToken: string | null;
   refreshToken: string | null;
@@ -13,6 +13,7 @@ interface AuthState {
   signup: (userData: SignupRequest) => Promise<void>;
   login: (credentials: LoginRequest) => Promise<void>;
   getRefreshToken: () => Promise<void>;
+  getUserInfo: () => Promise<void>;
   logout: () => void;
   setTokens: (accessToken: string, refreshToken: string) => void;
 }
@@ -49,7 +50,7 @@ export const useAuthStore = create<AuthState>()(
           .login(credentials)
           .then((response) => {
             const { access_token, refresh_token } = response.data;
-            const user: User = {
+            const user: UserInfoResponse = {
               user_id: '1',
               name: 'User',
               email: credentials.email,
@@ -100,6 +101,19 @@ export const useAuthStore = create<AuthState>()(
 
       setTokens: (accessToken: string, refreshToken: string) => {
         set({ accessToken, refreshToken });
+      },
+
+      //사용자 정보 조회
+      getUserInfo: () => {
+        return authAPI
+          .getUserInfo()
+          .then((response) => {
+            const userData: UserInfoResponse = response.data;
+            set({ user: userData, error: null });
+          })
+          .catch((error) => {
+            throw error;
+          });
       },
 
       //로그아웃
