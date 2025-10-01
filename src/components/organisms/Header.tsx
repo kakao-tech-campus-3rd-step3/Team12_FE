@@ -1,10 +1,14 @@
 import Logo from '@/components/atoms/Logo';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/store/useAuthStore';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import { RouterPath } from '@/routes/path';
 
 const Navigation = () => {
-  const { user, isAuthenticated, logout } = useAuthStore();
+  const navigate = useNavigate();
+
+  const [isLoadingUserInfo, setIsLoadingUserInfo] = useState(false);
+  const { user, isAuthenticated, logout, getUserInfo } = useAuthStore();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -13,22 +17,52 @@ const Navigation = () => {
     return name ? name.charAt(0).toUpperCase() : 'U';
   };
 
-  // 사용자 정보 조회
+  // 사용자 정보 조회 - 중복 정보 조회 방지
   const handleGetUserInfo = async () => {
-    if (!isAuthenticated) return;
+    if (!isAuthenticated || !isLoadingUserInfo) return;
+
+    setIsLoadingUserInfo(true);
+    try {
+      await getUserInfo();
+    } catch (error) {
+      console.error('사용자 정보 조회 실패:', error);
+    } finally {
+      setIsLoadingUserInfo(false);
+    }
   };
 
-  // 드롭다운 -> 사용자 정보 조회
+  // 로그인 후 사용자 정보 자동 조회
+  useEffect(() => {
+    if (isAuthenticated && !user) {
+      handleGetUserInfo();
+    }
+  }, [isAuthenticated, user]);
+
+  // 드롭다운 열 때 사용자 정보 조회
   const handleDropdownToggle = () => {
-    if (!isDropdownOpen && isAuthenticated) {
+    if (!isDropdownOpen && isAuthenticated && !user) {
       handleGetUserInfo();
     }
     setIsDropdownOpen(!isDropdownOpen);
   };
 
+  // 드롭다운 외부 클릭 시 닫기
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   const handleLogout = () => {
     logout();
-    window.location.href = '/login';
+    navigate(RouterPath.LOGIN);
   };
 
   return (
@@ -78,7 +112,7 @@ const Navigation = () => {
 
                       <button
                         onClick={handleLogout}
-                        className="w-full py-2 text-sm text-red-600 hover:bg-red-50 hover:rounded transition"
+                        className="w-full py-2 px-4 text-sm text-red-600 hover:bg-red-50 transition-all duration-200"
                       >
                         로그아웃
                       </button>

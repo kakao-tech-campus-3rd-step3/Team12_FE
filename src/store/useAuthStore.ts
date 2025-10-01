@@ -50,13 +50,7 @@ export const useAuthStore = create<AuthState>()(
           .login(credentials)
           .then((response) => {
             const { access_token, refresh_token } = response.data;
-            const user: UserInfoResponse = {
-              user_id: '1',
-              name: 'User',
-              email: credentials.email,
-            };
             set({
-              user,
               isAuthenticated: true,
               accessToken: access_token,
               refreshToken: refresh_token,
