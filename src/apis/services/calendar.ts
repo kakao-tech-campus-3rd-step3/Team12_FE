@@ -8,15 +8,9 @@ import type {
 
 export const calendarAPI = {
   getEvents: (params: { startAt: string; endAt: string }) => {
-    return apiClient.get(
-      CALENDAR_ENDPOINTS.GET_EVENTS.replace(':startAt', params.startAt).replace(
-        ':endAt',
-        params.endAt,
-      ),
-      {
-        params,
-      },
-    );
+    return apiClient.get(CALENDAR_ENDPOINTS.GET_EVENTS, {
+      params,
+    });
   },
   addEvent: (event: addCalendarEventRequest): Promise<addCalendarEventResponse> => {
     return apiClient.post(CALENDAR_ENDPOINTS.ADD_EVENT, event);
@@ -25,8 +19,6 @@ export const calendarAPI = {
     return apiClient.patch(CALENDAR_ENDPOINTS.MODIFY_EVENT, event);
   },
   deleteEvent: (eventId: number) => {
-    return apiClient.delete(
-      CALENDAR_ENDPOINTS.DELETE_EVENT.replace(':eventId', eventId.toString()),
-    );
+    return apiClient.delete(CALENDAR_ENDPOINTS.DELETE_EVENT(eventId));
   },
 };
