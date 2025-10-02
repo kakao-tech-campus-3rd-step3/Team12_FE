@@ -1,5 +1,5 @@
-import { API_BASE_URL } from '@/apis/constants/endpoints';
 import axios from 'axios';
+import { API_BASE_URL, AUTH_ENDPOINTS } from '@/apis/constants/endpoints';
 
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -65,7 +65,7 @@ apiClient.interceptors.response.use(
         console.log('토큰 갱신 시도 중...');
 
         // 리프레시 API 호출
-        const refreshResponse = await refreshClient.post(`${API_BASE_URL}/api/members/refresh`, {
+        const refreshResponse = await refreshClient.post(AUTH_ENDPOINTS.REFRESH, {
           refresh_token: state.refreshToken,
         });
 
