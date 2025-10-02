@@ -38,7 +38,7 @@ const DateModal: React.FC<DateModalProps> = ({
     selectedDate,
   });
 
-  const { handleSubmit } = useEventForm({
+  const { handleSubmit, error, setError } = useEventForm({
     onSave,
     onClose,
   });
@@ -131,9 +131,13 @@ const DateModal: React.FC<DateModalProps> = ({
                 id="title"
                 label="일정 제목"
                 value={formData.title}
-                onChange={(value) => updateFormData({ title: value })}
+                onChange={(value) => {
+                  updateFormData({ title: value });
+                  if (error === 'title') setError(null);
+                }}
                 placeholder="일정 제목을 입력하세요"
                 required
+                error={error === 'title' ? '일정 제목을 입력해주세요' : undefined}
                 className="p-4"
               />
 
@@ -214,18 +218,20 @@ const DateModal: React.FC<DateModalProps> = ({
                         id="startTime"
                         label="시작 시간"
                         value={getTimePart(formData.startTime) || ''}
-                        onChange={(value) =>
+                        onChange={(value) => {
                           updateFormData({
                             startTime: buildIsoFromDateAndTime(
                               formData.startTime,
                               range?.from,
                               value,
                             ),
-                          })
-                        }
+                          });
+                          if (error === 'startTime') setError(null);
+                        }}
                         type="time"
                         className=""
                         placeholder="-- : --"
+                        error={error === 'startTime' ? '시작 시간을 선택해주세요' : undefined}
                       />
                     </div>
                     <div className="flex-1">
@@ -233,18 +239,20 @@ const DateModal: React.FC<DateModalProps> = ({
                         id="endTime"
                         label="종료 시간"
                         value={getTimePart(formData.endTime) || ''}
-                        onChange={(value) =>
+                        onChange={(value) => {
                           updateFormData({
                             endTime: buildIsoFromDateAndTime(
                               formData.endTime,
                               range?.to ?? range?.from,
                               value,
                             ),
-                          })
-                        }
+                          });
+                          if (error === 'endTime') setError(null);
+                        }}
                         type="time"
                         className=""
                         placeholder="-- : --"
+                        error={error === 'endTime' ? '종료 시간을 선택해주세요' : undefined}
                       />
                     </div>
                   </div>
