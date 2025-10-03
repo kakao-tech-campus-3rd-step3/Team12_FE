@@ -1,11 +1,13 @@
 import { useState, useMemo } from 'react';
 import { Users, Plus, UserPlus } from 'lucide-react';
-import { mockTeams } from '@/mockdata/teamData';
+//import { mockTeams } from '@/mockdata/teamData';
 import Button from '@/components/atoms/Button';
 import TeamListCard from '@/pages/TeamCalendar/components/TeamListCard';
 import CreateTeam from '@/pages/TeamCalendar/components/CreateTeam';
 import JoinTeam from '@/pages/TeamCalendar/components/JoinTeam';
 import Pagination from '@/components/molecules/Pagination';
+import { teamAPI } from '@/apis';
+import { useTeamStore } from '@/store/team';
 
 interface TeamListModalProps {
   isOpen: boolean;
@@ -17,12 +19,14 @@ const TeamListModal = ({ isOpen, onClose }: TeamListModalProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3;
 
+  const { teams, addTeam } = useTeamStore();
+
   const paginationData = useMemo(() => {
-    const totalItems = mockTeams.length;
+    const totalItems = teams.length;
     const totalPages = Math.ceil(totalItems / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    const currentItems = mockTeams.slice(startIndex, endIndex);
+    const currentItems = teams.slice(startIndex, endIndex);
 
     return {
       currentItems,
@@ -33,20 +37,31 @@ const TeamListModal = ({ isOpen, onClose }: TeamListModalProps) => {
       startIndex: startIndex + 1,
       endIndex: Math.min(endIndex, totalItems),
     };
-  }, [currentPage]);
+  }, [currentPage, teams]);
 
   if (!isOpen) return null;
 
-  const handleCreateTeam = (teamData: { name: string; description: string }) => {
-    console.log('팀 생성 완료', teamData);
-    alert(`"${teamData.name}" 팀이 생성되었습니다!`);
-    setCurrentView('list');
+  const handleCreateTeam = async (teamData: { name: string; description: string }) => {
+    try {
+      const response = await teamAPI.createTeam({
+        team_name: teamData.name,
+        team_description: teamData.description,
+      });
+      addTeam(response);
+      alert(`"${teamData.name}" 팀이 생성되었습니다!`);
+      setCurrentView('list');
+    } catch {}
   };
 
-  const handleJoinTeam = (inviteCode: string) => {
-    console.log('팀 참여 시도:', inviteCode);
-    alert(`초대코드 "${inviteCode}"로 팀 참여를 시도합니다.`);
-    setCurrentView('list');
+  const handleJoinTeam = async (inviteCode: string) => {
+    try {
+      const response = await teamAPI.joinTeam({
+        invite_code: inviteCode,
+      });
+      addTeam(response);
+      alert('팀 가입 성공');
+      setCurrentView('list');
+    } catch {}
   };
 
   const handleClose = () => {
@@ -129,27 +144,8 @@ const TeamListModal = ({ isOpen, onClose }: TeamListModalProps) => {
                 </div>
 
                 {/* 팀 목록 */}
-                <div className="space-y-3 pb-4 min-h-[400px]">
-                  {paginationData.currentItems.map((team) => (
-                    <TeamListCard
-                      key={team.code}
-                      team={team}
-                      onSettingsClick={() => {
-                        // TODO: 팀 설정 탭 추후 구현
-                      }}
-                    />
-                  ))}
-                </div>
-
-                {/* 페이지네이션 */}
-                <Pagination
-                  currentPage={currentPage}
-                  totalPages={paginationData.totalPages}
-                  onPageChange={handlePageChange}
-                />
-
-                {mockTeams.length === 0 && (
-                  <div className="text-center py-12">
+                {teams.length === 0 ? (
+                  <div className="text-center py-40">
                     <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center rounded-full bg-gray-100">
                       <Users className="w-8 h-8 text-gray-400" />
                     </div>
@@ -161,6 +157,27 @@ const TeamListModal = ({ isOpen, onClose }: TeamListModalProps) => {
                       noWrapper={true}
                     />
                   </div>
+                ) : (
+                  <>
+                    <div className="space-y-3 pb-4">
+                      {paginationData.currentItems.map((team) => (
+                        <TeamListCard
+                          key={team.team_code}
+                          team={team}
+                          onSettingsClick={() => {
+                            // TODO: 팀 설정 탭 추후 구현
+                          }}
+                        />
+                      ))}
+                    </div>
+
+                    {/* 페이지네이션 */}
+                    <Pagination
+                      currentPage={currentPage}
+                      totalPages={paginationData.totalPages}
+                      onPageChange={handlePageChange}
+                    />
+                  </>
                 )}
               </div>
             </div>
