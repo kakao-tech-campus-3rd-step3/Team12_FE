@@ -27,15 +27,9 @@ const CreateTeam = ({ onBack, onCreateTeam }: CreateTeamProps) => {
   };
 
   return (
-    <div className="h-full flex flex-col pt-10 pb-5 p-6 h-full">
+    <div className="h-full flex flex-col pt-7 pb-5 p-7 h-full">
       {/* 헤더 */}
       <div className="flex items-center mb-6">
-        <button
-          onClick={onBack}
-          className="flex items-center justify-center w-8 h-8 mr-3 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-colors duration-200"
-        >
-          <ArrowLeft className="w-5 h-5" />
-        </button>
         <div className="flex flex-col">
           <h2 className="text-xl font-semibold text-gray-900">새 팀 만들기</h2>
           <p className="text-sm text-gray-600 leading-relaxed">
