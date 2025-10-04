@@ -19,7 +19,7 @@ const SelectBox: React.FC<SelectBoxProps> = ({
     <div className={`mb-4 sm:mb-6 ${className}`}>
       <label
         htmlFor={`select-box-${label}`}
-        className="block text-sm sm:text-sm font-medium text-gray-700 mb-2"
+        className="block mb-2 text-sm font-medium text-gray-700 sm:text-sm"
       >
         {label}
       </label>
@@ -27,7 +27,7 @@ const SelectBox: React.FC<SelectBoxProps> = ({
         <select
           value={value}
           onChange={(e) => onChange(Number(e.target.value))}
-          className="w-full px-2 sm:px-3 py-2 sm:py-3 pr-8 sm:pr-10 border border-gray-200 rounded-lg text-md sm:text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent bg-white appearance-none cursor-pointer transition-all duration-200"
+          className="px-2 py-2 pr-8 w-full bg-white rounded-lg border border-gray-200 transition-all duration-200 appearance-none cursor-pointer sm:px-3 sm:py-3 sm:pr-10 text-md sm:text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent"
         >
           {options.map((option) => (
             <option key={option.value} value={option.value}>
@@ -35,9 +35,9 @@ const SelectBox: React.FC<SelectBoxProps> = ({
             </option>
           ))}
         </select>
-        <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:pr-3 pointer-events-none">
+        <div className="flex absolute inset-y-0 right-0 items-center pr-2 pointer-events-none sm:pr-3">
           <svg
-            className="w-3 h-3 sm:w-4 sm:h-4 text-gray-400"
+            className="w-3 h-3 text-gray-400 sm:w-4 sm:h-4"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
