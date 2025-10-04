@@ -18,3 +18,8 @@ export const EVERYTIME_ENDPOINTS = {
   TIMETABLE_DETAIL: '/api/everytime/timetable',
   TIMETABLE_IMAGE: '/api/everytime/timetable',
 } as const;
+
+export const TEAM_ENDPOINTS = {
+  JOIN_TEAM: '/api/teams/join',
+  CREATE_TEAM: '/api/teams',
+};
