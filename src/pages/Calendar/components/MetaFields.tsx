@@ -2,6 +2,7 @@ import type { DateRange } from 'react-day-picker';
 import { FormInput } from '@/components/atoms/FormInput';
 import { getDatePart } from '@/utils/dateTimeUtils';
 import type { FormData } from '@/hooks/calendar/useFormData';
+import { useState } from 'react';
 
 interface MetaFieldsProps {
   formData: FormData;
@@ -10,15 +11,21 @@ interface MetaFieldsProps {
 }
 
 const MetaFields: React.FC<MetaFieldsProps> = ({ formData, range, updateFormData }) => {
+  const [error, setError] = useState<string | null>(null);
+
   return (
     <div className="">
       <FormInput
         id="title"
         label="일정 제목"
         value={formData.title}
-        onChange={(value) => updateFormData({ title: value })}
+        onChange={(value) => {
+          updateFormData({ title: value });
+          if (error === 'title') setError(null);
+        }}
         placeholder="일정 제목을 입력하세요"
         required
+        error={error === 'title' ? '일정 제목을 입력해주세요' : undefined}
         className="p-4"
       />
       <div className="flex gap-4 -mt-1">
@@ -60,7 +67,6 @@ const MetaFields: React.FC<MetaFieldsProps> = ({ formData, range, updateFormData
             }
           }}
           type="checkbox"
-          className=""
         />
       </div>
     </div>
