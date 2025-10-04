@@ -161,11 +161,46 @@
 
   /* 이벤트 스타일 */
   .fc-event {
-    @apply !rounded-xl !border-0 shadow-sm transition-all duration-200 !bg-blue-500 !text-white;
+    @apply !rounded-xl !border-0 shadow-sm transition-all duration-200 !bg-blue-500 !text-white !min-h-[30px] !overflow-visible;
   }
 
   .fc-event:hover {
-    @apply shadow-md transform scale-105;
+    @apply shadow-md transform scale-105 !z-10;
+  }
+
+  /* 일반 단일 날짜 이벤트 */
+  .fc-event.fc-daygrid-event {
+    @apply !rounded-xl !border-none !mb-1 !min-h-[20px];
+  }
+
+  /* 여러 날에 걸친 이벤트 - 시작 부분 */
+  .fc-event.fc-daygrid-event.fc-event-start {
+    @apply !rounded-l-xl !rounded-r-sm !mr-0;
+  }
+
+  /* 여러 날에 걸친 이벤트 - 끝 부분 */
+  .fc-event.fc-daygrid-event.fc-event-end {
+    @apply !rounded-r-xl !ml-0;
+  }
+
+  /* 여러 날에 걸친 이벤트 - 중간 부분 */
+  .fc-event.fc-daygrid-event:not(.fc-event-start):not(.fc-event-end) {
+    @apply !rounded-sm !mx-0;
+  }
+
+  /* 이벤트 내용 영역 */
+  .fc-event-main {
+    @apply !overflow-visible !min-h-[20px] !flex !items-center;
+  }
+
+  /* 이벤트 텍스트 스타일 */
+  .fc-event-title {
+    @apply !font-medium !text-sm !overflow-visible !whitespace-nowrap;
+  }
+
+  /* 이벤트 시간 표시 */
+  .fc-event-time {
+    @apply !text-xs !opacity-90 !mr-1;
   }
 
   /* 날짜 셀 스타일 */
@@ -174,7 +209,17 @@
   }
 
   .fc-daygrid-day-frame {
-    @apply !rounded-xl !overflow-hidden !ring-1 !border-none;
+    @apply !rounded-xl !overflow-visible !ring-1 !border-none;
+  }
+
+  /* 이벤트 컨테이너 */
+  .fc-daygrid-day-events {
+    @apply !overflow-visible !min-h-[35px];
+  }
+
+  /* 이벤트 배치 관련 */
+  .fc-daygrid-event-harness {
+    @apply !overflow-visible;
   }
 
   .fc-daygrid-day:hover {
@@ -248,14 +293,30 @@
   }
 
   .fc-daygrid-day.fc-day {
-    @apply !rounded-xl !m-1 !overflow-hidden !border-none;
+    @apply !rounded-xl !m-1 !overflow-visible !border-none;
   }
 
   .fc-daygrid-day-frame.fc-scrollgrid-sync-inner {
-    @apply !rounded-xl !border-none;
+    @apply !rounded-xl !border-none !overflow-visible;
   }
 
-  .fc-event.fc-daygrid-event {
-    @apply !rounded-xl !border-none;
+  /* 그리드 전체 오버플로우 설정 */
+  .fc-scrollgrid-sync-table {
+    @apply !overflow-visible;
+  }
+
+  .fc-daygrid-body {
+    @apply !overflow-visible;
+  }
+
+  /* 이벤트가 끊어지지 않도록 하는 핵심 설정 */
+  .fc-daygrid-event {
+    @apply !overflow-visible !z-10;
+    position: relative !important;
+  }
+
+  /* 여러 날 이벤트의 연결성 강화 */
+  .fc-daygrid-event.fc-event-mirror {
+    @apply !overflow-visible;
   }
 }

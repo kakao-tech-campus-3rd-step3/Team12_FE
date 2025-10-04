@@ -1,0 +1,11 @@
+/* 캘린더 양쪽 버튼 숨기기 */
+.date-picker .rdp-button_previous,
+.date-picker .rdp-button_next {
+  display: none;
+}
+
+/* 월 캡션 영역 정리 */
+.date-picker .rdp-month_caption {
+  margin: 0;
+  padding: 0;
+}

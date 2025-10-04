@@ -40,6 +40,13 @@ export const mockTimeSlots: TimeSlot[] = [
     participants: '6/8명 참석 가능',
     tag: '좋음',
   },
+  {
+    id: 5,
+    day: '9월 14일 목요일',
+    time: '11:00-13:00',
+    participants: '6/8명 참석 가능',
+    tag: '좋음',
+  },
 ];
 
 export const mockTeams: Team[] = [

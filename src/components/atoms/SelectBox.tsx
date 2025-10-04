@@ -1,14 +1,14 @@
-import type { TimeOption } from '@/utils/timeUtils';
+import type { SelectOption } from '@/utils/timeUtils';
 
-interface TimeSelectorProps {
+interface SelectBoxProps {
   label: string;
   value: number;
   onChange: (value: number) => void;
-  options: TimeOption[];
+  options: SelectOption[];
   className?: string;
 }
 
-const TimeSelector: React.FC<TimeSelectorProps> = ({
+const SelectBox: React.FC<SelectBoxProps> = ({
   label,
   value,
   onChange,
@@ -18,8 +18,8 @@ const TimeSelector: React.FC<TimeSelectorProps> = ({
   return (
     <div className={`mb-4 sm:mb-6 ${className}`}>
       <label
-        htmlFor={`time-selector-${label}`}
-        className="block text-xs sm:text-sm font-medium text-gray-700 mb-2"
+        htmlFor={`select-box-${label}`}
+        className="block text-sm sm:text-sm font-medium text-gray-700 mb-2"
       >
         {label}
       </label>
@@ -27,7 +27,7 @@ const TimeSelector: React.FC<TimeSelectorProps> = ({
         <select
           value={value}
           onChange={(e) => onChange(Number(e.target.value))}
-          className="w-full px-2 sm:px-3 py-2 sm:py-3 pr-8 sm:pr-10 border border-gray-200 rounded-lg text-xs sm:text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent bg-white appearance-none cursor-pointer transition-all duration-200"
+          className="w-full px-2 sm:px-3 py-2 sm:py-3 pr-8 sm:pr-10 border border-gray-200 rounded-lg text-md sm:text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent bg-white appearance-none cursor-pointer transition-all duration-200"
         >
           {options.map((option) => (
             <option key={option.value} value={option.value}>
@@ -50,4 +50,4 @@ const TimeSelector: React.FC<TimeSelectorProps> = ({
   );
 };
 
-export default TimeSelector;
+export default SelectBox;

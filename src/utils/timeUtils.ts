@@ -1,10 +1,10 @@
-export interface TimeOption {
+export interface SelectOption {
   value: number;
   label: string;
 }
 
-export const generateTimeOptions = (maxHours: number = 4): TimeOption[] => {
-  const options: TimeOption[] = [];
+export const generateTimeOptions = (maxHours: number = 4): SelectOption[] => {
+  const options: SelectOption[] = [];
 
   for (let hours = 0; hours <= maxHours; hours++) {
     for (let minutes = 0; minutes < 60; minutes += 15) {

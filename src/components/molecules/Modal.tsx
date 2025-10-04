@@ -15,12 +15,12 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
       onClick={onClose}
     >
       <div
-        className="relative p-6 w-full max-w-md bg-white rounded-lg max-h-[90vh] overflow-y-auto p-6"
+        className="relative fit-content min-w-md  bg-white rounded-lg max-h-[90vh] overflow-y-auto p-6"
         onClick={(e) => e.stopPropagation()}
       >
         <button
           onClick={onClose}
-          className="absolute top-2 right-5 text-gray-500 hover:text-gray-700 text-2xl"
+          className="absolute top-2 right-5 text-2xl text-gray-500 hover:text-gray-700"
           aria-label="Close modal"
         >
           &times;

@@ -1,25 +1,27 @@
+import { useState } from 'react';
 import Drawer from '@/components/organisms/Drawer';
 import FullCalendar from '@/pages/Calendar/FullCalendar';
 import RecommendTimes from '@/pages/TeamCalendar/components/RecommendTimes';
 import TeamListModal from '@/pages/TeamCalendar/components/TeamListModal';
 import TeamMembers from '@/pages/TeamCalendar/components/TeamMembers';
-import { useState } from 'react';
+import UpcomingTeamSchedule from '@/pages/TeamCalendar/components/UpcomingTeamSchedule';
 
 const TeamCalendarPage = () => {
   const [isTeamListModalOpen, setIsTeamListModalOpen] = useState(false);
 
   return (
-    <div className="min-h-screen">
-      <div className="hidden min-h-screen transition-all duration-500 ease-in-out xl:flex">
+    <div className="min-h-[calc(100vh-70px)] bg-gradient-to-br from-blue-50 to-indigo-100">
+      <div className="hidden transition-all duration-500 duration-500 ease-in-out ease-in-out xl:flex">
         <Drawer>
           <TeamMembers onSettingsClick={() => setIsTeamListModalOpen(true)} />
+          <UpcomingTeamSchedule />
         </Drawer>
 
-        <div className="flex-1 p-0 transition-all duration-500 ease-in-out">
+        <div className="flex-1 transition-all duration-500 ease-in-out">
           <FullCalendar />
         </div>
 
-        <div className="p-2 w-80 bg-gray-50 border-l border-gray-200 transition-all duration-500 ease-in-out transform">
+        <div className="px-2 py-2 pr-4 w-[400px] transition-all duration-500 ease-in-out transform">
           <div className="transition-all duration-300 ease-out transform">
             <RecommendTimes />
           </div>
@@ -28,14 +30,15 @@ const TeamCalendarPage = () => {
 
       {/*모바일 뷰*/}
       <div className="block min-h-screen xl:hidden">
-        <div className="flex flex-col min-h-screen">
+        <div className="flex flex-col min-h-screen uration-500 ease-in-out bg-gradient-to-br from-blue-50 to-indigo-100">
           <Drawer>
             <TeamMembers onSettingsClick={() => setIsTeamListModalOpen(true)} />
+            <UpcomingTeamSchedule />
           </Drawer>
 
           <div className="flex flex-col flex-1">
-            <div className="overflow-x-auto p-2 bg-gray-50 border-b border-gray-200">
-              <div className="p-4 bg-white rounded-lg border border-gray-100">
+            <div className="overflow-x-auto order-b border-gray-200">
+              <div className="p-2 rounded-lg border border-gray-100">
                 <RecommendTimes />
               </div>
             </div>
