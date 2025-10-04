@@ -17,16 +17,16 @@ function CustomCaption(props: MonthCaptionProps) {
   const { calendarMonth } = props;
 
   return (
-    <div className="flex items-center justify-between px-2 sm:px-4 mb-2 sm:mb-4">
+    <div className="flex justify-between items-center px-2 mb-2 sm:px-4 sm:mb-4">
       <button
         onClick={() => previousMonth && goToMonth(previousMonth)}
         disabled={!previousMonth}
-        className="bg-transparent border-none cursor-pointer hover:bg-gray-100 p-1 sm:p-2 rounded disabled:cursor-not-allowed disabled:opacity-50 transition-colors"
+        className="p-1 bg-transparent rounded border-none transition-colors cursor-pointer hover:bg-gray-100 sm:p-2 disabled:cursor-not-allowed disabled:opacity-50"
       >
-        <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
+        <ChevronLeft className="w-4 h-4 text-gray-600 sm:w-5 sm:h-5" />
       </button>
 
-      <span className="text-sm sm:text-base md:text-lg font-medium text-gray-800">
+      <span className="text-sm font-medium text-gray-800 sm:text-base md:text-lg">
         {calendarMonth.date.toLocaleString('ko-KR', {
           year: 'numeric',
           month: 'long',
@@ -36,9 +36,9 @@ function CustomCaption(props: MonthCaptionProps) {
       <button
         onClick={() => nextMonth && goToMonth(nextMonth)}
         disabled={!nextMonth}
-        className="bg-transparent border-none cursor-pointer hover:bg-gray-100 p-1 sm:p-2 rounded disabled:cursor-not-allowed disabled:opacity-50 transition-colors"
+        className="p-1 bg-transparent rounded border-none transition-colors cursor-pointer hover:bg-gray-100 sm:p-2 disabled:cursor-not-allowed disabled:opacity-50"
       >
-        <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
+        <ChevronRight className="w-4 h-4 text-gray-600 sm:w-5 sm:h-5" />
       </button>
     </div>
   );
@@ -48,7 +48,7 @@ const SelectDurationCalendar: React.FC<Props> = ({ range, setRange, onSearch }) 
   return (
     <div className="date-picker">
       {/* 캘린더 컨테이너 */}
-      <div className="bg-white rounded-lg p-4">
+      <div className="p-4 bg-white rounded-lg">
         <div className="flex justify-center">
           <DayPicker
             mode="range"
@@ -69,25 +69,25 @@ const SelectDurationCalendar: React.FC<Props> = ({ range, setRange, onSearch }) 
         </div>
 
         {/* 선택된 날짜 표시 - 반응형 */}
-        <div className="mt-4 sm:mt-6 space-y-3 sm:space-y-4 w-full">
+        <div className="mt-4 space-y-3 w-full sm:mt-6 sm:space-y-4">
           {/* 시작일 & 종료일 버튼 : 세로 배치 -> 가로 배치 */}
-          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
-            <div className="flex-1 bg-gray-50 border border-gray-200 rounded-lg p-2 sm:p-3 text-center">
-              <div className="text-xs text-gray-500 mb-1">시작일</div>
-              <div className="text-sm sm:text-base font-medium text-gray-800">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
+            <div className="flex-1 p-2 text-center bg-gray-50 rounded-lg border border-gray-200 sm:p-3">
+              <div className="mb-1 text-xs text-gray-500">시작일</div>
+              <div className="text-sm font-medium text-gray-800 sm:text-base">
                 {range?.from ? range.from.toLocaleDateString('ko-KR') : '날짜 선택'}
               </div>
             </div>
 
             {/* 화살표 : 아래쪽 -> 오른쪽 */}
-            <div className="text-gray-400 text-center sm:text-left">
+            <div className="text-center text-gray-400 sm:text-left">
               <span className="sm:hidden">↓</span>
               <span className="hidden sm:inline">→</span>
             </div>
 
-            <div className="flex-1 bg-gray-50 border border-gray-200 rounded-lg p-2 sm:p-3 text-center">
-              <div className="text-xs text-gray-500 mb-1">종료일</div>
-              <div className="text-sm sm:text-base font-medium text-gray-800">
+            <div className="flex-1 p-2 text-center bg-gray-50 rounded-lg border border-gray-200 sm:p-3">
+              <div className="mb-1 text-xs text-gray-500">종료일</div>
+              <div className="text-sm font-medium text-gray-800 sm:text-base">
                 {range?.to ? range.to.toLocaleDateString('ko-KR') : '날짜 선택'}
               </div>
             </div>

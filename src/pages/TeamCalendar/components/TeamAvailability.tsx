@@ -1,8 +1,11 @@
 import Button from '@/components/atoms/Button';
 import SelectBox from '@/components/atoms/SelectBox';
 import { mockTimeSlots } from '@/mockdata/teamData';
+import SelectDurationCalendar from '@/pages/TeamCalendar/components/SelectDurationCalendar';
 import { generateTimeOptions } from '@/utils/timeUtils';
-import React, { useState } from 'react';
+import { Calendar } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import type { DateRange } from 'react-day-picker';
 
 // 가용성 데이터 타입
 type AvailabilityLevel = 'high' | 'medium' | 'low' | 'none';
@@ -35,8 +38,46 @@ const TeamAvailability: React.FC<TeamAvailabilityProps> = ({ onBack }) => {
   const [selectedDuration, setSelectedDuration] = useState(120);
   const timeOptions = generateTimeOptions(4);
   const [availabilityData] = useState<TimeSlotAvailability[]>(generateMockAvailability());
+  const [range, setRange] = useState<DateRange | undefined>({
+    from: new Date(2025, 7, 10), // 2025년 8월 10일
+    to: new Date(2025, 7, 17), // 2025년 8월 17일
+  });
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const datePickerRef = useRef<HTMLDivElement>(null);
 
   const weekDays = ['월', '화', '수', '목', '금', '토', '일'];
+
+  // 외부 클릭 시 DatePicker 닫기
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (datePickerRef.current && !datePickerRef.current.contains(event.target as Node)) {
+        setShowDatePicker(false);
+      }
+    };
+
+    if (showDatePicker) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showDatePicker]);
+
+  // 날짜를 YY/MM/DD 형식으로 포맷
+  const formatDate = (date: Date | undefined) => {
+    if (!date) return '';
+    const year = date.getFullYear().toString().slice(-2);
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}/${month}/${day}`;
+  };
+
+  // 검색 핸들러
+  const handleSearch = () => {
+    setShowDatePicker(false);
+    // TODO: 날짜 범위로 가용성 데이터 재조회
+  };
 
   const getColorClass = (level: AvailabilityLevel): string => {
     switch (level) {
@@ -104,9 +145,33 @@ const TeamAvailability: React.FC<TeamAvailabilityProps> = ({ onBack }) => {
                   />
                 </div>
 
-                <div className="flex flex-row gap-2 items-center pb-4 text-nowrap">
+                <div
+                  className="flex relative flex-row gap-2 items-center pb-4 text-nowrap"
+                  ref={datePickerRef}
+                >
                   <p className="text-sm text-gray-600">검색 기간</p>
-                  <p className="font-medium text-gray-700">25/08/10 ~ 25/08/17</p>
+                  <button
+                    onClick={() => setShowDatePicker(!showDatePicker)}
+                    className="flex gap-2 items-center px-3 py-2 font-medium text-gray-700 bg-white rounded-lg border border-gray-300 transition-colors hover:bg-gray-50"
+                  >
+                    <Calendar className="w-4 h-4 text-gray-500" />
+                    <span>
+                      {range?.from
+                        ? `${formatDate(range.from)} ~ ${formatDate(range.to) || '선택'}`
+                        : '날짜 선택'}
+                    </span>
+                  </button>
+
+                  {/* DatePicker 드롭다운 */}
+                  {showDatePicker && (
+                    <div className="absolute right-0 top-full z-50 mt-2 bg-white rounded-lg border border-gray-200 shadow-xl">
+                      <SelectDurationCalendar
+                        range={range}
+                        setRange={setRange}
+                        onSearch={handleSearch}
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
 
