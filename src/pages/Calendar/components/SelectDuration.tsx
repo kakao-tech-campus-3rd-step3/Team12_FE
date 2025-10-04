@@ -18,6 +18,7 @@ function CustomCaption(props: MonthCaptionProps) {
   return (
     <div className="flex justify-between items-center px-2 mb-2 sm:px-4 sm:mb-4">
       <button
+        type="button"
         onClick={() => previousMonth && goToMonth(previousMonth)}
         disabled={!previousMonth}
         className="p-1 bg-transparent rounded border-none transition-colors cursor-pointer hover:bg-gray-100 sm:p-2 disabled:cursor-not-allowed disabled:opacity-50"
@@ -33,6 +34,7 @@ function CustomCaption(props: MonthCaptionProps) {
       </span>
 
       <button
+        type="button"
         onClick={() => nextMonth && goToMonth(nextMonth)}
         disabled={!nextMonth}
         className="p-1 bg-transparent rounded border-none transition-colors cursor-pointer hover:bg-gray-100 sm:p-2 disabled:cursor-not-allowed disabled:opacity-50"
@@ -52,7 +54,7 @@ const SelectDuration: React.FC<Props> = ({ range, setRange }) => {
     <div className="date-picker">
       {/* 캘린더 컨테이너 */}
       <div className="p-4 bg-white rounded-lg">
-        <div className="flex justify-center">
+        <div className="flex justify-center min-h-[355px]">
           <DayPicker
             mode="range"
             selected={range}
@@ -72,7 +74,7 @@ const SelectDuration: React.FC<Props> = ({ range, setRange }) => {
         </div>
 
         {/* 선택된 날짜 표시 - 반응형 */}
-        <div className="mt-4 space-y-3 w-full sm:mt-6 sm:space-y-4">
+        <div className="space-y-3 w-full sm:mt-0 sm:space-y-4">
           {/* 시작일 & 종료일 버튼 : 세로 배치 -> 가로 배치 */}
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
             <div className="flex-1 p-2 text-center bg-gray-50 rounded-lg border border-gray-200 sm:p-3">
