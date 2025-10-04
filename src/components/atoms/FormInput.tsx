@@ -2,7 +2,7 @@ import { ChevronDown } from 'lucide-react';
 
 export interface FormInputProps {
   id: string;
-  label: string;
+  label?: string;
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
@@ -11,7 +11,7 @@ export interface FormInputProps {
   helpText?: string;
   error?: string;
   disabled?: boolean;
-  type?: 'text' | 'email' | 'password' | 'tel' | 'date' | 'checkbox' | 'select' | 'time';
+  type?: 'text' | 'email' | 'password' | 'tel' | 'date' | 'checkbox' | 'select' | 'time' | 'input';
   className?: string;
   options?: { label: string; value: string }[];
 }
@@ -100,9 +100,15 @@ export const FormInput = ({
             id={id}
             value={value}
             onChange={(e) => onChange(e.target.value)}
-            className={`w-full px-4 py-2 pr-10 border rounded-lg appearance-none focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
+            className={`w-full px-4 py-2 pr-10 border rounded-lg appearance-none focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white ${
               error ? 'border-red-300 focus:ring-red-500' : 'border-gray-300'
             } ${disabled ? 'text-gray-500 bg-gray-50 cursor-not-allowed' : 'cursor-pointer'}`}
+            style={{ 
+              WebkitAppearance: 'none',
+              MozAppearance: 'none',
+              appearance: 'none',
+              zIndex: 10
+            }}
           >
             {options?.map((option) => (
               <option key={option.value} value={option.value}>
