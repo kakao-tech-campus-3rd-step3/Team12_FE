@@ -1,15 +1,19 @@
 import { type FormData } from '@/hooks/calendar/useFormData';
 import { type CalendarEvent } from '@/types/calendar';
+import { useState } from 'react';
 
 interface UseEventFormProps {
   onSave: (event: Omit<CalendarEvent, 'event_id'>) => void;
   onClose: () => void;
 }
 
+type ErrorType = 'title' | 'startTime' | 'endTime';
+
 const useEventForm = ({ onSave, onClose }: UseEventFormProps) => {
+  const [error, setError] = useState<ErrorType | null>(null);
   const handleSubmit = (formData: FormData) => {
     if (!formData.title.trim()) {
-      alert('일정 제목을 입력해주세요.');
+      setError('title');
       return;
     }
 
@@ -41,17 +45,17 @@ const useEventForm = ({ onSave, onClose }: UseEventFormProps) => {
     formData: Pick<FormData, 'title' | 'startTime' | 'endTime' | 'private'>,
   ) => {
     if (!formData.title?.trim()) {
-      alert('일정 제목을 입력해주세요.');
+      setError('title');
       return false;
     }
 
     if (!formData.startTime) {
-      alert('시작 날짜를 선택해주세요.');
+      setError('startTime');
       return false;
     }
 
     if (!formData.endTime) {
-      alert('종료 날짜를 선택해주세요.');
+      setError('endTime');
       return false;
     }
 
@@ -61,6 +65,8 @@ const useEventForm = ({ onSave, onClose }: UseEventFormProps) => {
   return {
     handleSubmit,
     validateForm,
+    error,
+    setError,
   };
 };
 

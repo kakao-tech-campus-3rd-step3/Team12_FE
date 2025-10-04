@@ -2,8 +2,9 @@ import type { ReactNode } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 interface ButtonProps {
-  onClick?: () => void;
-  text: string;
+  onClick?: (e: React.MouseEvent) => void;
+  text?: string;
+  children?: ReactNode;
   className?: string;
   /**너비 100% 여부**/
   fullWidth?: boolean;
@@ -20,6 +21,7 @@ interface ButtonProps {
 const Button = ({
   onClick,
   text,
+  children,
   className,
   fullWidth = false,
   icon,
@@ -70,7 +72,7 @@ const Button = ({
           {icon}
         </span>
       )}
-      <span className="flex-1 text-center">{text}</span>
+      <span className="flex-1 text-center">{children || text}</span>
       {icon && iconPosition === 'right' && (
         <span className={`${iconSizes[size]} flex items-center justify-center flex-shrink-0`}>
           {icon}

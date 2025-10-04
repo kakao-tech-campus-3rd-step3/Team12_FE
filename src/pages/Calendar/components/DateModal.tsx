@@ -40,7 +40,7 @@ const DateModal: React.FC<DateModalProps> = ({
     selectedDate,
   });
 
-  const { handleSubmit } = useEventForm({
+  const { handleSubmit, error, setError } = useEventForm({
     onSave,
     onClose,
   });
@@ -79,20 +79,18 @@ const DateModal: React.FC<DateModalProps> = ({
         <div className="p-6">
           <p className="mb-4 text-gray-600">"{selectedEvent?.title}" 일정을 삭제하시겠습니까?</p>
           <div className="flex gap-2 justify-end">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 text-gray-600 rounded-lg border border-gray-300 hover:bg-gray-50"
-            >
+            <Button onClick={onClose} variant="outline" size="md" noWrapper={true}>
               취소
-            </button>
-            <button
-              type="button"
+            </Button>
+            <Button
               onClick={handleDelete}
-              className="px-4 py-2 text-white bg-red-500 rounded-lg hover:bg-red-600"
+              variant="primary"
+              size="md"
+              noWrapper={true}
+              className="bg-red-500 hover:bg-red-600"
             >
               삭제
-            </button>
+            </Button>
           </div>
         </div>
       ) : (

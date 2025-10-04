@@ -1,3 +1,4 @@
+import Button from '@/components/atoms/Button';
 import TimeTableModal from '@/pages/Calendar/components/TimetableModal';
 import { Link } from 'lucide-react';
 import { useState } from 'react';
@@ -28,12 +29,15 @@ const LinkStatus = () => {
             {linkStatus ? (
               <p className="text-sm font-medium px-2 py-1 text-[#1C398E]">연동완료</p>
             ) : (
-              <button
-                className="text-sm border text-nowrap border-mainBlue rounded-lg px-2 py-1 font-medium text-[#1C398E] hover:cursor-pointer transition hover:bg-mainBlue/50 hover:text-white"
+              <Button
                 onClick={handleLinkStatus}
+                variant="outline"
+                size="sm"
+                noWrapper={true}
+                className="border-mainBlue text-[#1C398E] hover:bg-mainBlue/50 hover:text-white"
               >
                 연동하기
-              </button>
+              </Button>
             )}
           </div>
         </div>
