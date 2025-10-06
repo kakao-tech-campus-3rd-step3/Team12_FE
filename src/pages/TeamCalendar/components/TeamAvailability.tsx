@@ -82,13 +82,13 @@ const TeamAvailability: React.FC<TeamAvailabilityProps> = ({ onBack }) => {
   const getColorClass = (level: AvailabilityLevel): string => {
     switch (level) {
       case 'high':
-        return 'bg-green-400';
+        return 'bg-green-500';
       case 'medium':
-        return 'bg-yellow-400';
+        return 'bg-green-300';
       case 'low':
-        return 'bg-orange-400';
+        return 'bg-green-100';
       case 'none':
-        return 'bg-red-400';
+        return 'bg-gray-300';
       default:
         return 'bg-gray-200';
     }
