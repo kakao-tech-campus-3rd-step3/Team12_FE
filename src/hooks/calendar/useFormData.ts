@@ -3,16 +3,8 @@
  */
 
 import { type CalendarEvent, type RepeatType } from '@/types/calendar';
+import { toDateOnly } from '@/utils/dateTimeUtils';
 import { useEffect, useState } from 'react';
-
-// ISO 문자열 또는 Date를 YYYY-MM-DD로 변환
-const toDateOnly = (dateLike: string | Date): string => {
-  const d = typeof dateLike === 'string' ? new Date(dateLike) : dateLike;
-  const year = d.getFullYear();
-  const month = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-};
 
 export interface FormData {
   title: string;
@@ -21,6 +13,10 @@ export interface FormData {
   repeat: RepeatType;
   startTime?: string;
   endTime?: string;
+  repeatEndType?: 'endcount' | 'enddate';
+  repeatEndDate?: string;
+  repeatCount: number;
+  repeatWeekDays?: string[];
 }
 
 interface UseFormDataProps {
@@ -39,6 +35,10 @@ const useFormData = ({ isOpen, modalType, selectedEvent, selectedDate }: UseForm
     private: false,
     allDay: false,
     repeat: 'none',
+    repeatEndType: undefined,
+    repeatEndDate: '',
+    repeatCount: 1,
+    repeatWeekDays: [],
   });
 
   // 모달이 열릴 때마다 폼 초기화
@@ -52,6 +52,10 @@ const useFormData = ({ isOpen, modalType, selectedEvent, selectedDate }: UseForm
           private: selectedEvent.is_private ?? false,
           allDay: false,
           repeat: 'none',
+          repeatEndType: undefined,
+          repeatEndDate: '',
+          repeatCount: 1,
+          repeatWeekDays: [],
           // startTime: new Date(selectedEvent.start_time).toTimeString().slice(0, 5),
           // endTime: new Date(selectedEvent.end_time).toTimeString().slice(0, 5),
         });
@@ -63,6 +67,10 @@ const useFormData = ({ isOpen, modalType, selectedEvent, selectedDate }: UseForm
           private: false,
           allDay: false,
           repeat: 'none',
+          repeatEndType: undefined,
+          repeatEndDate: '',
+          repeatCount: 1,
+          repeatWeekDays: [],
         });
       } else {
         setFormData({
@@ -72,6 +80,10 @@ const useFormData = ({ isOpen, modalType, selectedEvent, selectedDate }: UseForm
           private: false,
           allDay: false,
           repeat: 'none',
+          repeatEndType: undefined,
+          repeatEndDate: '',
+          repeatCount: 1,
+          repeatWeekDays: [],
         });
       }
     }
