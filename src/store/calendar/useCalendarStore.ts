@@ -11,7 +11,7 @@ interface CalendarState {
   updateEvent: (eventId: number, updates: Partial<CalendarEvent>) => void;
 }
 
-export const useCalendarStore = create<CalendarState>((set, get) => ({
+export const useCalendarStore = create<CalendarState>((set) => ({
   // Test Data
   events: [],
   isAuthenticated: false,
