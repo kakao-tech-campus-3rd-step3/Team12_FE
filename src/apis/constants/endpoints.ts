@@ -10,7 +10,7 @@ export const CALENDAR_ENDPOINTS = {
   GET_EVENTS: '/api/events',
   ADD_EVENT: '/api/events/add',
   MODIFY_EVENT: '/api/events/modify',
-  DELETE_EVENT: (eventId: number) => `/calendar/events/${eventId}`,
+  DELETE_EVENT: (eventId: number) => `/api/events/${eventId}`,
 } as const;
 
 export const EVERYTIME_ENDPOINTS = {
