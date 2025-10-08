@@ -22,7 +22,7 @@ const TeamCalendarPage = () => {
         {!showAvailability ? (
           <>
             <div className="flex-1 transition-all duration-500 ease-in-out">
-              <FullCalendar />
+              <FullCalendar mode="team" />
             </div>
 
             <div className="px-2 py-2 pr-4 w-[400px] transition-all duration-500 ease-in-out transform">
@@ -55,7 +55,7 @@ const TeamCalendarPage = () => {
               </div>
 
               <div className="flex-1 p-0">
-                <FullCalendar />
+                <FullCalendar mode="team" />
               </div>
             </div>
           ) : (

@@ -1,4 +1,4 @@
-import { calendarAPI } from '@/apis';
+import { personalCalendarAPI, teamCalendarAPI } from '@/apis';
 import { useEvents, useModal } from '@/hooks';
 import DateModal from '@/pages/Calendar/components/DateModal';
 import type { CalendarEvent, modifyCalendarEventRequest } from '@/types/calendar';
@@ -7,9 +7,22 @@ import interactionPlugin from '@fullcalendar/interaction';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useParams } from 'react-router-dom';
+import { useTeamStore } from '@/store/team/useTeamStore';
 
-const CalendarPage = () => {
+//개인 캘린더와 팀 캘린더를 분리하기 위한 mode 설정
+type CalendarMode = 'personal' | 'team';
+
+interface CalendarProps {
+  mode: CalendarMode;
+}
+
+const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
+  //store에서 팀 id 가져오기 -> url에서 팀 id 가져오기
+  const { currentTeam } = useTeamStore();
+  const { id: urlTeamId } = useParams<{ id: string }>();
+  const teamId = mode === 'team' ? (currentTeam?.team_id ?? Number(urlTeamId)) : undefined;
+
   const { setModalType, setIsOpen, isOpen, modalType } = useModal();
   const {
     events,
@@ -20,6 +33,15 @@ const CalendarPage = () => {
     handleEventDrop,
     handleEventResize,
   } = useEvents();
+
+  //초기 로딩 시 팀/개인 분기해서 캘린더 가져오기
+  useEffect(() => {
+    if (mode === 'team') {
+      void getEvents({ teamId, mode: 'team' });
+    } else {
+      void getEvents({ mode: 'personal' });
+    }
+  }, [getEvents, mode, teamId]);
 
   const notNull = <T,>(value: T | null): value is T => value !== null;
 
@@ -91,15 +113,26 @@ const CalendarPage = () => {
     }
   }, [currentDate, currentView]);
 
-  // 마운트 시 이벤트 초기 로딩
-  useEffect(() => {
-    void getEvents();
-  }, [getEvents]);
-
   // 모달에서 이벤트 저장 핸들러
-  const handleSaveEvent = (eventData: Omit<CalendarEvent, 'event_id'>) => {
+  const handleSaveEvent = async (eventData: Omit<CalendarEvent, 'event_id'>) => {
     if (modalType === 'add') {
-      calendarAPI.addEvent({
+      if (mode === 'team') {
+        if (!teamId) {
+          console.error('팀이 선택되지 않았습니다.');
+          return;
+        }
+        await teamCalendarAPI.addTeamEvent({
+          team_id: teamId,
+          title: eventData.title,
+          description: eventData.description,
+          start_time: eventData.start_time,
+          end_time: eventData.end_time,
+          is_private: eventData.is_private,
+        });
+        addEvent(eventData);
+        return;
+      }
+      personalCalendarAPI.addEvent({
         title: eventData.title,
         description: eventData.description,
         start_time: eventData.start_time,
@@ -130,7 +163,7 @@ const CalendarPage = () => {
 
       console.log('modify payload:', modifyData);
 
-      calendarAPI.modifyEvent(modifyData);
+      personalCalendarAPI.modifyEvent(modifyData);
       updateEvent(selectedEvent.event_id, eventData);
     }
   };
@@ -138,7 +171,7 @@ const CalendarPage = () => {
   // 모달에서 이벤트 삭제 핸들러
   const handleDeleteEvent = (eventId: number) => {
     removeEvent(eventId);
-    calendarAPI.deleteEvent(eventId);
+    personalCalendarAPI.deleteEvent(eventId);
   };
 
   return (
