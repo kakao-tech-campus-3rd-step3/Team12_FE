@@ -19,7 +19,7 @@ const Navigation = () => {
 
   // 사용자 정보 조회 - 중복 정보 조회 방지
   const handleGetUserInfo = async () => {
-    if (!isAuthenticated || !isLoadingUserInfo) return;
+    if (!isAuthenticated || isLoadingUserInfo) return;
 
     setIsLoadingUserInfo(true);
     try {
@@ -76,10 +76,6 @@ const Navigation = () => {
           {isAuthenticated ? (
             <>
               <div className="flex items-center gap-2">
-                <span className="text-sm sm:text-base font-medium text-gray-700">
-                  {user?.name || '사용자'}
-                </span>
-
                 <div className="relative" ref={dropdownRef}>
                   <button
                     onClick={handleDropdownToggle}
