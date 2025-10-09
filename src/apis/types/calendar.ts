@@ -1,4 +1,4 @@
-import { type CalendarEvent } from '@/types/calendar';
+import type { CalendarEvent } from '@/types/calendar';
 
 // API가 배열을 직접 반환하므로 타입을 배열로 변경
 export type getCalendarEventsResponse = CalendarEvent[];
@@ -33,7 +33,7 @@ export interface addTeamCalendarEventResponse {
 
 //팀 일정 수정
 export interface modifyTeamCalendarEventRequest {
-  team_id: number;
+  event_id: number;
   title?: string;
   description?: string;
   start_time?: string;
@@ -42,9 +42,9 @@ export interface modifyTeamCalendarEventRequest {
 }
 export interface modifyTeamCalendarEventResponse {
   event_id: number;
-  title?: string;
+  title: string;
   description?: string;
-  start_time?: string;
-  end_time?: string;
-  is_private?: boolean;
+  start_time: string;
+  end_time: string;
+  is_private: boolean;
 }

@@ -163,15 +163,23 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
 
       console.log('modify payload:', modifyData);
 
-      personalCalendarAPI.modifyEvent(modifyData);
+      if (mode === 'team') {
+        await teamCalendarAPI.modifyTeamEvent(modifyData);
+      } else {
+        await personalCalendarAPI.modifyEvent(modifyData);
+      }
       updateEvent(selectedEvent.event_id, eventData);
     }
   };
 
   // 모달에서 이벤트 삭제 핸들러
-  const handleDeleteEvent = (eventId: number) => {
+  const handleDeleteEvent = async (eventId: number) => {
+    if (mode === 'team') {
+      await teamCalendarAPI.deleteTeamEvent(eventId);
+    } else {
+      await personalCalendarAPI.deleteEvent(eventId);
+    }
     removeEvent(eventId);
-    personalCalendarAPI.deleteEvent(eventId);
   };
 
   return (
