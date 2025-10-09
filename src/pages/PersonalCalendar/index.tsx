@@ -1,17 +1,16 @@
 import Drawer from '@/components/organisms/Drawer';
+import { useDeleteTeam, useLeaveTeam, useTeam } from '@/hooks/team';
 import FullCalendar from '@/pages/Calendar/FullCalendar';
 import LinkStatus from '@/pages/PersonalCalendar/components/LinkStatus';
 import MyClass from '@/pages/PersonalCalendar/components/MyClass';
 import MyTeam from '@/pages/PersonalCalendar/components/MyTeam';
 import QuickActions from '@/pages/PersonalCalendar/components/QuickActions';
+import TeamSettingModal from '@/pages/PersonalCalendar/components/TeamSettingModal';
 import TodaySchedule from '@/pages/PersonalCalendar/components/TodaySchedule';
 import UpcomingSchedule from '@/pages/PersonalCalendar/components/UpcomingSchedule';
-import { useTeam } from '@/hooks/team';
-import { useLeaveTeam } from '@/hooks/team';
-import { useDeleteTeam } from '@/hooks/team';
 
 const PersonalCalendarPage = () => {
-  const { teams, isLoading } = useTeam();
+  const { teams, isLoading, isSetting, setIsSetting } = useTeam();
   const { leaveTeam } = useLeaveTeam();
   const { deleteTeam } = useDeleteTeam();
 
@@ -27,6 +26,7 @@ const PersonalCalendarPage = () => {
             isLoading={isLoading}
             leaveTeam={leaveTeam}
             deleteTeam={deleteTeam}
+            setIsSetting={setIsSetting}
           />
           <TodaySchedule />
         </Drawer>
@@ -43,6 +43,16 @@ const PersonalCalendarPage = () => {
           <LinkStatus />
         </div>
       </div>
+
+      {isSetting && (
+        <TeamSettingModal
+          isOpen={isSetting}
+          teams={teams}
+          onClose={() => setIsSetting(false)}
+          leaveTeam={leaveTeam}
+          deleteTeam={deleteTeam}
+        />
+      )}
     </div>
   );
 };

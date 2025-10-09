@@ -7,11 +7,13 @@ const MyTeam = ({
   isLoading,
   leaveTeam,
   deleteTeam,
+  setIsSetting,
 }: {
   teams: TeamData[];
   isLoading: boolean;
   leaveTeam: (teamId: number) => void;
   deleteTeam: (teamId: number) => void;
+  setIsSetting: (isSetting: boolean) => void;
 }) => {
   const navigate = useNavigate();
   if (isLoading) {
@@ -25,6 +27,7 @@ const MyTeam = ({
         <Button
           wrapperClassName="m-0 p-0 w-fit rounded-md h-fit"
           className="p-1 text-xs text-white bg-gray-300 hover:bg-gray-400"
+          onClick={() => setIsSetting(true)}
         >
           설정
         </Button>

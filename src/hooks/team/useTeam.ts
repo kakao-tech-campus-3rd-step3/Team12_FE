@@ -1,6 +1,8 @@
 import { teamAPI } from '@/apis/services/team';
 import type { GetTeamsResponse } from '@/apis/types/team';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
+import { toast } from 'react-toastify';
 
 // 팀 목록 조회 훅
 const useTeam = () => {
@@ -8,7 +10,8 @@ const useTeam = () => {
     queryKey: ['teams'],
     queryFn: () => teamAPI.getTeams(),
   });
-  console.log('팀 목록 ', data);
+  const [isSetting, setIsSetting] = useState(false);
+
   return {
     teams: data?.content ?? [],
     totalElements: data?.total_elements ?? 0,
@@ -16,6 +19,8 @@ const useTeam = () => {
     currentPage: data?.page ?? 1,
     isLoading,
     error,
+    isSetting,
+    setIsSetting,
   };
 };
 
@@ -31,7 +36,12 @@ export const useLeaveTeam = () => {
     mutationFn: (teamId: number) => teamAPI.leaveTeam(teamId),
     onSuccess: () => {
       // 팀 목록 다시 조회
+      toast.success('팀 탈퇴 성공');
       queryClient.invalidateQueries({ queryKey: ['teams'] });
+    },
+    onError: (error) => {
+      toast.error(error.message);
+      console.error(error);
     },
   });
 
@@ -54,7 +64,11 @@ export const useDeleteTeam = () => {
     mutationFn: (teamId: number) => teamAPI.deleteTeam(teamId),
     onSuccess: () => {
       // 팀 목록 다시 조회
+      toast.success('팀 삭제 성공');
       queryClient.invalidateQueries({ queryKey: ['teams'] });
+    },
+    onError: (error: Error) => {
+      toast.error(error.message);
     },
   });
 
