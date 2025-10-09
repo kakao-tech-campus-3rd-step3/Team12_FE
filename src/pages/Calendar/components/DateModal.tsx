@@ -97,7 +97,7 @@ const DateModal: React.FC<DateModalProps> = ({
         <form onSubmit={handleFormSubmit} className="p-6">
           <div className="flex flex-col space-y-2 md:flex-row md:w-full">
             {/** 일정 제목, 비공개 여부, 시간 추가 (모달 우측) */}
-            <div className="mt-4 min-h-[400px]">
+            <div className="mt-4">
               <MetaFields formData={formData} range={range} updateFormData={updateFormData} />
               <RepeatSettings formData={formData} updateFormData={updateFormData} />
             </div>
@@ -128,7 +128,7 @@ const DateModal: React.FC<DateModalProps> = ({
               variant="primary"
               size="md"
               noWrapper={true}
-              className="flex justify-center items-center w-[20%] h-[40px] bg-blue-500 hover:bg-blue-600"
+              className="flex justify-center items-center w-[20%] h-[40px] mt-2 bg-blue-500 hover:bg-blue-600"
             />
           </div>
         </form>
