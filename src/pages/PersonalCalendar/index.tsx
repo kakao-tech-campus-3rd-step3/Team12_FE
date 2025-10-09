@@ -6,8 +6,15 @@ import MyTeam from '@/pages/PersonalCalendar/components/MyTeam';
 import QuickActions from '@/pages/PersonalCalendar/components/QuickActions';
 import TodaySchedule from '@/pages/PersonalCalendar/components/TodaySchedule';
 import UpcomingSchedule from '@/pages/PersonalCalendar/components/UpcomingSchedule';
+import { useTeam } from '@/hooks/team';
+import { useLeaveTeam } from '@/hooks/team';
+import { useDeleteTeam } from '@/hooks/team';
 
 const PersonalCalendarPage = () => {
+  const { teams, isLoading } = useTeam();
+  const { leaveTeam } = useLeaveTeam();
+  const { deleteTeam } = useDeleteTeam();
+
   return (
     <div className="flex overflow-x-hidden min-h-screen">
       {/* 사이드바 영역 - 큰 화면에서는 고정 너비 */}
@@ -15,7 +22,12 @@ const PersonalCalendarPage = () => {
         <Drawer>
           <QuickActions />
           <MyClass />
-          <MyTeam />
+          <MyTeam
+            teams={teams}
+            isLoading={isLoading}
+            leaveTeam={leaveTeam}
+            deleteTeam={deleteTeam}
+          />
           <TodaySchedule />
         </Drawer>
       </div>

@@ -1,27 +1,51 @@
-import { teams } from '@/mockdata/scheduleData';
+import type { TeamData } from '@/apis/types/team';
+import Button from '@/components/atoms/Button';
+import { useNavigate } from 'react-router-dom';
 
-const MyTeam = () => {
+const MyTeam = ({
+  teams,
+  isLoading,
+  leaveTeam,
+  deleteTeam,
+}: {
+  teams: TeamData[];
+  isLoading: boolean;
+  leaveTeam: (teamId: number) => void;
+  deleteTeam: (teamId: number) => void;
+}) => {
+  const navigate = useNavigate();
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="px-3 mb-8">
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-lg font-semibold text-gray-800">내 팀 ({teams.length})</h3>
-        <button className="p-1 text-sm rounded-md text-mainBlue hover:text-mainBlue/80">
+        <Button
+          wrapperClassName="m-0 p-0 w-fit rounded-md h-fit"
+          className="p-1 text-xs text-white bg-gray-300 hover:bg-gray-400"
+        >
           설정
-        </button>
+        </Button>
       </div>
-      <div className="space-y-3">
+      <div className="">
         {teams.map((team, index) => (
           <div key={index} className="flex justify-between items-center p-2 pl-0 rounded-lg">
             <div className="flex items-center">
-              <div className={`w-3 h-3 rounded-full ${team.color} mr-2`} />
+              <div className={`mr-2 w-3 h-3 rounded-full`} />
               <div>
-                <p className="text-xs font-medium text-gray-800">{team.name}</p>
-                <p className="text-xs text-gray-500">{team.members}명</p>
+                <p className="text-xs font-medium text-gray-800">{team.team_name}</p>
+                <p className="text-xs text-gray-500">{team.member_count}명</p>
               </div>
             </div>
-            <button className="px-3 py-1 text-xs text-blue-600 bg-blue-50 rounded-md transition-colors hover:bg-blue-100">
+            <Button
+              wrapperClassName="m-0 p-0 w-fit rounded-md h-fit"
+              className="p-1 text-xs bg-blue-200 text-mainBlue hover:bg-blue-300"
+              onClick={() => navigate(`/team-calendar/${team.id}`)}
+            >
               이동
-            </button>
+            </Button>
           </div>
         ))}
       </div>
