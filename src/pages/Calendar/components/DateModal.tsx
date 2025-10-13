@@ -33,6 +33,17 @@ const DateModal: React.FC<DateModalProps> = ({
 }) => {
   const [range, setRange] = useState<DateRange | undefined>();
 
+  //일정 수정 시에 저장된 날짜 불러오기
+  useEffect(() => {
+    if (isOpen && modalType === 'edit' && selectedEvent) {
+      const startDate = new Date(selectedEvent.start_time);
+      const endDate = new Date(selectedEvent.end_time);
+      setRange({ from: startDate, to: endDate });
+    } else if (isOpen && modalType === 'add') {
+      setRange(undefined);
+    }
+  }, [isOpen, modalType, selectedEvent]);
+
   const { formData, updateFormData } = useFormData({
     isOpen,
     modalType,
@@ -51,7 +62,17 @@ const DateModal: React.FC<DateModalProps> = ({
       // 로컬 시간을 사용하여 날짜 형식 변환 (YYYY-MM-DD)
       const startDate = `${range.from.getFullYear()}-${String(range.from.getMonth() + 1).padStart(2, '0')}-${String(range.from.getDate()).padStart(2, '0')}`;
       const endDate = `${range.to.getFullYear()}-${String(range.to.getMonth() + 1).padStart(2, '0')}-${String(range.to.getDate()).padStart(2, '0')}`;
-      updateFormData({ startTime: startDate, endTime: endDate });
+
+      // 기존 시간 정보가 있으면 유지, 없으면 날짜만 설정
+      const existingStartTime = formData.startTime?.includes('T')
+        ? formData.startTime.split('T')[1]
+        : '';
+      const existingEndTime = formData.endTime?.includes('T') ? formData.endTime.split('T')[1] : '';
+
+      updateFormData({
+        startTime: existingStartTime ? `${startDate}T${existingStartTime}` : startDate,
+        endTime: existingEndTime ? `${endDate}T${existingEndTime}` : endDate,
+      });
     }
   }, [range?.from, range?.to]);
 

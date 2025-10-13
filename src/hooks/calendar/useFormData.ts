@@ -50,8 +50,8 @@ const useFormData = ({ isOpen, modalType, selectedEvent, selectedDate }: UseForm
         setFormData({
           title: selectedEvent.title,
           description: selectedEvent.description,
-          startTime: toDateOnly(selectedEvent.start_time),
-          endTime: toDateOnly(selectedEvent.end_time),
+          startTime: selectedEvent.start_time,
+          endTime: selectedEvent.end_time,
           private: selectedEvent.is_private ?? false,
           allDay: false,
           repeat: 'none',
@@ -92,7 +92,7 @@ const useFormData = ({ isOpen, modalType, selectedEvent, selectedDate }: UseForm
         });
       }
     }
-  }, [isOpen, modalType, selectedEvent, selectedDate]);
+  }, [isOpen, modalType, selectedEvent?.event_id, selectedDate]);
 
   const updateFormData = (updates: Partial<FormData>) => {
     setFormData((prev) => ({ ...prev, ...updates }));
