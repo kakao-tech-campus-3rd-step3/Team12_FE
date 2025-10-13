@@ -4,6 +4,7 @@ export const AUTH_ENDPOINTS = {
   SIGNUP: '/api/members/signup',
   LOGIN: '/api/members/login',
   REFRESH: '/api/members/refresh',
+  USER_INFO: '/api/members/me',
 } as const;
 
 export const PERSONAL_CALENDAR_ENDPOINTS = {

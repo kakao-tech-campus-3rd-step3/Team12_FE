@@ -63,4 +63,17 @@ export const authAPI = {
         throw error;
       });
   },
+
+  getUserInfo: () => {
+    return apiClient
+      .get(AUTH_ENDPOINTS.USER_INFO)
+      .then((response) => {
+        console.log('내 정보 조회 성공', response.data);
+        return response;
+      })
+      .catch((error) => {
+        console.error('내 정보 조회 실패', error);
+        throw error;
+      });
+  },
 };
