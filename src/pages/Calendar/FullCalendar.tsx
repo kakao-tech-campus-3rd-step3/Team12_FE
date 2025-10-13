@@ -154,6 +154,14 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
       if (eventData.is_private !== selectedEvent.is_private) {
         modifyData.is_private = eventData.is_private;
       }
+      if (eventData.start_time !== selectedEvent.start_time) {
+        modifyData.start_time = eventData.start_time;
+        modifyData.end_time = eventData.end_time;
+      }
+      if (eventData.end_time !== selectedEvent.end_time) {
+        modifyData.start_time = eventData.start_time;
+        modifyData.end_time = eventData.end_time;
+      }
 
       console.log('modify payload:', modifyData);
 
