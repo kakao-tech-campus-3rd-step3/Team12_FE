@@ -145,11 +145,11 @@ const DateModal: React.FC<DateModalProps> = ({
             )}
             <Button
               type="submit"
-              text={modalType === 'add' ? '추가' : '수정'}
+              text={modalType === 'add' ? '추가' : '등록'}
               variant="primary"
               size="md"
               noWrapper={true}
-              className="flex justify-center items-center w-[20%] h-[40px] mt-2 bg-blue-500 hover:bg-blue-600"
+              className="flex justify-center items-center w-[20%] h-[40px] bg-blue-500 hover:bg-blue-600"
             />
           </div>
         </form>
