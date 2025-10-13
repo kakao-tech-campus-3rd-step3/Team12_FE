@@ -23,9 +23,10 @@ export interface TeamMember {
 }
 
 export interface TeamData {
-  id: number;
+  team_id: number;
   team_name: string;
   members: TeamMember[];
+  team_description: string;
   member_count: number;
   invite_code: string;
 }

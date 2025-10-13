@@ -24,7 +24,7 @@ const TeamSettingModal = ({
       <ModalHeader title="팀 설정" />
       <div className="flex flex-col gap-4 mt-4">
         {teams.map((team) => (
-          <div key={team.id} className="flex gap-2 justify-between items-center">
+          <div key={team.team_id} className="flex gap-2 justify-between items-center">
             <div className="flex gap-2 items-center">
               <div className="flex justify-center items-center w-8 h-8 bg-blue-50 rounded-full">
                 <Users className="w-4 h-4 text-blue-500" />
@@ -37,14 +37,14 @@ const TeamSettingModal = ({
               <Button
                 wrapperClassName="w-fit m-0 p-0"
                 className="p-2 px-4 text-white h-fit"
-                onClick={() => leaveTeam(team.id)}
+                onClick={() => leaveTeam(team.team_id)}
               >
                 팀 탈퇴
               </Button>
               <Button
                 wrapperClassName="w-fit m-0 p-0"
                 className="p-2 px-4 text-white h-fit"
-                onClick={() => deleteTeam(team.id)}
+                onClick={() => deleteTeam(team.team_id)}
               >
                 팀 삭제
               </Button>

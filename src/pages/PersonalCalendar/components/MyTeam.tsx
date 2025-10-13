@@ -1,5 +1,6 @@
 import type { TeamData } from '@/apis/types/team';
 import Button from '@/components/atoms/Button';
+import { Settings } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const MyTeam = ({
@@ -25,11 +26,12 @@ const MyTeam = ({
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-lg font-semibold text-gray-800">내 팀 ({teams.length})</h3>
         <Button
-          wrapperClassName="m-0 p-0 w-fit rounded-md h-fit"
-          className="p-1 text-xs text-white bg-gray-300 hover:bg-gray-400"
+          wrapperClassName="m-0 p-0 w-fit rounded-md h-fit bg-transparent"
+          noWrapper
+          className="p-2 text-gray-400 bg-transparent rounded-full transition-colors duration-200 hover:bg-blue-50 hover:text-blue-600"
           onClick={() => setIsSetting(true)}
         >
-          설정
+          <Settings className="w-4 h-4" />
         </Button>
       </div>
       <div className="">
@@ -45,7 +47,7 @@ const MyTeam = ({
             <Button
               wrapperClassName="m-0 p-0 w-fit rounded-md h-fit"
               className="p-1 text-xs bg-blue-200 text-mainBlue hover:bg-blue-300"
-              onClick={() => navigate(`/team-calendar/${team.id}`)}
+              onClick={() => navigate(`/team-calendar/${team.team_id}`)}
             >
               이동
             </Button>
