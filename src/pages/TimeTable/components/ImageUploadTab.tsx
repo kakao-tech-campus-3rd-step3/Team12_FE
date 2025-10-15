@@ -22,7 +22,7 @@ const ImageUploadTab: React.FC<ImageUploadTabProps> = ({
 }) => {
   return (
     <div className="mb-3">
-      <label className="block mb-3 text-lg font-bold text-gray-700">에브리타임 시간표 업로드</label>
+      <label className="block mb-3 text-lg font-bold text-gray-700">에브리타임 시간표 이미지</label>
 
       <ImageInput
         selectedImage={selectedImage}

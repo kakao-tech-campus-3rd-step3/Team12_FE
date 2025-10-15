@@ -32,8 +32,7 @@ const EverytimeLinkTab: React.FC<EverytimeLinkTabProps> = ({
         type="text"
       />
       <div className="m-2 text-xs text-center text-gray-400">
-        링크로 시간표를 등록하시는 경우, <br />
-        공개 범위를 전체 공개로 변경해주세요.
+        에브리타임 시간표 공개 범위를 전체 공개로 변경해주세요.
       </div>
 
       {/* 시간표 학기 선택 */}

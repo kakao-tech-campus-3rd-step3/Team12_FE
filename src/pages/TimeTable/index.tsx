@@ -78,15 +78,15 @@ const TimeTablePage = () => {
 
   return (
     <>
-      <div className="max-w-4xl mx-auto p-6 m-10 rounded-lg border border-gray-200">
+      <div className="max-w-4xl mx-auto p-3 m-1 rounded-lg /border border-gray-200">
         {/* 탭 버튼 */}
         <div className="flex border-b border-gray-200 mb-6">
           <button
             onClick={() => setActiveTab('image')}
             className={`px-6 py-3 font-medium transition-colors ${
               activeTab === 'image'
-                ? 'border-b-2 border-black text-black'
-                : 'text-gray-500 hover:text-gray-700'
+                ? 'border-b-2 text-blue-600'
+                : 'text-gray-400 hover:text-blue-600'
             }`}
           >
             이미지로 등록
@@ -95,8 +95,8 @@ const TimeTablePage = () => {
             onClick={() => setActiveTab('link')}
             className={`px-6 py-3 font-medium transition-colors ${
               activeTab === 'link'
-                ? 'border-b-2 border-black text-black'
-                : 'text-gray-500 hover:text-gray-700'
+                ? 'border-b-2 text-blue-600'
+                : 'text-gray-400 hover:text-blue-600'
             }`}
           >
             링크로 등록
