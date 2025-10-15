@@ -3,7 +3,7 @@ import Button from '@/components/atoms/Button';
 import Modal from '@/components/molecules/Modal';
 import ModalHeader from '@/components/atoms/ModalHeader';
 import { FormInput } from '@/components/atoms/FormInput';
-import ImageInput from '@/pages/Calendar/components/ImageInput';
+import ImageInput from '@/pages/TimeTable/components/ImageInput';
 import { useTimetableData } from '@/hooks/timetable/useTimetableData';
 import { useImageParsing } from '@/hooks/timetable/useImageParsing';
 import { useImageUpload } from '@/hooks/timetable/useImageUpload';

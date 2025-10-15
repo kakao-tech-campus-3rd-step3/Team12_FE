@@ -1,17 +1,20 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router';
+import { Link } from 'lucide-react';
 import Button from '@/components/atoms/Button';
 import TimeTableModal from '@/pages/Calendar/components/TimetableModal';
-import { Link } from 'lucide-react';
-import { useState } from 'react';
+import { RouterPath } from '@/routes/path';
 
 const LinkStatus = () => {
+  const navigate = useNavigate();
   const [linkStatus, setLinkStatus] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const handleLinkStatus = () => {
     if (linkStatus) {
-      return;
     }
     // TODO: 실제 연동 로직 추가
-    setIsOpen(true);
+    navigate(RouterPath.TIMETABLE);
+    //setIsOpen(true);
     setLinkStatus(true);
   };
 
