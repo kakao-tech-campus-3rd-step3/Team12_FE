@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { RouterPath } from '@/routes/path';
 import Button from '@/components/atoms/Button';
 import ImageUploadTab from '@/pages/TimeTable/components/ImageUploadTab';
 import EverytimeLinkTab from '@/pages/TimeTable/components/EveryTimeLinkTab';
@@ -7,6 +9,8 @@ import { useImageParsing } from '@/hooks/timetable/useImageParsing';
 import { useImageUpload } from '@/hooks/timetable/useImageUpload';
 
 const TimeTablePage = () => {
+  const navigate = useNavigate();
+
   const [activeTab, setActiveTab] = useState<'image' | 'link'>('image');
   const [startDate, setStartDate] = useState<Date>(new Date('2025-03-01'));
   const [endDate, setEndDate] = useState<Date>(new Date('2025-12-21'));
@@ -52,6 +56,7 @@ const TimeTablePage = () => {
 
   //데이터 확인용 콘솔
   const handleSubmit = () => {
+    localStorage.setItem('timetableLinked', 'true');
     if (selectedTimetable) {
       console.log('선택된 시간표:', selectedTimetable);
       console.log('시간표 상세 정보:', timetableDetail);
@@ -63,6 +68,7 @@ const TimeTablePage = () => {
         timetableDetail,
         everytimeUrl: everytimeTable,
       });
+      navigate(RouterPath.HOME.DEFAULT);
     } else if (parsedTimetable) {
       console.log('파싱된 시간표:', parsedTimetable);
       console.log('시간표 등록:', {
@@ -73,6 +79,7 @@ const TimeTablePage = () => {
       });
     } else {
       console.log('시간표 등록:', { selectedImage, startDate, endDate });
+      navigate(RouterPath.HOME.DEFAULT);
     }
   };
 
