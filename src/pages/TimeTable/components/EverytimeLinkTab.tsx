@@ -23,9 +23,9 @@ const EverytimeLinkTab: React.FC<EverytimeLinkTabProps> = ({
 }) => {
   return (
     <div className="mb-3">
+      <label className="block mb-3 text-lg font-bold text-gray-700">에브리타임 시간표 링크</label>
       <FormInput
         id="everytimeTable"
-        label="에브리타임 시간표 링크"
         value={everytimeTable}
         onChange={setEverytimeTable}
         placeholder="https://everytime.kr/@..."
@@ -70,7 +70,7 @@ const EverytimeLinkTab: React.FC<EverytimeLinkTabProps> = ({
               timetableDetail.semester &&
               ` (${timetableDetail.year}년 ${timetableDetail.semester}학기)`}
           </label>
-          <div className="max-h-60 overflow-y-auto border border-gray-200 rounded-md p-3 bg-gray-50">
+          <div className="overflow-y-auto border border-gray-200 rounded-md p-3 bg-gray-50">
             {(() => {
               const validation = validateTimetableData(timetableDetail.subjects);
               if (!validation.isValid) {

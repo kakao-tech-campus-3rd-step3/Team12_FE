@@ -78,8 +78,7 @@ const TimeTablePage = () => {
 
   return (
     <>
-      <h1 className="text-xl font-bold text-gray-800 m-6">에브리타임 시간표 등록</h1>
-      <div className="p-6 m-3 rounded-lg border border-gray-200">
+      <div className="max-w-4xl mx-auto p-6 m-10 rounded-lg border border-gray-200">
         {/* 탭 버튼 */}
         <div className="flex border-b border-gray-200 mb-6">
           <button
@@ -151,7 +150,6 @@ const TimeTablePage = () => {
             />
           </div>
         </div>
-        {/* 등록 버튼 - 항상 표시 */}
         <Button onClick={handleSubmit} text="등록하기" className="flex justify-center w-full" />
       </div>
     </>
