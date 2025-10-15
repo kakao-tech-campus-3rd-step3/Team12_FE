@@ -1,6 +1,6 @@
-import { type FormData } from '@/hooks/calendar/useFormData';
-import { type CalendarEvent } from '@/types/calendar';
 import { useState } from 'react';
+import type { FormData } from '@/hooks/calendar/useFormData';
+import type { CalendarEvent } from '@/types/calendar';
 
 interface UseEventFormProps {
   onSave: (event: Omit<CalendarEvent, 'event_id'>) => void;
@@ -11,9 +11,27 @@ type ErrorType = 'title' | 'startTime' | 'endTime';
 
 const useEventForm = ({ onSave, onClose }: UseEventFormProps) => {
   const [error, setError] = useState<ErrorType | null>(null);
-  const handleSubmit = (formData: FormData) => {
-    if (!formData.title.trim()) {
+  const validateForm = (formData: FormData) => {
+    if (!formData.title?.trim()) {
       setError('title');
+      return false;
+    }
+
+    if (!formData.startTime) {
+      setError('startTime');
+      return false;
+    }
+
+    if (!formData.endTime) {
+      setError('endTime');
+      return false;
+    }
+    setError(null);
+    return true;
+  };
+
+  const handleSubmit = (formData: FormData) => {
+    if (!validateForm(formData)) {
       return;
     }
 
@@ -39,27 +57,6 @@ const useEventForm = ({ onSave, onClose }: UseEventFormProps) => {
 
     onSave(eventData);
     onClose();
-  };
-
-  const validateForm = (
-    formData: Pick<FormData, 'title' | 'startTime' | 'endTime' | 'private'>,
-  ) => {
-    if (!formData.title?.trim()) {
-      setError('title');
-      return false;
-    }
-
-    if (!formData.startTime) {
-      setError('startTime');
-      return false;
-    }
-
-    if (!formData.endTime) {
-      setError('endTime');
-      return false;
-    }
-
-    return true;
   };
 
   return {

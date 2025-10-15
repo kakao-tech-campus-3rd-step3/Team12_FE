@@ -98,7 +98,13 @@ const DateModal: React.FC<DateModalProps> = ({
           <div className="flex flex-col space-y-2 md:flex-row md:w-full">
             {/** 일정 제목, 비공개 여부, 시간 추가 (모달 우측) */}
             <div className="mt-4 min-h-[400px]">
-              <MetaFields formData={formData} range={range} updateFormData={updateFormData} />
+              <MetaFields
+                formData={formData}
+                range={range}
+                updateFormData={updateFormData}
+                error={error}
+                setError={setError}
+              />
               <RepeatSettings formData={formData} updateFormData={updateFormData} />
             </div>
             {/** 기간 선택 (모달 좌측) */}

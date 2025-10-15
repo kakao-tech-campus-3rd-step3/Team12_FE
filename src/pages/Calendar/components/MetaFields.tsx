@@ -2,17 +2,22 @@ import type { DateRange } from 'react-day-picker';
 import { FormInput } from '@/components/atoms/FormInput';
 import { getDatePart } from '@/utils/dateTimeUtils';
 import type { FormData } from '@/hooks/calendar/useFormData';
-import { useState } from 'react';
 
 interface MetaFieldsProps {
   formData: FormData;
   range?: DateRange;
   updateFormData: (updates: Partial<FormData>) => void;
+  error: 'title' | 'startTime' | 'endTime' | null;
+  setError: (error: 'title' | 'startTime' | 'endTime' | null) => void;
 }
 
-const MetaFields: React.FC<MetaFieldsProps> = ({ formData, range, updateFormData }) => {
-  const [error, setError] = useState<string | null>(null);
-
+const MetaFields: React.FC<MetaFieldsProps> = ({
+  formData,
+  range,
+  updateFormData,
+  error,
+  setError,
+}) => {
   return (
     <div className="">
       <FormInput
