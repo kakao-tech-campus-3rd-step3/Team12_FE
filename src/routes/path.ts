@@ -11,6 +11,7 @@ export const RouterPath = {
   LOGIN: '/login',
   SIGNUP: '/signup',
   MEMBERS: '/members',
+  TIMETABLE: '/timetable',
 };
 
 export const createPersonalCalendarPath = (view: string, date: string) =>
