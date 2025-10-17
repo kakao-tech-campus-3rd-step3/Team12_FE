@@ -31,7 +31,7 @@ const useEventForm = ({ onSave, onClose }: UseEventFormProps) => {
 
     const eventData: Omit<CalendarEvent, 'event_id'> = {
       title: formData.title,
-      description: '',
+      description: formData.description || '',
       start_time: startTime,
       end_time: endTime,
       is_private: formData.private,

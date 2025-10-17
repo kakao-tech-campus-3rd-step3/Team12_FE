@@ -1,11 +1,14 @@
-import { calendarAPI } from '@/apis';
+import { personalCalendarAPI, teamCalendarAPI } from '@/apis';
 import { type CalendarEvent } from '@/types/calendar';
 import { create } from 'zustand';
 
 interface CalendarState {
   events: CalendarEvent[] | null;
   isAuthenticated: boolean;
-  getEvents: () => Promise<CalendarEvent[] | null>;
+  getEvents: (teamOrPersonalOption?: {
+    teamId?: number;
+    mode?: 'team' | 'personal';
+  }) => Promise<CalendarEvent[] | null>;
   addEvent: (event: Omit<CalendarEvent, 'event_id'>) => void;
   removeEvent: (eventId: number) => void;
   updateEvent: (eventId: number, updates: Partial<CalendarEvent>) => void;
@@ -15,7 +18,7 @@ export const useCalendarStore = create<CalendarState>((set) => ({
   // Test Data
   events: [],
   isAuthenticated: false,
-  getEvents: async () => {
+  getEvents: async (teamOrPersonalOption) => {
     try {
       // 오늘 기준 저번달 1일부터 다음달 마지막 일까지 범위 계산
       const now = new Date();
@@ -26,10 +29,21 @@ export const useCalendarStore = create<CalendarState>((set) => ({
         return d.toISOString();
       };
 
-      const response = await calendarAPI.getEvents({
+      const params = {
         startAt: toIsoString(start),
         endAt: toIsoString(end),
-      });
+      };
+
+      //팀 id 유무에 따라 분기 + 콘솔 메세지
+      const response =
+        teamOrPersonalOption?.mode === 'team'
+          ? teamOrPersonalOption.teamId
+            ? await teamCalendarAPI.getTeamEvents(teamOrPersonalOption.teamId, params)
+            : (() => {
+                throw new Error('teamId가 없습니다');
+              })()
+          : await personalCalendarAPI.getEvents(params);
+
       // API 응답이 배열을 직접 반환하므로 response.data를 사용
       const fetchedEvents = response.data ?? null;
       if (fetchedEvents) {

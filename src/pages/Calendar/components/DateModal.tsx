@@ -33,6 +33,17 @@ const DateModal: React.FC<DateModalProps> = ({
 }) => {
   const [range, setRange] = useState<DateRange | undefined>();
 
+  //일정 수정 시에 저장된 날짜 불러오기
+  useEffect(() => {
+    if (isOpen && modalType === 'edit' && selectedEvent) {
+      const startDate = new Date(selectedEvent.start_time);
+      const endDate = new Date(selectedEvent.end_time);
+      setRange({ from: startDate, to: endDate });
+    } else if (isOpen && modalType === 'add') {
+      setRange(undefined);
+    }
+  }, [isOpen, modalType, selectedEvent]);
+
   const { formData, updateFormData } = useFormData({
     isOpen,
     modalType,
@@ -40,7 +51,7 @@ const DateModal: React.FC<DateModalProps> = ({
     selectedDate,
   });
 
-  const { handleSubmit, error, setError } = useEventForm({
+  const { handleSubmit } = useEventForm({
     onSave,
     onClose,
   });
@@ -51,7 +62,17 @@ const DateModal: React.FC<DateModalProps> = ({
       // 로컬 시간을 사용하여 날짜 형식 변환 (YYYY-MM-DD)
       const startDate = `${range.from.getFullYear()}-${String(range.from.getMonth() + 1).padStart(2, '0')}-${String(range.from.getDate()).padStart(2, '0')}`;
       const endDate = `${range.to.getFullYear()}-${String(range.to.getMonth() + 1).padStart(2, '0')}-${String(range.to.getDate()).padStart(2, '0')}`;
-      updateFormData({ startTime: startDate, endTime: endDate });
+
+      // 기존 시간 정보가 있으면 유지, 없으면 날짜만 설정
+      const existingStartTime = formData.startTime?.includes('T')
+        ? formData.startTime.split('T')[1]
+        : '';
+      const existingEndTime = formData.endTime?.includes('T') ? formData.endTime.split('T')[1] : '';
+
+      updateFormData({
+        startTime: existingStartTime ? `${startDate}T${existingStartTime}` : startDate,
+        endTime: existingEndTime ? `${endDate}T${existingEndTime}` : endDate,
+      });
     }
   }, [range?.from, range?.to]);
 
@@ -97,7 +118,7 @@ const DateModal: React.FC<DateModalProps> = ({
         <form onSubmit={handleFormSubmit} className="p-6">
           <div className="flex flex-col space-y-2 md:flex-row md:w-full">
             {/** 일정 제목, 비공개 여부, 시간 추가 (모달 우측) */}
-            <div className="mt-4 min-h-[400px]">
+            <div className="mt-4">
               <MetaFields formData={formData} range={range} updateFormData={updateFormData} />
               <RepeatSettings formData={formData} updateFormData={updateFormData} />
             </div>
@@ -124,7 +145,7 @@ const DateModal: React.FC<DateModalProps> = ({
             )}
             <Button
               type="submit"
-              text={modalType === 'add' ? '추가' : '수정'}
+              text={modalType === 'add' ? '추가' : '등록'}
               variant="primary"
               size="md"
               noWrapper={true}

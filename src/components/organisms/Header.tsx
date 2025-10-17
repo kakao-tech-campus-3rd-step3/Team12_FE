@@ -4,7 +4,7 @@ import { useAuthStore } from '@/store/useAuthStore';
 import { useState, useRef, useEffect } from 'react';
 import { RouterPath } from '@/routes/path';
 
-const Navigation = () => {
+const Header = () => {
   const navigate = useNavigate();
 
   const [isLoadingUserInfo, setIsLoadingUserInfo] = useState(false);
@@ -17,10 +17,11 @@ const Navigation = () => {
     return name ? name.charAt(0).toUpperCase() : 'U';
   };
 
+  const userInitial = getUserInitial(user?.name || '사용자');
+
   // 사용자 정보 조회 - 중복 정보 조회 방지
   const handleGetUserInfo = async () => {
     if (!isAuthenticated || isLoadingUserInfo) return;
-
     setIsLoadingUserInfo(true);
     try {
       await getUserInfo();
@@ -33,18 +34,8 @@ const Navigation = () => {
 
   // 로그인 후 사용자 정보 자동 조회
   useEffect(() => {
-    if (isAuthenticated && !user) {
-      handleGetUserInfo();
-    }
+    handleGetUserInfo();
   }, [isAuthenticated, user]);
-
-  // 드롭다운 열 때 사용자 정보 조회
-  const handleDropdownToggle = () => {
-    if (!isDropdownOpen && isAuthenticated && !user) {
-      handleGetUserInfo();
-    }
-    setIsDropdownOpen(!isDropdownOpen);
-  };
 
   // 드롭다운 외부 클릭 시 닫기
   useEffect(() => {
@@ -65,6 +56,36 @@ const Navigation = () => {
     navigate(RouterPath.LOGIN);
   };
 
+  const UserProfile = ({ isOpen }: { isOpen: boolean }) => {
+    return (
+      <>
+        {isOpen && (
+          <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+            {/* 사용자 정보 헤더 */}
+            <div className="px-4 py-3 border-b border-gray-100">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center">
+                  <span className="text-sm font-medium">{userInitial}</span>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-900">{user?.name || '사용자'}</p>
+                  <p className="text-xs text-gray-500">{user?.email || '이메일 없음'}</p>
+                </div>
+              </div>
+            </div>
+
+            <button
+              onClick={handleLogout}
+              className="w-full py-2 px-4 text-sm text-red-600 hover:bg-red-50 transition-all duration-200"
+            >
+              로그아웃
+            </button>
+          </div>
+        )}
+      </>
+    );
+  };
+
   return (
     <nav className="sticky top-0 z-50 py-1 bg-white border-b border-gray-200">
       <div className="flex justify-between items-center ml-1 mr-2 sm:ml-3 sm:mr-6">
@@ -78,42 +99,12 @@ const Navigation = () => {
               <div className="flex items-center gap-2">
                 <div className="relative" ref={dropdownRef}>
                   <button
-                    onClick={handleDropdownToggle}
+                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                     className="flex items-center justify-center w-8 h-8 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors cursor-pointer"
                   >
-                    <span className="text-sm font-medium">
-                      {getUserInitial(user?.name || '사용자')}
-                    </span>
+                    <span className="text-sm font-medium">{userInitial}</span>
                   </button>
-
-                  {/* 드롭다운 메뉴 */}
-                  {isDropdownOpen && (
-                    <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
-                      {/* 사용자 정보 헤더 */}
-                      <div className="px-4 py-3 border-b border-gray-100">
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center">
-                            <span className="text-sm font-medium">
-                              {getUserInitial(user?.name || '사용자')}
-                            </span>
-                          </div>
-                          <div>
-                            <p className="text-sm font-medium text-gray-900">
-                              {user?.name || '사용자'}
-                            </p>
-                            <p className="text-xs text-gray-500">{user?.email || '이메일 없음'}</p>
-                          </div>
-                        </div>
-                      </div>
-
-                      <button
-                        onClick={handleLogout}
-                        className="w-full py-2 px-4 text-sm text-red-600 hover:bg-red-50 transition-all duration-200"
-                      >
-                        로그아웃
-                      </button>
-                    </div>
-                  )}
+                  <UserProfile isOpen={isDropdownOpen} />
                 </div>
               </div>
             </>
@@ -139,4 +130,4 @@ const Navigation = () => {
   );
 };
 
-export default Navigation;
+export default Header;
