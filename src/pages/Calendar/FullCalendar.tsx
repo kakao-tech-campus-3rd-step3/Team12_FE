@@ -1,14 +1,14 @@
 import { personalCalendarAPI, teamCalendarAPI } from '@/apis';
 import { useEvents, useModal } from '@/hooks';
 import DateModal from '@/pages/Calendar/components/DateModal';
+import { useTeamStore } from '@/store/team/useTeamStore';
 import type { CalendarEvent, modifyCalendarEventRequest } from '@/types/calendar';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useSearchParams, useParams } from 'react-router-dom';
-import { useTeamStore } from '@/store/team/useTeamStore';
+import { useParams, useSearchParams } from 'react-router-dom';
 
 //개인 캘린더와 팀 캘린더를 분리하기 위한 mode 설정
 type CalendarMode = 'personal' | 'team';
@@ -21,7 +21,7 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
   //store에서 팀 id 가져오기 -> url에서 팀 id 가져오기
   const { currentTeam } = useTeamStore();
   const { id: urlTeamId } = useParams<{ id: string }>();
-  const teamId = mode === 'team' ? (currentTeam?.team_id ?? Number(urlTeamId)) : undefined;
+  const teamId = mode === 'team' ? (currentTeam?.id ?? Number(urlTeamId)) : undefined;
 
   const { setModalType, setIsOpen, isOpen, modalType } = useModal();
   const {

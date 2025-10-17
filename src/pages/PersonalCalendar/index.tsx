@@ -21,13 +21,7 @@ const PersonalCalendarPage = () => {
         <Drawer>
           <QuickActions />
           <MyClass />
-          <MyTeam
-            teams={teams}
-            isLoading={isLoading}
-            leaveTeam={leaveTeam}
-            deleteTeam={deleteTeam}
-            setIsSetting={() => setIsSetting(true)}
-          />
+          <MyTeam teams={teams} isLoading={isLoading} setIsSetting={() => setIsSetting(true)} />
           <TodaySchedule />
         </Drawer>
       </div>
