@@ -35,7 +35,7 @@ const Header = () => {
   // 로그인 후 사용자 정보 자동 조회
   useEffect(() => {
     handleGetUserInfo();
-  }, [isAuthenticated, user]);
+  }, [isAuthenticated]);
 
   // 드롭다운 외부 클릭 시 닫기
   useEffect(() => {
