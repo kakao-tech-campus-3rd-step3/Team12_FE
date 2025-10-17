@@ -12,14 +12,21 @@ const useTeam = () => {
     queryKey: ['teams'],
     queryFn: () => teamAPI.getTeams(),
   });
+
+  // API 데이터가 있을 때는 API 데이터를 우선으로 하고, 없을 때는 로컬 스토어 데이터 사용
   useEffect(() => {
-    setTeams(data?.content ?? teams);
-  }, [data]);
+    if (data?.content) {
+      setTeams(data.content);
+    }
+  }, [data, setTeams]);
 
   const [isSetting, setIsSetting] = useState(false);
 
+  // API 데이터가 있으면 API 데이터를 사용, 없으면 로컬 스토어 데이터 사용
+  const currentTeams = data?.content ?? teams;
+
   return {
-    teams: data?.content ?? teams,
+    teams: currentTeams,
     totalElements: data?.total_elements ?? 0,
     totalPages: data?.total_pages ?? 1,
     currentPage: data?.page ?? 1,

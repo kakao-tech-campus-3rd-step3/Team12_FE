@@ -51,7 +51,7 @@ const TeamListModal = ({ isOpen, onClose, leaveTeam, deleteTeam }: TeamListModal
         team_description: teamData.description,
       });
       addTeam({
-        team_id: response.team_id,
+        id: response.team_id,
         team_name: response.team_name,
         members: [{ name: user?.name ?? '' }],
         team_description: response.team_description,
@@ -69,7 +69,7 @@ const TeamListModal = ({ isOpen, onClose, leaveTeam, deleteTeam }: TeamListModal
         invite_code: inviteCode,
       });
       addTeam({
-        team_id: response.team_id,
+        id: response.team_id,
         team_name: response.team_name,
         members: [{ name: user?.name ?? '' }],
         team_description: response.team_description,
@@ -179,7 +179,7 @@ const TeamListModal = ({ isOpen, onClose, leaveTeam, deleteTeam }: TeamListModal
                     <div className="pb-4 space-y-3">
                       {paginationData.currentItems.map((team) => (
                         <TeamListCard
-                          key={team.team_id}
+                          key={team.id}
                           team={team}
                           leaveTeam={leaveTeam}
                           deleteTeam={deleteTeam}

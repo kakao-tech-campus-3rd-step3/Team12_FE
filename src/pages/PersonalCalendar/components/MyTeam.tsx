@@ -47,7 +47,7 @@ const MyTeam = ({
             <Button
               wrapperClassName="m-0 p-0 w-fit rounded-md h-fit"
               className="p-1 text-xs bg-blue-200 text-mainBlue hover:bg-blue-300"
-              onClick={() => navigate(`/team-calendar/${team.team_id}`)}
+              onClick={() => navigate(`/team-calendar/${team.id}`)}
             >
               이동
             </Button>
