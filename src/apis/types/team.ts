@@ -17,3 +17,23 @@ export interface joinTeamResponse {
   team_name: string;
   team_description: string;
 }
+
+export interface TeamMember {
+  name: string;
+}
+
+export interface TeamData {
+  id: number;
+  team_name: string;
+  members: TeamMember[];
+  member_count: number;
+  invite_code: string;
+}
+
+export interface GetTeamsResponse {
+  content: TeamData[];
+  page: number;
+  size: number;
+  total_elements: number;
+  total_pages: number;
+}

@@ -21,6 +21,9 @@ export const EVERYTIME_ENDPOINTS = {
 } as const;
 
 export const TEAM_ENDPOINTS = {
+  GET_TEAMS: '/api/teams',
   JOIN_TEAM: '/api/teams/join',
   CREATE_TEAM: '/api/teams',
+  LEAVE_TEAM: (teamId: number) => `/api/teams/${teamId}/member`, // 팀 탈퇴
+  DELETE_TEAM: (teamId: number) => `/api/teams/${teamId}/team`, // 팀 삭제
 };
