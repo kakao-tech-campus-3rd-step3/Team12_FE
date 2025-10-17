@@ -8,7 +8,6 @@ import CreateTeam from '@/pages/PersonalCalendar/components/CreateTeam';
 import JoinTeam from '@/pages/PersonalCalendar/components/JoinTeam';
 import TeamListCard from '@/pages/PersonalCalendar/components/TeamListCard';
 import { useTeamStore } from '@/store/team';
-import { useAuthStore } from '@/store/useAuthStore';
 
 interface TeamListModalProps {
   isOpen: boolean;
@@ -22,8 +21,7 @@ const TeamListModal = ({ isOpen, onClose, leaveTeam, deleteTeam }: TeamListModal
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3;
 
-  const { teams, addTeam } = useTeamStore();
-  const { user } = useAuthStore();
+  const { teams, refreshTeams } = useTeamStore();
   const paginationData = useMemo(() => {
     const totalItems = teams.length;
     const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -46,18 +44,14 @@ const TeamListModal = ({ isOpen, onClose, leaveTeam, deleteTeam }: TeamListModal
 
   const handleCreateTeam = async (teamData: { name: string; description: string }) => {
     try {
-      const response = await teamAPI.createTeam({
+      await teamAPI.createTeam({
         team_name: teamData.name,
         team_description: teamData.description,
       });
-      addTeam({
-        id: response.team_id,
-        team_name: response.team_name,
-        members: [{ name: user?.name ?? '' }],
-        team_description: response.team_description,
-        member_count: 1,
-        invite_code: response.team_code,
-      });
+
+      // 팀 목록을 새로고침하여 최신 데이터를 가져옴
+      await refreshTeams();
+
       alert(`"${teamData.name}" 팀이 생성되었습니다!`);
       setCurrentView('list');
     } catch {}
@@ -65,17 +59,13 @@ const TeamListModal = ({ isOpen, onClose, leaveTeam, deleteTeam }: TeamListModal
 
   const handleJoinTeam = async (inviteCode: string) => {
     try {
-      const response = await teamAPI.joinTeam({
+      await teamAPI.joinTeam({
         invite_code: inviteCode,
       });
-      addTeam({
-        id: response.team_id,
-        team_name: response.team_name,
-        members: [{ name: user?.name ?? '' }],
-        team_description: response.team_description,
-        member_count: 1,
-        invite_code: inviteCode,
-      });
+
+      // 팀 목록을 새로고침하여 최신 데이터를 가져옴
+      await refreshTeams();
+
       alert('팀 가입 성공');
       setCurrentView('list');
     } catch {}
