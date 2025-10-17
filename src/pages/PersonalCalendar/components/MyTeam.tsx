@@ -6,14 +6,10 @@ import { useNavigate } from 'react-router-dom';
 const MyTeam = ({
   teams,
   isLoading,
-  leaveTeam,
-  deleteTeam,
   setIsSetting,
 }: {
   teams: TeamData[];
   isLoading: boolean;
-  leaveTeam: (teamId: number) => void;
-  deleteTeam: (teamId: number) => void;
   setIsSetting: (isSetting: boolean) => void;
 }) => {
   const navigate = useNavigate();
