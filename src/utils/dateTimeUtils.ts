@@ -30,3 +30,16 @@ export const buildIsoFromDateAndTime = (
   const dateStr = getDatePart(current) || (fallbackDate ? toDateOnly(fallbackDate) : '');
   return dateStr ? `${dateStr}T${time}:00` : time;
 };
+
+/**
+ * 날짜를 YY/MM/DD 형식으로 포맷
+ * @param date Date 객체
+ * @returns YY/MM/DD 형식의 문자열 (예: "25/01/15")
+ */
+export const formatDateShort = (date: Date | undefined): string => {
+  if (!date) return '';
+  const year = date.getFullYear().toString().slice(-2);
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  return `${year}/${month}/${day}`;
+};
