@@ -1,19 +1,25 @@
 import { teamAPI } from '@/apis/services/team';
 import type { GetTeamsResponse } from '@/apis/types/team';
+import { useTeamStore } from '@/store/team';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 // 팀 목록 조회 훅
 const useTeam = () => {
+  const { teams, setTeams } = useTeamStore();
   const { data, isLoading, error } = useQuery<GetTeamsResponse>({
     queryKey: ['teams'],
     queryFn: () => teamAPI.getTeams(),
   });
+  useEffect(() => {
+    setTeams(data?.content ?? teams);
+  }, [data]);
+
   const [isSetting, setIsSetting] = useState(false);
 
   return {
-    teams: data?.content ?? [],
+    teams: data?.content ?? teams,
     totalElements: data?.total_elements ?? 0,
     totalPages: data?.total_pages ?? 1,
     currentPage: data?.page ?? 1,

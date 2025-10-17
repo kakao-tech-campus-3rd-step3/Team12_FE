@@ -5,7 +5,7 @@ import LinkStatus from '@/pages/PersonalCalendar/components/LinkStatus';
 import MyClass from '@/pages/PersonalCalendar/components/MyClass';
 import MyTeam from '@/pages/PersonalCalendar/components/MyTeam';
 import QuickActions from '@/pages/PersonalCalendar/components/QuickActions';
-import TeamSettingModal from '@/pages/PersonalCalendar/components/TeamSettingModal';
+import TeamListModal from '@/pages/PersonalCalendar/components/TeamListModal';
 import TodaySchedule from '@/pages/PersonalCalendar/components/TodaySchedule';
 import UpcomingSchedule from '@/pages/PersonalCalendar/components/UpcomingSchedule';
 
@@ -26,7 +26,7 @@ const PersonalCalendarPage = () => {
             isLoading={isLoading}
             leaveTeam={leaveTeam}
             deleteTeam={deleteTeam}
-            setIsSetting={setIsSetting}
+            setIsSetting={() => setIsSetting(true)}
           />
           <TodaySchedule />
         </Drawer>
@@ -44,13 +44,22 @@ const PersonalCalendarPage = () => {
         </div>
       </div>
 
-      {isSetting && (
+      {/* {isSetting && (
         <TeamSettingModal
           isOpen={isSetting}
           teams={teams}
           onClose={() => setIsSetting(false)}
           leaveTeam={leaveTeam}
           deleteTeam={deleteTeam}
+        />
+      )} */}
+
+      {isSetting && (
+        <TeamListModal
+          leaveTeam={leaveTeam}
+          deleteTeam={deleteTeam}
+          isOpen={isSetting}
+          onClose={() => setIsSetting(false)}
         />
       )}
     </div>
