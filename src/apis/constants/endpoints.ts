@@ -7,11 +7,18 @@ export const AUTH_ENDPOINTS = {
   USER_INFO: '/api/members/me',
 } as const;
 
-export const CALENDAR_ENDPOINTS = {
+export const PERSONAL_CALENDAR_ENDPOINTS = {
   GET_EVENTS: '/api/events',
   ADD_EVENT: '/api/events/add',
   MODIFY_EVENT: '/api/events/modify',
   DELETE_EVENT: (eventId: number) => `/api/events/${eventId}`,
+} as const;
+
+export const TEAM_CALENDAR_ENDPOINTS = {
+  GET_EVENTS: (teamId: number) => `/api/events/team/${teamId}`,
+  ADD_EVENT: '/api/events/team/add',
+  MODIFY_EVENT: '/api/events/team/modify',
+  DELETE_EVENT: (eventId: number) => `/api/events/team/${eventId}`,
 } as const;
 
 export const EVERYTIME_ENDPOINTS = {

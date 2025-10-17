@@ -1,6 +1,5 @@
 import { ko } from 'date-fns/locale';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useEffect } from 'react';
 import type { DateRange, MonthCaptionProps } from 'react-day-picker';
 import { DayPicker, useDayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
@@ -46,10 +45,6 @@ function CustomCaption(props: MonthCaptionProps) {
 }
 
 const SelectDuration: React.FC<Props> = ({ range, setRange }) => {
-  useEffect(() => {
-    setRange(undefined);
-  }, []);
-
   return (
     <div className="date-picker">
       {/* 캘린더 컨테이너 */}

@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 
 export interface FormData {
   title: string;
+  description: string;
   private: boolean;
   allDay: boolean;
   repeat: RepeatType;
@@ -30,6 +31,7 @@ const useFormData = ({ isOpen, modalType, selectedEvent, selectedDate }: UseForm
   const [showTime, setShowTime] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     title: '',
+    description: '',
     startTime: '',
     endTime: '',
     private: false,
@@ -47,8 +49,9 @@ const useFormData = ({ isOpen, modalType, selectedEvent, selectedDate }: UseForm
       if (modalType === 'edit' && selectedEvent) {
         setFormData({
           title: selectedEvent.title,
-          startTime: toDateOnly(selectedEvent.start_time),
-          endTime: toDateOnly(selectedEvent.end_time),
+          description: selectedEvent.description,
+          startTime: selectedEvent.start_time,
+          endTime: selectedEvent.end_time,
           private: selectedEvent.is_private ?? false,
           allDay: false,
           repeat: 'none',
@@ -62,6 +65,7 @@ const useFormData = ({ isOpen, modalType, selectedEvent, selectedDate }: UseForm
       } else if (modalType === 'add' && selectedDate) {
         setFormData({
           title: '',
+          description: '',
           startTime: selectedDate,
           endTime: selectedDate,
           private: false,
@@ -75,6 +79,7 @@ const useFormData = ({ isOpen, modalType, selectedEvent, selectedDate }: UseForm
       } else {
         setFormData({
           title: '',
+          description: '',
           startTime: toDateOnly(new Date()),
           endTime: toDateOnly(new Date()),
           private: false,
@@ -87,7 +92,7 @@ const useFormData = ({ isOpen, modalType, selectedEvent, selectedDate }: UseForm
         });
       }
     }
-  }, [isOpen, modalType, selectedEvent, selectedDate]);
+  }, [isOpen, modalType, selectedEvent?.event_id, selectedDate]);
 
   const updateFormData = (updates: Partial<FormData>) => {
     setFormData((prev) => ({ ...prev, ...updates }));
