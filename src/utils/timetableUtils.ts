@@ -1,3 +1,5 @@
+import { DAYS_OF_WEEK } from '@/constants';
+
 /**
  * 시간표 데이터 검증 함수
  * @param subjects 시간표 과목 배열
@@ -29,8 +31,7 @@ export const validateTimetableData = (subjects: any[]) => {
  * @returns 한글 요일 문자열
  */
 export const getDayOfWeek = (dayOfWeek: number) => {
-  const days = ['일', '월', '화', '수', '목', '금', '토'];
-  return days[dayOfWeek];
+  return DAYS_OF_WEEK[dayOfWeek];
 };
 
 /**

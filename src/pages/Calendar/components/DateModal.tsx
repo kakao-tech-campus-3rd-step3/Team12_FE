@@ -40,7 +40,7 @@ const DateModal: React.FC<DateModalProps> = ({
     selectedDate,
   });
 
-  const { handleSubmit, error, setError } = useEventForm({
+  const { handleSubmit } = useEventForm({
     onSave,
     onClose,
   });
