@@ -4,13 +4,14 @@ export const AUTH_ENDPOINTS = {
   SIGNUP: '/api/members/signup',
   LOGIN: '/api/members/login',
   REFRESH: '/api/members/refresh',
+  USER_INFO: '/api/members/me',
 } as const;
 
 export const CALENDAR_ENDPOINTS = {
-  GET_EVENTS: '/api/events?startAt=:startAt&endAt=:endAt',
+  GET_EVENTS: '/api/events',
   ADD_EVENT: '/api/events/add',
   MODIFY_EVENT: '/api/events/modify',
-  DELETE_EVENT: (eventId: number) => `/calendar/events/${eventId}`,
+  DELETE_EVENT: (eventId: number) => `/api/events/${eventId}`,
 } as const;
 
 export const EVERYTIME_ENDPOINTS = {
@@ -18,3 +19,8 @@ export const EVERYTIME_ENDPOINTS = {
   TIMETABLE_DETAIL: '/api/everytime/timetable',
   TIMETABLE_IMAGE: '/api/everytime/timetable',
 } as const;
+
+export const TEAM_ENDPOINTS = {
+  JOIN_TEAM: '/api/teams/join',
+  CREATE_TEAM: '/api/teams',
+};

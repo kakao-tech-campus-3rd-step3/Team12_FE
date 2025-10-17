@@ -1,9 +1,3 @@
-export interface User {
-  user_id: string;
-  name: string;
-  email: string;
-}
-
 //회원가입
 export interface SignupRequest {
   nickname: string;
@@ -37,4 +31,10 @@ export interface RefreshTokenResponse {
 }
 export interface RefreshTokenError {
   message: string;
+}
+
+export interface UserInfoResponse {
+  user_id: string;
+  name: string;
+  email: string;
 }
