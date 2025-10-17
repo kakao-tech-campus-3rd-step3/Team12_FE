@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Calendar } from 'lucide-react';
 import type { DateRange } from 'react-day-picker';
-import { WEEKDAYS } from '@/constants';
+import { WEEKDAYS_MON_FIRST } from '@/constants';
 import Button from '@/components/atoms/Button';
 import SelectBox from '@/components/atoms/SelectBox';
 import { mockTimeSlots } from '@/mockdata/teamData';
@@ -188,7 +188,7 @@ const AvailabilityGrid: React.FC<AvailabilityGridProps> = ({ availabilityData })
       {/* 요일 헤더 */}
       <div className="grid grid-cols-8 gap-1 mb-2">
         <div className="text-sm font-semibold text-center text-gray-600"></div>
-        {WEEKDAYS.map((day) => (
+        {WEEKDAYS_MON_FIRST.map((day) => (
           <div key={day} className="py-2 font-semibold text-center text-gray-700">
             {day}
           </div>

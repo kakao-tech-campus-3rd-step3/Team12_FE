@@ -1,4 +1,4 @@
-import { DAYS_OF_WEEK } from '@/constants';
+import { WEEKDAYS_SUN_FIRST } from '@/constants';
 
 /**
  * 시간표 데이터 검증 함수
@@ -31,7 +31,7 @@ export const validateTimetableData = (subjects: any[]) => {
  * @returns 한글 요일 문자열
  */
 export const getDayOfWeek = (dayOfWeek: number) => {
-  return DAYS_OF_WEEK[dayOfWeek];
+  return WEEKDAYS_SUN_FIRST[dayOfWeek];
 };
 
 /**
