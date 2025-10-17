@@ -19,13 +19,27 @@ const TeamListCard = ({ team, leaveTeam, deleteTeam }: TeamListCardProps) => {
   };
 
   const handleLeaveTeam = () => {
+    // API 응답에서는 id를 사용하므로 team_id와 id 둘 다 확인
+    const teamId = team.id;
+    if (!teamId || teamId === undefined) {
+      console.error('Invalid team_id for leaving team:', team);
+      alert('팀 정보가 올바르지 않습니다.');
+      return;
+    }
     setIsActionsOpen(false);
-    leaveTeam(team.team_id);
+    leaveTeam(teamId);
   };
 
   const handleDeleteTeam = () => {
+    // API 응답에서는 id를 사용하므로 team_id와 id 둘 다 확인
+    const teamId = team.id;
+    if (!teamId || teamId === undefined) {
+      console.error('Invalid team_id for deleting team:', team);
+      alert('팀 정보가 올바르지 않습니다.');
+      return;
+    }
     setIsActionsOpen(false);
-    deleteTeam(team.team_id);
+    deleteTeam(teamId);
   };
 
   return (

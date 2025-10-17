@@ -23,7 +23,7 @@ export interface TeamMember {
 }
 
 export interface TeamData {
-  team_id: number;
+  id: number;
   team_name: string;
   members: TeamMember[];
   team_description: string;
