@@ -192,7 +192,7 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
           <p className="text-gray-600">팀 일정을 효율적으로 관리하세요</p>
         </div> */}
 
-        <div className="overflow-hidden bg-white rounded-2xl shadow-xl">
+        <div className="overflow-hidden bg-white rounded-2xl">
           <div className="p-1 py-4 sm:p-6">
             <FullCalendar
               ref={calendarRef}
