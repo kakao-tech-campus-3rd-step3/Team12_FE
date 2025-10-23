@@ -1,16 +1,57 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Send } from 'lucide-react';
 import Button from '@/components/atoms/Button';
 
 interface Message {
   id: number;
-  userName: string;
-  message: string;
-  timestamp: string;
-  isMe: boolean;
+  teamId: number;
+  senderId: number;
+  senderName: string;
+  content: string;
+  createdAt: string;
 }
 
-const TeamChat = () => {
+interface chatResponse {
+  type: 'NEW_MESSAGE';
+  data: Message;
+}
+
+interface TeamChatProps {
+  teamId: number;
+}
+
+const TeamChat = ({ teamId }: TeamChatProps) => {
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [inputMessage, setInputMessage] = useState('');
+
+  useEffect(() => {
+    if (!teamId) return;
+  }, [teamId]);
+
+  const handleSendMessage = async () => {
+    if (!inputMessage.trim() || !teamId) return;
+
+    const messageContent = inputMessage;
+    setInputMessage('');
+
+    try {
+      const mockResponse: chatResponse = {
+        type: 'NEW_MESSAGE',
+        data: {
+          id: Date.now(),
+          teamId: teamId,
+          senderId: 1,
+          senderName: '나',
+          content: messageContent,
+          createdAt: new Date().toISOString(),
+        },
+      };
+      setMessages((prev) => [...prev, mockResponse.data]);
+    } catch (error) {
+      console.error('실패', error);
+    }
+  };
+
   return (
     <div className="flex flex-col w-full h-full rounded-xl shadow-lg border border-gray-200 bg-white">
       {/* 헤더 */}
@@ -24,13 +65,44 @@ const TeamChat = () => {
       </div>
 
       {/* 메시지 목록 */}
-      <div className="flex-1 overflow-y-auto px-4 py-5 space-y-4">
-        {
+      <div className="flex-1 overflow-y-auto px-4 py-5 space-y-1">
+        {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-gray-400">
             <p className="text-sm">아직 메시지가 없습니다</p>
             <p className="text-xs mt-1">첫 메시지를 보내보세요!</p>
           </div>
-        }
+        ) : (
+          <>
+            {messages.map((message) => {
+              const isMyMessage = message.senderName === '나';
+              return (
+                <div
+                  key={message.id}
+                  className={`flex ${isMyMessage ? 'justify-end' : 'justify-start'}`}
+                >
+                  <div
+                    className={`flex flex-col ${isMyMessage ? 'items-end' : 'items-start'} max-w-[70%]`}
+                  >
+                    {!isMyMessage && (
+                      <span className="text-xs font-medium text-gray-700 mb-1 px-1">
+                        {message.senderName}
+                      </span>
+                    )}
+                    <div
+                      className={`px-4 py-2.5 rounded-2xl ${
+                        isMyMessage
+                          ? 'bg-blue-600 text-white rounded-br-sm'
+                          : 'bg-gray-100 text-gray-800 rounded-bl-sm'
+                      }`}
+                    >
+                      <p className="text-sm break-words">{message.content}</p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </>
+        )}
       </div>
 
       {/* 입력 영역 */}
@@ -39,9 +111,12 @@ const TeamChat = () => {
           <input
             type="text"
             placeholder="메시지 보내기"
+            value={inputMessage}
+            onChange={(e) => setInputMessage(e.target.value)}
             className="flex-1 px-4 py-2.5 bg-gray-100 rounded-full text-gray-800 placeholder-gray-400 focus:outline-none transition-all"
           />
           <Button
+            onClick={handleSendMessage}
             icon={<Send className="w-5 h-5 rotate-45 -ml-1" />}
             className="p-y-2 rounded-full text-white shadow-md justify-center"
             noWrapper

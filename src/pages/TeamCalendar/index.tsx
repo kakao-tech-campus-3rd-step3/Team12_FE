@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { MessageCircleMore, X } from 'lucide-react';
 import Drawer from '@/components/organisms/Drawer';
 import FullCalendar from '@/pages/Calendar/FullCalendar';
@@ -11,6 +12,9 @@ import TeamChat from '@/pages/TeamCalendar/components/TeamChat';
 const TeamCalendarPage = () => {
   const [showAvailability, setShowAvailability] = useState(false);
   const [showChat, setShowChat] = useState(false);
+
+  const { id } = useParams<{ id: string }>();
+  const teamId = id ? Number(id) : 0;
 
   return (
     <div className="min-h-[calc(100vh-70px)] bg-gradient-to-br from-blue-50 to-indigo-100">
@@ -57,7 +61,7 @@ const TeamCalendarPage = () => {
 
       {showChat && (
         <div className="fixed bottom-24 right-6 w-90 h-[600px] z-50">
-          <TeamChat />
+          <TeamChat teamId={teamId} />
         </div>
       )}
 
