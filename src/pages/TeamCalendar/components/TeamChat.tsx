@@ -17,27 +17,33 @@ const TeamChat = ({ teamId }: TeamChatProps) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const previousScrollHeightRef = useRef(0);
-  const previousMessageCountRef = useRef(0);
   const isFirstRenderRef = useRef(true);
+  const lastMessageIdRef = useRef<number | null>(null);
+  const isLoadingOldMessagesRef = useRef(false);
 
   useEffect(() => {
     if (isFirstRenderRef.current && messages.length > 0) {
       messagesEndRef.current?.scrollIntoView();
       isFirstRenderRef.current = false;
+      lastMessageIdRef.current = messages[messages.length - 1]?.id || null;
     }
   }, [messages]);
 
   //메세지 전송 -> 스크롤 이동
   useEffect(() => {
-    if (
-      !isFirstRenderRef.current &&
-      messages.length > previousMessageCountRef.current &&
-      previousScrollHeightRef.current === 0
-    ) {
-      setTimeout(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-      }, 50);
-      previousMessageCountRef.current = messages.length;
+    if (!isFirstRenderRef.current && messages.length > 0) {
+      const lastMessage = messages[messages.length - 1];
+      const isNewMessage =
+        lastMessageIdRef.current !== null && lastMessage.id !== lastMessageIdRef.current;
+
+      // 과거 메시지 로드 중이 아니고, 새 메시지가 추가되었을 때만 스크롤
+      if (isNewMessage && !isLoadingOldMessagesRef.current) {
+        setTimeout(() => {
+          messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        }, 50);
+      }
+
+      lastMessageIdRef.current = lastMessage.id;
     }
   }, [messages]);
 
@@ -48,6 +54,7 @@ const TeamChat = ({ teamId }: TeamChatProps) => {
     //최상단 -> 이전 메세지 추가 조회
     if (container.scrollTop === 0) {
       previousScrollHeightRef.current = container.scrollHeight;
+      isLoadingOldMessagesRef.current = true;
       loadMoreMessages();
     }
   };
@@ -55,10 +62,24 @@ const TeamChat = ({ teamId }: TeamChatProps) => {
   //이전 메세지 조회 -> 스크롤 위치 고정
   useEffect(() => {
     const container = messagesContainerRef.current;
-    if (container && previousScrollHeightRef.current > 0) {
-      const newScrollHeight = container.scrollHeight;
-      container.scrollTop = newScrollHeight - previousScrollHeightRef.current;
-      previousScrollHeightRef.current = 0;
+    if (container && previousScrollHeightRef.current > 0 && isLoadingOldMessagesRef.current) {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          const newScrollHeight = container.scrollHeight;
+          const scrollDiff = newScrollHeight - previousScrollHeightRef.current;
+
+          const originalScrollBehavior = container.style.scrollBehavior;
+          container.style.scrollBehavior = 'auto';
+          container.scrollTop = scrollDiff;
+
+          requestAnimationFrame(() => {
+            container.style.scrollBehavior = originalScrollBehavior;
+          });
+
+          previousScrollHeightRef.current = 0;
+          isLoadingOldMessagesRef.current = false;
+        });
+      });
     }
   }, [messages]);
 
@@ -92,7 +113,6 @@ const TeamChat = ({ teamId }: TeamChatProps) => {
         className="flex-1 overflow-y-auto px-4 py-5 space-y-1"
         style={{
           scrollBehavior: 'smooth',
-          scrollPaddingBottom: '2px',
         }}
       >
         {messages.length === 0 ? (
