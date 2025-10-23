@@ -1,55 +1,20 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Send } from 'lucide-react';
 import Button from '@/components/atoms/Button';
-
-interface Message {
-  id: number;
-  teamId: number;
-  senderId: number;
-  senderName: string;
-  content: string;
-  createdAt: string;
-}
-
-interface chatResponse {
-  type: 'NEW_MESSAGE';
-  data: Message;
-}
+import { useTeamChat } from '@/hooks/team/useTeamChat';
 
 interface TeamChatProps {
   teamId: number;
 }
 
 const TeamChat = ({ teamId }: TeamChatProps) => {
-  const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');
+  const { messages, isConnected, sendMessage } = useTeamChat(teamId);
 
-  useEffect(() => {
-    if (!teamId) return;
-  }, [teamId]);
-
-  const handleSendMessage = async () => {
-    if (!inputMessage.trim() || !teamId) return;
-
-    const messageContent = inputMessage;
+  const handleSendMessage = () => {
+    if (!inputMessage.trim()) return;
+    sendMessage(inputMessage);
     setInputMessage('');
-
-    try {
-      const mockResponse: chatResponse = {
-        type: 'NEW_MESSAGE',
-        data: {
-          id: Date.now(),
-          teamId: teamId,
-          senderId: 1,
-          senderName: '나',
-          content: messageContent,
-          createdAt: new Date().toISOString(),
-        },
-      };
-      setMessages((prev) => [...prev, mockResponse.data]);
-    } catch (error) {
-      console.error('실패', error);
-    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -118,6 +83,7 @@ const TeamChat = ({ teamId }: TeamChatProps) => {
             placeholder="메시지 보내기"
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
+            disabled={!isConnected}
             className="flex-1 px-4 py-2.5 bg-gray-100 rounded-full text-gray-800 placeholder-gray-400 focus:outline-none transition-all"
           />
           <Button

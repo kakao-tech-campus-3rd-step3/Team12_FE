@@ -1,4 +1,8 @@
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+//웹소켓 base url
+export const WS_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL?.replace('http://', 'ws://')?.replace('https://', 'wss://') ||
+  'ws://uni-schedule-lb-1153657976.ap-northeast-2.elb.amazonaws.com';
 
 export const AUTH_ENDPOINTS = {
   SIGNUP: '/api/members/signup',
@@ -33,4 +37,5 @@ export const TEAM_ENDPOINTS = {
   CREATE_TEAM: '/api/teams',
   LEAVE_TEAM: (teamId: number) => `/api/teams/${teamId}/member`, // 팀 탈퇴
   DELETE_TEAM: (teamId: number) => `/api/teams/${teamId}/team`, // 팀 삭제
+  CHAT_WEBSOCKET: (teamId: number, token: string) => `/ws/teams/${teamId}/chat?token=${token}`,
 };
