@@ -52,6 +52,11 @@ const TeamChat = ({ teamId }: TeamChatProps) => {
     }
   };
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    handleSendMessage();
+  };
+
   return (
     <div className="flex flex-col w-full h-full rounded-xl shadow-lg border border-gray-200 bg-white">
       {/* 헤더 */}
@@ -107,7 +112,7 @@ const TeamChat = ({ teamId }: TeamChatProps) => {
 
       {/* 입력 영역 */}
       <div className="px-3 py-3">
-        <div className="flex items-center gap-2">
+        <form onSubmit={handleSubmit} className="flex items-center gap-2">
           <input
             type="text"
             placeholder="메시지 보내기"
@@ -116,12 +121,12 @@ const TeamChat = ({ teamId }: TeamChatProps) => {
             className="flex-1 px-4 py-2.5 bg-gray-100 rounded-full text-gray-800 placeholder-gray-400 focus:outline-none transition-all"
           />
           <Button
-            onClick={handleSendMessage}
+            type="submit"
             icon={<Send className="w-5 h-5 rotate-45 -ml-1" />}
             className="p-y-2 rounded-full text-white shadow-md justify-center"
             noWrapper
           />
-        </div>
+        </form>
       </div>
     </div>
   );
