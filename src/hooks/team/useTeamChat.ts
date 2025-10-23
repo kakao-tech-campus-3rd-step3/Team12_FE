@@ -34,7 +34,11 @@ export const useTeamChat = (teamId: number) => {
     setIsLoadingMessages(true);
     try {
       const response = await chatAPI.getChatMessages({ teamId });
-      setMessages(response.messages);
+      //시간순 정렬
+      const sortedMessages = response.messages.sort(
+        (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+      );
+      setMessages(sortedMessages);
       setHasMore(response.hasNext);
       setNextCursor(response.nextCursor);
     } catch (error) {
@@ -52,8 +56,12 @@ export const useTeamChat = (teamId: number) => {
     setIsLoadingMessages(true);
     try {
       const response = await chatAPI.getChatMessages({ teamId, cursor: nextCursor });
+      //시간순 정렬
+      const sortedMessages = response.messages.sort(
+        (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+      );
 
-      setMessages((prev) => [...response.messages, ...prev]);
+      setMessages((prev) => [...sortedMessages, ...prev]);
       setHasMore(response.hasNext);
       setNextCursor(response.nextCursor);
     } catch (error) {
