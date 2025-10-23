@@ -1,19 +1,12 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useAuthStore } from '@/store/useAuthStore';
 import { WS_BASE_URL, TEAM_ENDPOINTS } from '@/apis/constants/endpoints';
-
-interface Message {
-  id: number;
-  teamId: number;
-  senderId: number;
-  senderName: string;
-  content: string;
-  createdAt: string;
-}
+import { chatAPI } from '@/apis/services/chat';
+import type { ChatMessage } from '@/apis/types/chat';
 
 interface NewMessageResponse {
   type: 'NEW_MESSAGE';
-  data: Message;
+  data: ChatMessage;
 }
 
 interface ErrorResponse {
@@ -24,10 +17,58 @@ interface ErrorResponse {
 type WebSocketMessage = NewMessageResponse | ErrorResponse;
 
 export const useTeamChat = (teamId: number) => {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isConnected, setIsConnected] = useState(false);
+  const [isLoadingMessages, setIsLoadingMessages] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [nextCursor, setNextCursor] = useState<number | null>(null);
+
   const wsRef = useRef<WebSocket | null>(null);
   const { accessToken } = useAuthStore();
+  const isInitialLoadRef = useRef(true);
+
+  //초기 메세지 조회
+  const loadInitialMessages = useCallback(async () => {
+    if (!teamId) return;
+
+    setIsLoadingMessages(true);
+    try {
+      const response = await chatAPI.getChatMessages({ teamId });
+      setMessages(response.messages);
+      setHasMore(response.hasNext);
+      setNextCursor(response.nextCursor);
+    } catch (error) {
+      console.error('메세지 불러오기 실패', error);
+    } finally {
+      setIsLoadingMessages(false);
+      isInitialLoadRef.current = false;
+    }
+  }, [teamId]);
+
+  //추가 메세지 조회 - 무한 스크롤
+  const loadMoreMessages = useCallback(async () => {
+    if (!teamId || !hasMore || isLoadingMessages || nextCursor === null) return;
+
+    setIsLoadingMessages(true);
+    try {
+      const response = await chatAPI.getChatMessages({ teamId, cursor: nextCursor });
+
+      setMessages((prev) => [...response.messages, ...prev]);
+      setHasMore(response.hasNext);
+      setNextCursor(response.nextCursor);
+    } catch (error) {
+      console.log('메세지 로드 실패', error);
+    } finally {
+      setIsLoadingMessages(false);
+    }
+  }, [teamId, hasMore, isLoadingMessages, nextCursor]);
+
+  //채팅창 open -> 초기 메세지 조회
+  useEffect(() => {
+    if (isInitialLoadRef.current) {
+      loadInitialMessages();
+    }
+  }, [loadInitialMessages]);
 
   //웹소켓 연결
   useEffect(() => {
@@ -102,5 +143,8 @@ export const useTeamChat = (teamId: number) => {
     messages,
     isConnected,
     sendMessage,
+    loadMoreMessages,
+    isLoadingMessages,
+    hasMore,
   };
 };

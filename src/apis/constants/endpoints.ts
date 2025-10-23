@@ -38,4 +38,5 @@ export const TEAM_ENDPOINTS = {
   LEAVE_TEAM: (teamId: number) => `/api/teams/${teamId}/member`, // 팀 탈퇴
   DELETE_TEAM: (teamId: number) => `/api/teams/${teamId}/team`, // 팀 삭제
   CHAT_WEBSOCKET: (teamId: number, token: string) => `/ws/teams/${teamId}/chat?token=${token}`,
+  CHAT_MESSAGES: (teamId: number) => `/api/teams/${teamId}/chat/messages`,
 };

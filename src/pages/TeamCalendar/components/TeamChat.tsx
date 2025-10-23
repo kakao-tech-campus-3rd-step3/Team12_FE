@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Send } from 'lucide-react';
 import Button from '@/components/atoms/Button';
 import { useTeamChat } from '@/hooks/team/useTeamChat';
@@ -10,8 +10,57 @@ interface TeamChatProps {
 
 const TeamChat = ({ teamId }: TeamChatProps) => {
   const [inputMessage, setInputMessage] = useState('');
-  const { messages, isConnected, sendMessage } = useTeamChat(teamId);
+  const { messages, isConnected, sendMessage, loadMoreMessages, isLoadingMessages, hasMore } =
+    useTeamChat(teamId);
   const { user } = useAuthStore();
+
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const previousScrollHeightRef = useRef(0);
+  const previousMessageCountRef = useRef(0);
+  const isFirstRenderRef = useRef(true);
+
+  useEffect(() => {
+    if (isFirstRenderRef.current && messages.length > 0) {
+      messagesEndRef.current?.scrollIntoView();
+      isFirstRenderRef.current = false;
+    }
+  }, [messages]);
+
+  //메세지 전송 -> 스크롤 이동
+  useEffect(() => {
+    if (
+      !isFirstRenderRef.current &&
+      messages.length > previousMessageCountRef.current &&
+      previousScrollHeightRef.current === 0
+    ) {
+      setTimeout(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      }, 50);
+      previousMessageCountRef.current = messages.length;
+    }
+  }, [messages]);
+
+  const handleScroll = () => {
+    const container = messagesContainerRef.current;
+    if (!container || isLoadingMessages || !hasMore) return;
+
+    //최상단 -> 이전 메세지 추가 조회
+    if (container.scrollTop === 0) {
+      previousScrollHeightRef.current = container.scrollHeight;
+      loadMoreMessages();
+    }
+  };
+
+  //이전 메세지 조회 -> 스크롤 위치 고정
+  useEffect(() => {
+    const container = messagesContainerRef.current;
+    if (container && previousScrollHeightRef.current > 0) {
+      const newScrollHeight = container.scrollHeight;
+      container.scrollTop = newScrollHeight - previousScrollHeightRef.current;
+      previousScrollHeightRef.current = 0;
+    }
+  }, [messages]);
 
   const handleSendMessage = () => {
     if (!inputMessage.trim()) return;
@@ -37,7 +86,15 @@ const TeamChat = ({ teamId }: TeamChatProps) => {
       </div>
 
       {/* 메시지 목록 */}
-      <div className="flex-1 overflow-y-auto px-4 py-5 space-y-1">
+      <div
+        ref={messagesContainerRef}
+        onScroll={handleScroll}
+        className="flex-1 overflow-y-auto px-4 py-5 space-y-1"
+        style={{
+          scrollBehavior: 'smooth',
+          scrollPaddingBottom: '2px',
+        }}
+      >
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-gray-400">
             <p className="text-sm">아직 메시지가 없습니다</p>
@@ -76,6 +133,7 @@ const TeamChat = ({ teamId }: TeamChatProps) => {
                 </div>
               );
             })}
+            <div ref={messagesEndRef} />
           </>
         )}
       </div>
