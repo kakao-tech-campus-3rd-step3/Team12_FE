@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Send } from 'lucide-react';
 import Button from '@/components/atoms/Button';
 import { useTeamChat } from '@/hooks/team/useTeamChat';
+import { useAuthStore } from '@/store/useAuthStore';
 
 interface TeamChatProps {
   teamId: number;
@@ -10,6 +11,7 @@ interface TeamChatProps {
 const TeamChat = ({ teamId }: TeamChatProps) => {
   const [inputMessage, setInputMessage] = useState('');
   const { messages, isConnected, sendMessage } = useTeamChat(teamId);
+  const { user } = useAuthStore();
 
   const handleSendMessage = () => {
     if (!inputMessage.trim()) return;
@@ -44,7 +46,10 @@ const TeamChat = ({ teamId }: TeamChatProps) => {
         ) : (
           <>
             {messages.map((message) => {
-              const isMyMessage = message.senderName === '나';
+              //"나"인지 확인
+              const isMyMessage = user?.user_id
+                ? String(message.senderId) === String(user.user_id)
+                : false;
               return (
                 <div
                   key={message.id}
