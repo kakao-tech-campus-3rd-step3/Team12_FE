@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { Send } from 'lucide-react';
 import Button from '@/components/atoms/Button';
 import { useTeamChat } from '@/hooks/team/useTeamChat';
@@ -30,7 +30,7 @@ const TeamChat = ({ teamId }: TeamChatProps) => {
   }, [messages]);
 
   //메세지 전송 -> 스크롤 이동
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!isFirstRenderRef.current && messages.length > 0) {
       const lastMessage = messages[messages.length - 1];
       const isNewMessage =
@@ -38,9 +38,7 @@ const TeamChat = ({ teamId }: TeamChatProps) => {
 
       // 과거 메시지 로드 중이 아니고, 새 메시지가 추가되었을 때만 스크롤
       if (isNewMessage && !isLoadingOldMessagesRef.current) {
-        setTimeout(() => {
-          messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-        }, 50);
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
       }
 
       lastMessageIdRef.current = lastMessage.id;
@@ -60,25 +58,20 @@ const TeamChat = ({ teamId }: TeamChatProps) => {
   };
 
   //이전 메세지 조회 -> 스크롤 위치 고정
-  useEffect(() => {
+  useLayoutEffect(() => {
     const container = messagesContainerRef.current;
     if (container && previousScrollHeightRef.current > 0 && isLoadingOldMessagesRef.current) {
       requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          const newScrollHeight = container.scrollHeight;
-          const scrollDiff = newScrollHeight - previousScrollHeightRef.current;
+        const newScrollHeight = container.scrollHeight;
+        const scrollDiff = newScrollHeight - previousScrollHeightRef.current;
 
-          const originalScrollBehavior = container.style.scrollBehavior;
-          container.style.scrollBehavior = 'auto';
-          container.scrollTop = scrollDiff;
+        const originalScrollBehavior = container.style.scrollBehavior;
+        container.style.scrollBehavior = 'auto';
+        container.scrollTop = scrollDiff;
+        container.style.scrollBehavior = originalScrollBehavior;
 
-          requestAnimationFrame(() => {
-            container.style.scrollBehavior = originalScrollBehavior;
-          });
-
-          previousScrollHeightRef.current = 0;
-          isLoadingOldMessagesRef.current = false;
-        });
+        previousScrollHeightRef.current = 0;
+        isLoadingOldMessagesRef.current = false;
       });
     }
   }, [messages]);

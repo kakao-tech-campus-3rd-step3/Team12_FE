@@ -65,7 +65,7 @@ export const useTeamChat = (teamId: number) => {
       setHasMore(response.hasNext);
       setNextCursor(response.nextCursor);
     } catch (error) {
-      console.log('메세지 로드 실패', error);
+      console.error('메세지 로드 실패', error);
     } finally {
       setIsLoadingMessages(false);
     }
@@ -104,7 +104,7 @@ export const useTeamChat = (teamId: number) => {
 
       if (message.type === 'NEW_MESSAGE') {
         setMessages((prev) => [...prev, message.data]);
-      } else if (message.type == 'ERROR') {
+      } else if (message.type === 'ERROR') {
         console.error('서버 에러', message.message);
       }
     };
