@@ -17,6 +17,7 @@ export const PERSONAL_CALENDAR_ENDPOINTS = {
 export const TEAM_CALENDAR_ENDPOINTS = {
   GET_EVENTS: (teamId: number) => `/api/events/team/${teamId}`,
   ADD_EVENT: '/api/events/team/add',
+  ADD_RECURRING_EVENT: (teamId: number) => `/api/events/team/recurring/add/${teamId}`,
   MODIFY_EVENT: '/api/events/team/modify',
   DELETE_EVENT: (eventId: number) => `/api/events/team/${eventId}`,
 } as const;

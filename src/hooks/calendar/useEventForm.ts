@@ -1,9 +1,9 @@
-import { type FormData } from '@/hooks/calendar/useFormData';
-import { type CalendarEvent } from '@/types/calendar';
 import { useState } from 'react';
+import type { FormData } from '@/hooks/calendar/useFormData';
+import type { CalendarEvent } from '@/types/calendar';
 
 interface UseEventFormProps {
-  onSave: (event: Omit<CalendarEvent, 'event_id'>) => void;
+  onSave: (event: Omit<CalendarEvent, 'event_id'>, formData: FormData) => void;
   onClose: () => void;
 }
 
@@ -37,7 +37,7 @@ const useEventForm = ({ onSave, onClose }: UseEventFormProps) => {
       is_private: formData.private,
     };
 
-    onSave(eventData);
+    onSave(eventData, formData);
     onClose();
   };
 

@@ -1,14 +1,16 @@
-import { personalCalendarAPI, teamCalendarAPI } from '@/apis';
-import { useEvents, useModal } from '@/hooks';
-import DateModal from '@/pages/Calendar/components/DateModal';
-import { useTeamStore } from '@/store/team/useTeamStore';
-import type { CalendarEvent, modifyCalendarEventRequest } from '@/types/calendar';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import interactionPlugin from '@fullcalendar/interaction';
-import FullCalendar from '@fullcalendar/react';
-import timeGridPlugin from '@fullcalendar/timegrid';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
+import FullCalendar from '@fullcalendar/react';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import interactionPlugin from '@fullcalendar/interaction';
+import { personalCalendarAPI, teamCalendarAPI } from '@/apis';
+import { useEvents, useModal } from '@/hooks';
+import { useTeamStore } from '@/store/team/useTeamStore';
+import { generateRRule } from '@/utils/rruleUtils';
+import DateModal from '@/pages/Calendar/components/DateModal';
+import type { CalendarEvent, modifyCalendarEventRequest } from '@/types/calendar';
+import type { FormData } from '@/hooks/calendar/useFormData';
 
 //개인 캘린더와 팀 캘린더를 분리하기 위한 mode 설정
 type CalendarMode = 'personal' | 'team';
@@ -114,22 +116,42 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
   }, [currentDate, currentView]);
 
   // 모달에서 이벤트 저장 핸들러
-  const handleSaveEvent = async (eventData: Omit<CalendarEvent, 'event_id'>) => {
+  const handleSaveEvent = async (
+    eventData: Omit<CalendarEvent, 'event_id'>,
+    formData: FormData,
+  ) => {
     if (modalType === 'add') {
       if (mode === 'team') {
         if (!teamId) {
           console.error('팀이 선택되지 않았습니다.');
           return;
         }
-        await teamCalendarAPI.addTeamEvent({
-          team_id: teamId,
-          title: eventData.title,
-          description: eventData.description,
-          start_time: eventData.start_time,
-          end_time: eventData.end_time,
-          is_private: eventData.is_private,
-        });
-        addEvent(eventData);
+
+        const rrule = generateRRule(formData);
+
+        //반복 일정 추가
+        if (rrule) {
+          await teamCalendarAPI.addTeamRecurringEvent(teamId, {
+            title: eventData.title,
+            description: eventData.description,
+            first_start_time: eventData.start_time,
+            first_end_time: eventData.end_time,
+            is_private: eventData.is_private,
+            rrule: rrule,
+          });
+          await getEvents({ teamId, mode: 'team' });
+        } else {
+          //일반 일정 추가
+          await teamCalendarAPI.addTeamEvent({
+            team_id: teamId,
+            title: eventData.title,
+            description: eventData.description,
+            start_time: eventData.start_time,
+            end_time: eventData.end_time,
+            is_private: eventData.is_private,
+          });
+          addEvent(eventData);
+        }
         return;
       }
       personalCalendarAPI.addEvent({
@@ -154,11 +176,10 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
       if (eventData.is_private !== selectedEvent.is_private) {
         modifyData.is_private = eventData.is_private;
       }
-      if (eventData.start_time !== selectedEvent.start_time) {
-        modifyData.start_time = eventData.start_time;
-        modifyData.end_time = eventData.end_time;
-      }
-      if (eventData.end_time !== selectedEvent.end_time) {
+      if (
+        eventData.start_time !== selectedEvent.start_time ||
+        eventData.end_time !== selectedEvent.end_time
+      ) {
         modifyData.start_time = eventData.start_time;
         modifyData.end_time = eventData.end_time;
       }

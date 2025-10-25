@@ -5,7 +5,11 @@ import type {
   modifyCalendarEventRequest,
   modifyCalendarEventResponse,
 } from '@/types/calendar';
-import type { addTeamCalendarEventRequest, addTeamCalendarEventResponse } from '@/apis';
+import type {
+  addTeamCalendarEventRequest,
+  addTeamCalendarEventResponse,
+  addTeamCalendarRecurringEventRequest,
+} from '@/apis';
 
 export const personalCalendarAPI = {
   getEvents: (params: { startAt: string; endAt: string }) => {
@@ -30,6 +34,13 @@ export const teamCalendarAPI = {
   },
   addTeamEvent: (teamEvent: addTeamCalendarEventRequest): Promise<addTeamCalendarEventResponse> => {
     return apiClient.post(TEAM_CALENDAR_ENDPOINTS.ADD_EVENT, teamEvent);
+  },
+  //반복 일정 추가
+  addTeamRecurringEvent: (
+    teamId: number,
+    teamEvent: addTeamCalendarRecurringEventRequest,
+  ): Promise<addTeamCalendarEventResponse> => {
+    return apiClient.post(TEAM_CALENDAR_ENDPOINTS.ADD_RECURRING_EVENT(teamId), teamEvent);
   },
   modifyTeamEvent: (
     teamEvent: modifyCalendarEventRequest,

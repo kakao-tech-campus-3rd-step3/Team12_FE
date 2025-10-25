@@ -3,11 +3,12 @@ import type { DateRange } from 'react-day-picker';
 import Button from '@/components/atoms/Button';
 import ModalHeader from '@/components/atoms/ModalHeader';
 import Modal from '@/components/molecules/Modal';
-import { useEventForm, useFormData } from '@/hooks';
 import MetaFields from '@/pages/Calendar/components/MetaFields';
 import RepeatSettings from '@/pages/Calendar/components/RepeatSettings';
 import SelectDuration from '@/pages/Calendar/components/SelectDuration';
 import TimeFields from '@/pages/Calendar/components/TimeFields';
+import { useEventForm, useFormData } from '@/hooks';
+import type { FormData } from '@/hooks/calendar/useFormData';
 import type { CalendarEvent, ModalType } from '@/types/calendar';
 
 interface DateModalProps {
@@ -16,7 +17,7 @@ interface DateModalProps {
   modalType: ModalType;
   selectedEvent?: CalendarEvent;
   selectedDate?: string;
-  onSave: (event: Omit<CalendarEvent, 'event_id'>) => void;
+  onSave: (event: Omit<CalendarEvent, 'event_id'>, formData: FormData) => void;
   onDelete?: (eventId: number) => void;
   onChangeModalType?: (type: ModalType) => void;
 }

@@ -31,6 +31,24 @@ export interface addTeamCalendarEventResponse {
   is_private: boolean;
 }
 
+//팀 반복 일정 추가
+export interface addTeamCalendarRecurringEventRequest {
+  title: string;
+  description?: string;
+  first_start_time: string;
+  first_end_time: string;
+  is_private: boolean;
+  rrule: string;
+}
+export interface addTeamCalendarRecurringEventResponse {
+  event_id: number;
+  title: string;
+  description: string;
+  start_time: string;
+  end_time: string;
+  is_private: boolean;
+}
+
 //팀 일정 수정
 export interface modifyTeamCalendarEventRequest {
   event_id: number;
