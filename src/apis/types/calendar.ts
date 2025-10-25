@@ -11,6 +11,7 @@ export type getTeamCalendarEventsResponse = {
   start_time: string;
   end_time?: string;
   is_private: boolean;
+  is_recurring: boolean;
 }[];
 
 //팀 일정 추가
@@ -65,4 +66,9 @@ export interface modifyTeamCalendarEventResponse {
   start_time: string;
   end_time: string;
   is_private: boolean;
+}
+
+//반복 일정 단일 인스턴스 삭제
+export interface deleteTeamCalendarRecurringOneEventRequest {
+  original_start_time: string;
 }

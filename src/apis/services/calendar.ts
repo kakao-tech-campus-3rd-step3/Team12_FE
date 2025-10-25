@@ -9,6 +9,7 @@ import type {
   addTeamCalendarEventRequest,
   addTeamCalendarEventResponse,
   addTeamCalendarRecurringEventRequest,
+  deleteTeamCalendarRecurringOneEventRequest,
 } from '@/apis';
 
 export const personalCalendarAPI = {
@@ -35,13 +36,6 @@ export const teamCalendarAPI = {
   addTeamEvent: (teamEvent: addTeamCalendarEventRequest): Promise<addTeamCalendarEventResponse> => {
     return apiClient.post(TEAM_CALENDAR_ENDPOINTS.ADD_EVENT, teamEvent);
   },
-  //반복 일정 추가
-  addTeamRecurringEvent: (
-    teamId: number,
-    teamEvent: addTeamCalendarRecurringEventRequest,
-  ): Promise<addTeamCalendarEventResponse> => {
-    return apiClient.post(TEAM_CALENDAR_ENDPOINTS.ADD_RECURRING_EVENT(teamId), teamEvent);
-  },
   modifyTeamEvent: (
     teamEvent: modifyCalendarEventRequest,
   ): Promise<modifyCalendarEventResponse> => {
@@ -49,5 +43,24 @@ export const teamCalendarAPI = {
   },
   deleteTeamEvent: (eventId: number) => {
     return apiClient.delete(TEAM_CALENDAR_ENDPOINTS.DELETE_EVENT(eventId));
+  },
+  //반복 일정 추가
+  addTeamRecurringEvent: (
+    teamId: number,
+    teamEvent: addTeamCalendarRecurringEventRequest,
+  ): Promise<addTeamCalendarEventResponse> => {
+    return apiClient.post(TEAM_CALENDAR_ENDPOINTS.ADD_RECURRING_EVENT(teamId), teamEvent);
+  },
+  //반복 일정 삭제
+  deleteTeamRecurringAllEvents: (eventId: number) => {
+    return apiClient.delete(TEAM_CALENDAR_ENDPOINTS.DELETE_RECURRING_ALL_EVENT(eventId));
+  },
+  deleteTeamRecurringOneEvent: (
+    eventId: number,
+    data: deleteTeamCalendarRecurringOneEventRequest,
+  ) => {
+    return apiClient.delete(TEAM_CALENDAR_ENDPOINTS.DELETE_RECURRING_ONE_EVENT(eventId), {
+      data: data,
+    });
   },
 };

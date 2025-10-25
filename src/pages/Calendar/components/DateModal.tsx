@@ -19,6 +19,8 @@ interface DateModalProps {
   selectedDate?: string;
   onSave: (event: Omit<CalendarEvent, 'event_id'>, formData: FormData) => void;
   onDelete?: (eventId: number) => void;
+  onDeleteRecurringOne?: (eventId: number) => void;
+  onDeleteRecurringAll?: (eventId: number) => void;
   onChangeModalType?: (type: ModalType) => void;
 }
 
@@ -30,6 +32,8 @@ const DateModal: React.FC<DateModalProps> = ({
   selectedDate,
   onSave,
   onDelete,
+  onDeleteRecurringOne,
+  onDeleteRecurringAll,
   onChangeModalType,
 }) => {
   const [range, setRange] = useState<DateRange | undefined>();
@@ -89,15 +93,61 @@ const DateModal: React.FC<DateModalProps> = ({
     }
   };
 
+  //반복 일정 삭제
+  const handleDeleteRecurringOne = () => {
+    if (selectedEvent && onDeleteRecurringOne) {
+      onDeleteRecurringOne(selectedEvent.event_id);
+      onClose();
+    }
+  };
+  const handleDeleteRecurringAll = () => {
+    if (selectedEvent && onDeleteRecurringAll) {
+      onDeleteRecurringAll(selectedEvent.event_id);
+      onClose();
+    }
+  };
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalHeader
         title={
-          modalType === 'add' ? '새 일정 추가' : modalType === 'edit' ? '일정 편집' : '일정 삭제'
+          modalType === 'add'
+            ? '새 일정 추가'
+            : modalType === 'edit'
+              ? '일정 편집'
+              : modalType === 'deleteRecurring'
+                ? '반복 일정 삭제'
+                : '일정 삭제'
         }
       />
-
-      {modalType === 'delete' ? (
+      {modalType === 'deleteRecurring' ? (
+        <div className="p-6">
+          <p className="mb-6 text-gray-800">선택하신 일정은 반복 일정입니다.</p>
+          <div className="flex gap-3 mb-3">
+            <Button
+              onClick={handleDeleteRecurringOne}
+              variant="primary"
+              size="md"
+              noWrapper={true}
+              className="flex-1 bg-gray-400 hover:bg-gray-500"
+            >
+              단일 일정 삭제
+            </Button>
+            <Button
+              onClick={handleDeleteRecurringAll}
+              variant="primary"
+              size="md"
+              noWrapper={true}
+              className="flex-1 bg-red-600 hover:bg-red-700"
+            >
+              반복 일정 전체 삭제
+            </Button>
+          </div>
+          <Button onClick={onClose} variant="outline" size="md" noWrapper={true} className="w-full">
+            취소
+          </Button>
+        </div>
+      ) : modalType === 'delete' ? (
         <div className="p-6">
           <p className="mb-4 text-gray-600">"{selectedEvent?.title}" 일정을 삭제하시겠습니까?</p>
           <div className="flex gap-2 justify-end">
@@ -136,7 +186,13 @@ const DateModal: React.FC<DateModalProps> = ({
           >
             {modalType === 'edit' && (
               <Button
-                onClick={() => onChangeModalType?.('delete')}
+                onClick={() => {
+                  if (selectedEvent?.is_recurring) {
+                    onChangeModalType?.('deleteRecurring');
+                  } else {
+                    onChangeModalType?.('delete');
+                  }
+                }}
                 text="삭제"
                 variant="primary"
                 size="md"

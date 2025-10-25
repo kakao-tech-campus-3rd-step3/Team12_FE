@@ -20,6 +20,8 @@ export const TEAM_CALENDAR_ENDPOINTS = {
   ADD_RECURRING_EVENT: (teamId: number) => `/api/events/team/recurring/add/${teamId}`,
   MODIFY_EVENT: '/api/events/team/modify',
   DELETE_EVENT: (eventId: number) => `/api/events/team/${eventId}`,
+  DELETE_RECURRING_ALL_EVENT: (eventId: number) => `api/events/team/recurring/${eventId}`,
+  DELETE_RECURRING_ONE_EVENT: (eventId: number) => `api/events/team/recurring/instance/${eventId}`,
 } as const;
 
 export const EVERYTIME_ENDPOINTS = {

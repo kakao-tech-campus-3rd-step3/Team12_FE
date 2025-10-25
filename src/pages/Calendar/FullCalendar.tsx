@@ -205,6 +205,22 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
     removeEvent(eventId);
   };
 
+  const handleDeleteRecurringOne = async (eventId: number) => {
+    if (mode === 'team' && selectedEvent) {
+      await teamCalendarAPI.deleteTeamRecurringOneEvent(eventId, {
+        original_start_time: selectedEvent.start_time,
+      });
+      await getEvents({ teamId, mode: 'team' });
+    }
+  };
+
+  const handleDeleteRecurringAll = async (eventId: number) => {
+    if (mode === 'team') {
+      await teamCalendarAPI.deleteTeamRecurringAllEvents(eventId);
+      await getEvents({ teamId, mode: 'team' });
+    }
+  };
+
   return (
     <div className="p-2">
       <div className="mx-auto max-w-7xl">
@@ -364,6 +380,8 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
         selectedDate={selectedDate}
         onSave={handleSaveEvent}
         onDelete={handleDeleteEvent}
+        onDeleteRecurringOne={handleDeleteRecurringOne}
+        onDeleteRecurringAll={handleDeleteRecurringAll}
         onChangeModalType={setModalType}
       />
     </div>

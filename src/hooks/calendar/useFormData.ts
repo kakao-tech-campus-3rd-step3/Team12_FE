@@ -2,7 +2,7 @@
  * @description 폼 데이터 관리
  */
 
-import { type CalendarEvent, type RepeatType } from '@/types/calendar';
+import type { CalendarEvent, RepeatType, ModalType } from '@/types/calendar';
 import { toDateOnly } from '@/utils/dateTimeUtils';
 import { useEffect, useState } from 'react';
 
@@ -22,7 +22,7 @@ export interface FormData {
 
 interface UseFormDataProps {
   isOpen: boolean;
-  modalType: 'add' | 'edit' | 'delete';
+  modalType: ModalType;
   selectedEvent?: CalendarEvent;
   selectedDate?: string;
 }
