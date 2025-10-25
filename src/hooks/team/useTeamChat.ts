@@ -16,6 +16,11 @@ interface ErrorResponse {
 
 type WebSocketMessage = NewMessageResponse | ErrorResponse;
 
+//메세지 시간순 정렬
+const sortMessagesByTime = (messages: ChatMessage[]): ChatMessage[] => {
+  return messages.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+};
+
 export const useTeamChat = (teamId: number) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isConnected, setIsConnected] = useState(false);
@@ -34,10 +39,7 @@ export const useTeamChat = (teamId: number) => {
     setIsLoadingMessages(true);
     try {
       const response = await chatAPI.getChatMessages({ teamId });
-      //시간순 정렬
-      const sortedMessages = response.messages.sort(
-        (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-      );
+      const sortedMessages = sortMessagesByTime(response.messages);
       setMessages(sortedMessages);
       setHasMore(response.hasNext);
       setNextCursor(response.nextCursor);
@@ -56,10 +58,7 @@ export const useTeamChat = (teamId: number) => {
     setIsLoadingMessages(true);
     try {
       const response = await chatAPI.getChatMessages({ teamId, cursor: nextCursor });
-      //시간순 정렬
-      const sortedMessages = response.messages.sort(
-        (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-      );
+      const sortedMessages = sortMessagesByTime(response.messages);
 
       setMessages((prev) => [...sortedMessages, ...prev]);
       setHasMore(response.hasNext);
