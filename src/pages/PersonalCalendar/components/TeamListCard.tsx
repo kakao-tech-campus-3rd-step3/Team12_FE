@@ -75,11 +75,9 @@ const TeamListCard = ({ team, leaveTeam, deleteTeam }: TeamListCardProps) => {
 
       {/* 메인 카드 */}
       <div
-        className="relative p-4 bg-white rounded-xl border border-gray-200 shadow-sm transition-all duration-300 hover:border-blue-400 group hover:z-10"
-        style={{
-          transform: `translateX(-${isActionsOpen ? 60 : 0}px)`,
-          transition: 'transform 0.3s ease-out',
-        }}
+        className={`relative p-4 bg-white rounded-xl border border-gray-200 shadow-sm transition-transform duration-300 ease-out hover:border-blue-400 group hover:z-10 ${
+          isActionsOpen ? '-translate-x-[60px]' : 'translate-x-0'
+        }`}
       >
         <div className="flex justify-between items-start">
           <div className="flex flex-col justify-between">
