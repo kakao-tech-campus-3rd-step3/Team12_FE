@@ -1,5 +1,6 @@
 import { teamAPI } from '@/apis/services/team';
 import type { GetTeamsResponse } from '@/apis/types/team';
+import { queryKeys } from '@/lib/queryKeys';
 import { useTeamStore } from '@/store/team';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
@@ -9,7 +10,7 @@ import { toast } from 'react-toastify';
 const useTeam = () => {
   const { teams, setTeams } = useTeamStore();
   const { data, isLoading, error } = useQuery<GetTeamsResponse>({
-    queryKey: ['teams'],
+    queryKey: queryKeys.teams,
     queryFn: () => teamAPI.getTeams(),
   });
 
@@ -50,7 +51,7 @@ export const useLeaveTeam = () => {
     onSuccess: () => {
       // 팀 목록 다시 조회
       toast.success('팀 탈퇴 성공');
-      queryClient.invalidateQueries({ queryKey: ['teams'] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.teams });
     },
     onError: (error) => {
       toast.error(error.message);
@@ -78,7 +79,7 @@ export const useDeleteTeam = () => {
     onSuccess: () => {
       // 팀 목록 다시 조회
       toast.success('팀 삭제 성공');
-      queryClient.invalidateQueries({ queryKey: ['teams'] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.teams });
     },
     onError: (error: Error) => {
       toast.error(error.message);
