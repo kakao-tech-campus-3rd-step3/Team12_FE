@@ -1,6 +1,8 @@
 import { apiClient } from '@/apis/client/apiClients';
 import { TEAM_ENDPOINTS } from '@/apis/constants/endpoints';
 import type {
+  GetTeamMembersResponse,
+  GetTeamMembersParams,
   GetTeamsResponse,
   createTeamRequest,
   createTeamResponse,
@@ -23,5 +25,16 @@ export const teamAPI = {
   },
   deleteTeam: (teamId: number): Promise<void> => {
     return apiClient.delete(TEAM_ENDPOINTS.DELETE_TEAM(teamId));
+  },
+
+  getTeamMembers: ({
+    teamId,
+    page = 1,
+    limit = 10,
+  }: GetTeamMembersParams): Promise<GetTeamMembersResponse> => {
+    const params = new URLSearchParams({ page: page.toString(), limit: limit.toString() });
+    return apiClient
+      .get(`${TEAM_ENDPOINTS.GET_TEAM_MEMBERS(teamId)}?${params}`)
+      .then((response) => response.data);
   },
 };
