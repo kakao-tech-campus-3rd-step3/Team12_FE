@@ -50,25 +50,28 @@ export interface addTeamCalendarRecurringEventResponse {
   is_private: boolean;
 }
 
-//팀 일정 수정
-export interface modifyTeamCalendarEventRequest {
-  event_id: number;
+interface CalendarEventUpdateBase {
   title?: string;
   description?: string;
   start_time?: string;
   end_time?: string;
   is_private?: boolean;
 }
-export interface modifyTeamCalendarEventResponse {
+
+//팀 일정 수정
+export interface modifyTeamCalendarEventRequest extends CalendarEventUpdateBase {
   event_id: number;
-  title: string;
-  description?: string;
-  start_time: string;
-  end_time: string;
-  is_private: boolean;
+}
+//팀 반복 일정 전체 수정
+export interface modifyTeamCalendarRecurringAllEventsRequest extends CalendarEventUpdateBase {
+  rrule?: string;
+}
+//팀 반복 일정 단일 인스턴스 수정
+export interface modifyTeamCalendarRecurringOneEventRequest extends CalendarEventUpdateBase {
+  original_start_time: string;
 }
 
-//반복 일정 단일 인스턴스 삭제
+//팀 반복 일정 단일 인스턴스 삭제
 export interface deleteTeamCalendarRecurringOneEventRequest {
   original_start_time: string;
 }

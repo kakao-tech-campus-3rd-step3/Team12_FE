@@ -8,6 +8,7 @@ import { personalCalendarAPI, teamCalendarAPI } from '@/apis';
 import { useEvents, useModal } from '@/hooks';
 import { useTeamStore } from '@/store/team/useTeamStore';
 import { generateRRule } from '@/utils/rruleUtils';
+import { parseEventId } from '@/utils/eventUtils';
 import DateModal from '@/pages/Calendar/components/DateModal';
 import type { CalendarEvent, modifyCalendarEventRequest } from '@/types/calendar';
 import type { FormData } from '@/hooks/calendar/useFormData';
@@ -74,7 +75,9 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
         const hasTime = event.start_time.includes('T') && event.end_time.includes('T');
 
         return {
-          id: event.event_id.toString(),
+          id: event.is_recurring
+            ? `${event.event_id}_${event.start_time}`
+            : event.event_id.toString(),
           title: event.title,
           start: hasTime ? startDate.toISOString() : formatLocalDate(startDate),
           end: hasTime ? endDate.toISOString() : formatLocalDate(endDate),
@@ -221,6 +224,46 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
     }
   };
 
+  // 반복 일정 단일 인스턴스 수정
+  const handleEditRecurringOne = async (
+    eventId: number,
+    eventData: import('@/apis/types/calendar').modifyTeamCalendarRecurringOneEventRequest,
+  ) => {
+    if (mode === 'team') {
+      console.log('수정 요청', eventData);
+
+      // 1. 수정 API 호출
+      const response = await teamCalendarAPI.modifyTeamRecurringOneEvent(eventId, eventData);
+      console.log('수정 응답', response);
+
+      // 2. 약간의 지연 (DB 커밋 대기)
+      await new Promise((resolve) => setTimeout(resolve, 300));
+
+      // 3. 재조회
+      await getEvents({ teamId, mode: 'team' });
+      console.log('재조회된 이벤트들', events);
+
+      // 4. 수정된 이벤트가 있는지 확인
+      const updatedEvent = events?.find(
+        (e) => e.event_id === eventId && e.start_time === eventData.start_time,
+      );
+      console.log('수정된 이벤트 찾음?', updatedEvent);
+
+      calendarRef.current?.getApi()?.refetchEvents();
+    }
+  };
+
+  // 반복 일정 전체 수정
+  const handleEditRecurringAll = async (
+    eventId: number,
+    eventData: import('@/apis/types/calendar').modifyTeamCalendarRecurringAllEventsRequest,
+  ) => {
+    if (mode === 'team') {
+      await teamCalendarAPI.modifyTeamRecurringAllEvents(eventId, eventData);
+      await getEvents({ teamId, mode: 'team' });
+    }
+  };
+
   return (
     <div className="p-2">
       <div className="mx-auto max-w-7xl">
@@ -338,11 +381,20 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
               }}
               eventClick={(info) => {
                 if (!events) return;
-                const event = events.find((e) => e.event_id.toString() === info.event.id);
+                const { eventId, startTime } = parseEventId(info.event.id);
+                const event = events.find((e) => {
+                  // 일반 일정 및 반복 일정 조회 분기
+                  if (startTime) {
+                    // 반복 일정: event_id와 start_time 모두 비교
+                    return e.event_id === eventId && e.start_time === startTime;
+                  }
+                  // 일반 일정: event_id만 비교
+                  return e.event_id === eventId;
+                });
                 if (event) {
                   setSelectedEvent(event);
                   setSelectedDate(undefined);
-                  setModalType('edit');
+                  setModalType(event.is_recurring ? 'recurringAction' : 'edit');
                   setIsOpen(true);
                 }
               }}
@@ -379,6 +431,8 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
         selectedEvent={selectedEvent}
         selectedDate={selectedDate}
         onSave={handleSaveEvent}
+        onEditRecurringOne={handleEditRecurringOne}
+        onEditRecurringAll={handleEditRecurringAll}
         onDelete={handleDeleteEvent}
         onDeleteRecurringOne={handleDeleteRecurringOne}
         onDeleteRecurringAll={handleDeleteRecurringAll}

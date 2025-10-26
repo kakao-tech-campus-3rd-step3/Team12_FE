@@ -9,8 +9,11 @@ import type {
   addTeamCalendarEventRequest,
   addTeamCalendarEventResponse,
   addTeamCalendarRecurringEventRequest,
+  modifyTeamCalendarEventRequest,
+  modifyTeamCalendarRecurringAllEventsRequest,
+  modifyTeamCalendarRecurringOneEventRequest,
   deleteTeamCalendarRecurringOneEventRequest,
-} from '@/apis';
+} from '@/apis/types/calendar';
 
 export const personalCalendarAPI = {
   getEvents: (params: { startAt: string; endAt: string }) => {
@@ -37,13 +40,14 @@ export const teamCalendarAPI = {
     return apiClient.post(TEAM_CALENDAR_ENDPOINTS.ADD_EVENT, teamEvent);
   },
   modifyTeamEvent: (
-    teamEvent: modifyCalendarEventRequest,
+    teamEvent: modifyTeamCalendarEventRequest,
   ): Promise<modifyCalendarEventResponse> => {
     return apiClient.patch(TEAM_CALENDAR_ENDPOINTS.MODIFY_EVENT, teamEvent);
   },
   deleteTeamEvent: (eventId: number) => {
     return apiClient.delete(TEAM_CALENDAR_ENDPOINTS.DELETE_EVENT(eventId));
   },
+
   //반복 일정 추가
   addTeamRecurringEvent: (
     teamId: number,
@@ -51,16 +55,29 @@ export const teamCalendarAPI = {
   ): Promise<addTeamCalendarEventResponse> => {
     return apiClient.post(TEAM_CALENDAR_ENDPOINTS.ADD_RECURRING_EVENT(teamId), teamEvent);
   },
+  //반복 일정 전체 수정
+  modifyTeamRecurringAllEvents: (
+    eventId: number,
+    teamEvent: modifyTeamCalendarRecurringAllEventsRequest,
+  ): Promise<modifyCalendarEventResponse> => {
+    return apiClient.patch(TEAM_CALENDAR_ENDPOINTS.MODIFY_RECURRING_ALL_EVENT(eventId), teamEvent);
+  },
+  modifyTeamRecurringOneEvent: (
+    eventId: number,
+    teamEvent: modifyTeamCalendarRecurringOneEventRequest,
+  ): Promise<modifyCalendarEventResponse> => {
+    return apiClient.patch(TEAM_CALENDAR_ENDPOINTS.MODIFY_RECURRING_ONE_EVENT(eventId), teamEvent);
+  },
   //반복 일정 삭제
   deleteTeamRecurringAllEvents: (eventId: number) => {
     return apiClient.delete(TEAM_CALENDAR_ENDPOINTS.DELETE_RECURRING_ALL_EVENT(eventId));
   },
   deleteTeamRecurringOneEvent: (
     eventId: number,
-    data: deleteTeamCalendarRecurringOneEventRequest,
+    teamEvent: deleteTeamCalendarRecurringOneEventRequest,
   ) => {
     return apiClient.delete(TEAM_CALENDAR_ENDPOINTS.DELETE_RECURRING_ONE_EVENT(eventId), {
-      data: data,
+      data: teamEvent,
     });
   },
 };

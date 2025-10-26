@@ -10,6 +10,10 @@ import TimeFields from '@/pages/Calendar/components/TimeFields';
 import { useEventForm, useFormData } from '@/hooks';
 import type { FormData } from '@/hooks/calendar/useFormData';
 import type { CalendarEvent, ModalType } from '@/types/calendar';
+import type {
+  modifyTeamCalendarRecurringOneEventRequest,
+  modifyTeamCalendarRecurringAllEventsRequest,
+} from '@/apis/types/calendar';
 
 interface DateModalProps {
   isOpen: boolean;
@@ -18,6 +22,14 @@ interface DateModalProps {
   selectedEvent?: CalendarEvent;
   selectedDate?: string;
   onSave: (event: Omit<CalendarEvent, 'event_id'>, formData: FormData) => void;
+  onEditRecurringOne?: (
+    eventId: number,
+    eventData: import('@/apis/types/calendar').modifyTeamCalendarRecurringOneEventRequest,
+  ) => void;
+  onEditRecurringAll?: (
+    eventId: number,
+    eventData: import('@/apis/types/calendar').modifyTeamCalendarRecurringAllEventsRequest,
+  ) => void;
   onDelete?: (eventId: number) => void;
   onDeleteRecurringOne?: (eventId: number) => void;
   onDeleteRecurringAll?: (eventId: number) => void;
@@ -31,6 +43,8 @@ const DateModal: React.FC<DateModalProps> = ({
   selectedEvent,
   selectedDate,
   onSave,
+  onEditRecurringOne,
+  onEditRecurringAll,
   onDelete,
   onDeleteRecurringOne,
   onDeleteRecurringAll,
@@ -40,7 +54,11 @@ const DateModal: React.FC<DateModalProps> = ({
 
   //일정 수정 시에 저장된 날짜 불러오기
   useEffect(() => {
-    if (isOpen && modalType === 'edit' && selectedEvent) {
+    if (
+      isOpen &&
+      (modalType === 'edit' || modalType === 'editRecurring' || modalType === 'editRecurringAll') &&
+      selectedEvent
+    ) {
       const startDate = new Date(selectedEvent.start_time);
       const endDate = new Date(selectedEvent.end_time);
       setRange({ from: startDate, to: endDate });
@@ -83,7 +101,51 @@ const DateModal: React.FC<DateModalProps> = ({
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    handleSubmit(formData);
+
+    //반복 일정 단일 수정
+    if (modalType === 'editRecurringOne' && selectedEvent && onEditRecurringOne) {
+      const eventData: modifyTeamCalendarRecurringOneEventRequest = {
+        original_start_time: selectedEvent.start_time,
+        title: formData.title,
+        description: formData.description,
+        is_private: formData.private,
+      };
+      if (formData.startTime && formData.endTime) {
+        const startTimeWithTime = formData.startTime.includes('T')
+          ? formData.startTime
+          : `${formData.startTime}T00:00:00`;
+        const endTimeWithTime = formData.endTime.includes('T')
+          ? formData.endTime
+          : `${formData.endTime}T23:59:00`;
+
+        eventData.start_time = startTimeWithTime;
+        eventData.end_time = endTimeWithTime;
+      }
+      onEditRecurringOne(selectedEvent.event_id, eventData);
+      onClose();
+      //반복 일정 전체 수정
+    } else if (modalType === 'editRecurringAll' && selectedEvent && onEditRecurringAll) {
+      const eventData: modifyTeamCalendarRecurringAllEventsRequest = {
+        title: formData.title,
+        description: formData.description,
+        is_private: formData.private,
+      };
+      if (formData.startTime && formData.endTime) {
+        const startTimeWithTime = formData.startTime.includes('T')
+          ? formData.startTime
+          : `${formData.startTime}T00:00:00`;
+        const endTimeWithTime = formData.endTime.includes('T')
+          ? formData.endTime
+          : `${formData.endTime}T23:59:00`;
+
+        eventData.start_time = startTimeWithTime;
+        eventData.end_time = endTimeWithTime;
+      }
+      onEditRecurringAll(selectedEvent.event_id, eventData);
+      onClose();
+    } else {
+      handleSubmit(formData);
+    }
   };
 
   const handleDelete = () => {
@@ -113,14 +175,78 @@ const DateModal: React.FC<DateModalProps> = ({
         title={
           modalType === 'add'
             ? '새 일정 추가'
-            : modalType === 'edit'
-              ? '일정 편집'
-              : modalType === 'deleteRecurring'
-                ? '반복 일정 삭제'
-                : '일정 삭제'
+            : modalType === 'recurringAction'
+              ? '반복 일정'
+              : modalType === 'editRecurring'
+                ? '수정 방법 선택'
+                : modalType === 'edit' ||
+                    modalType === 'editRecurringOne' ||
+                    modalType === 'editRecurringAll'
+                  ? '일정 편집'
+                  : modalType === 'deleteRecurring'
+                    ? '삭제 방법 선택'
+                    : '일정 삭제'
         }
       />
-      {modalType === 'deleteRecurring' ? (
+      {modalType === 'recurringAction' ? (
+        <div className="p-6">
+          <p className="mb-6 text-gray-800">
+            이 일정은 반복 일정입니다.
+            <br />
+            어떤 작업을 수행하시겠습니까?
+          </p>
+          <div className="flex gap-3 mb-3">
+            <Button
+              onClick={() => onChangeModalType?.('editRecurring')}
+              variant="primary"
+              size="md"
+              noWrapper={true}
+              className="flex-1 bg-blue-500 hover:bg-blue-600"
+            >
+              수정
+            </Button>
+            <Button
+              onClick={() => onChangeModalType?.('deleteRecurring')}
+              variant="primary"
+              size="md"
+              noWrapper={true}
+              className="flex-1 bg-red-500 hover:bg-red-600"
+            >
+              삭제
+            </Button>
+          </div>
+          <Button onClick={onClose} variant="outline" size="md" noWrapper={true} className="w-full">
+            취소
+          </Button>
+        </div>
+      ) : modalType === 'editRecurring' ? (
+        <div className="p-6">
+          <p className="mb-6 text-gray-800">선택하신 일정은 반복 일정입니다.</p>
+          <div className="flex gap-3 mb-3">
+            <Button
+              onClick={() => onChangeModalType?.('editRecurringOne')}
+              variant="primary"
+              size="md"
+              noWrapper={true}
+              className="flex-1 bg-blue-500 hover:bg-blue-600"
+            >
+              이 일정만 수정
+            </Button>
+            <Button
+              onClick={() => onChangeModalType?.('editRecurringAll')}
+              variant="primary"
+              size="md"
+              noWrapper={true}
+              className="flex-1 bg-blue-600 hover:bg-blue-700"
+            >
+              반복 일정 전체 수정
+            </Button>
+          </div>
+          <Button onClick={onClose} variant="outline" size="md" noWrapper={true} className="w-full">
+            취소
+          </Button>
+        </div>
+      ) : modalType === 'deleteRecurring' ? (
         <div className="p-6">
           <p className="mb-6 text-gray-800">선택하신 일정은 반복 일정입니다.</p>
           <div className="flex gap-3 mb-3">
