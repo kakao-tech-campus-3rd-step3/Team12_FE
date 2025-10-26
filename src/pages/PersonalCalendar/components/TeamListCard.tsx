@@ -10,6 +10,9 @@ interface TeamListCardProps {
   // onSettingsClick?: (teamId: string) => void;
 }
 
+const MAX_VISIBLE_AVATARS = 4;
+const MAX_VISIBLE_MEMBER_NAMES = 2;
+
 const TeamListCard = ({ team, leaveTeam, deleteTeam }: TeamListCardProps) => {
   const [isActionsOpen, setIsActionsOpen] = useState(false);
 
@@ -99,7 +102,7 @@ const TeamListCard = ({ team, leaveTeam, deleteTeam }: TeamListCardProps) => {
 
             <div className="flex items-center space-x-2">
               <div className="flex -space-x-1">
-                {team.members.slice(0, 4).map((member, i) => (
+                {team.members.slice(0, MAX_VISIBLE_AVATARS).map((member, i) => (
                   <div
                     key={i}
                     className="flex justify-center items-center w-7 h-7 text-xs font-semibold text-blue-700 bg-blue-100 rounded-full border-2 border-white shadow-sm"
@@ -108,18 +111,19 @@ const TeamListCard = ({ team, leaveTeam, deleteTeam }: TeamListCardProps) => {
                     {member.name[0]}
                   </div>
                 ))}
-                {team.member_count > 4 && (
+                {team.member_count > MAX_VISIBLE_AVATARS && (
                   <div className="flex justify-center items-center w-7 h-7 text-xs font-semibold text-gray-600 bg-gray-100 rounded-full border-2 border-white shadow-sm">
-                    +{team.member_count - 4}
+                    +{team.member_count - MAX_VISIBLE_AVATARS}
                   </div>
                 )}
               </div>
               <div className="ml-2 text-sm text-gray-700">
                 {team.members
-                  .slice(0, 2)
+                  .slice(0, MAX_VISIBLE_MEMBER_NAMES)
                   .map((m) => m.name)
                   .join(', ')}
-                {team.member_count > 2 && ` 외 ${team.member_count - 2}명`}
+                {team.member_count > MAX_VISIBLE_MEMBER_NAMES &&
+                  ` 외 ${team.member_count - MAX_VISIBLE_MEMBER_NAMES}명`}
               </div>
             </div>
           </div>
