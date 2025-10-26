@@ -52,7 +52,8 @@ const TeamListCard = ({ team, leaveTeam, deleteTeam }: TeamListCardProps) => {
         <div className="flex flex-col flex-1 gap-2 justify-center p-2 bg-gray-50">
           <Button
             noWrapper
-            className="!p-2 !text-red-600 !bg-transparent !rounded-lg !font-normal !transition-all !duration-200 hover:!bg-red-100 !border-none focus-visible:!ring-0"
+            variant="ghost"
+            className="p-2 font-normal text-red-600 bg-transparent rounded-lg hover:bg-red-100"
             onClick={handleDeleteTeam}
           >
             <div className="flex flex-col gap-1 items-center">
@@ -62,7 +63,8 @@ const TeamListCard = ({ team, leaveTeam, deleteTeam }: TeamListCardProps) => {
           </Button>
           <Button
             noWrapper
-            className="!p-2 !text-orange-600 !bg-transparent !rounded-lg !font-normal !transition-all !duration-200 hover:!bg-orange-100 !border-none focus-visible:!ring-0"
+            variant="ghost"
+            className="p-2 font-normal text-orange-600 bg-transparent rounded-lg hover:bg-orange-100"
             onClick={handleLeaveTeam}
           >
             <div className="flex flex-col gap-1 items-center">
@@ -132,7 +134,8 @@ const TeamListCard = ({ team, leaveTeam, deleteTeam }: TeamListCardProps) => {
             </span>
             <Button
               noWrapper
-              className="p-2 !text-gray-400 !bg-transparent !rounded-full !font-normal !transition-all !duration-200 hover:!bg-blue-50 hover:!text-blue-600 !border-none focus-visible:!ring-0"
+              variant="ghost"
+              className="p-2 font-normal text-gray-400 bg-transparent rounded-full hover:bg-blue-50 hover:text-blue-600"
               onClick={handleSettingsClick}
             >
               <Settings className="w-4 h-4" />
