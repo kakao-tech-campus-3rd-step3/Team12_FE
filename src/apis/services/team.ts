@@ -1,25 +1,25 @@
 import { apiClient } from '@/apis/client/apiClients';
 import { TEAM_ENDPOINTS } from '@/apis/constants/endpoints';
 import type {
-  getTeamsResponse,
-  getMyTeamInfoResponse,
-  createTeamRequest,
-  createTeamResponse,
-  joinTeamRequest,
-  joinTeamResponse,
+  GetTeamsResponse,
+  GetMyTeamInfoResponse,
+  CreateTeamRequest,
+  CreateTeamResponse,
+  JoinTeamRequest,
+  JoinTeamResponse,
 } from '@/apis/types/team';
 
 export const teamAPI = {
-  getTeams: (): Promise<getTeamsResponse> => {
+  getTeams: (): Promise<GetTeamsResponse> => {
     return apiClient.get(TEAM_ENDPOINTS.GET_TEAMS).then((response) => response.data);
   },
-  getMyTeam: (teamId: number): Promise<getMyTeamInfoResponse> => {
+  getMyTeam: (teamId: number): Promise<GetMyTeamInfoResponse> => {
     return apiClient.get(TEAM_ENDPOINTS.GET_MY_TEAM_INFO(teamId)).then((response) => response.data);
   },
-  createTeam: (request: createTeamRequest): Promise<createTeamResponse> => {
+  createTeam: (request: CreateTeamRequest): Promise<CreateTeamResponse> => {
     return apiClient.post(TEAM_ENDPOINTS.CREATE_TEAM, request);
   },
-  joinTeam: (request: joinTeamRequest): Promise<joinTeamResponse> => {
+  joinTeam: (request: JoinTeamRequest): Promise<JoinTeamResponse> => {
     return apiClient.post(TEAM_ENDPOINTS.JOIN_TEAM, request);
   },
   leaveTeam: (teamId: number): Promise<void> => {

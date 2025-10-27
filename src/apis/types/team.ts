@@ -1,18 +1,18 @@
-export interface createTeamRequest {
+export interface CreateTeamRequest {
   team_name: string;
   team_description: string;
 }
-export interface createTeamResponse {
+export interface CreateTeamResponse {
   team_id: number;
   team_name: string;
   team_description: string;
   team_code: string;
 }
 
-export interface joinTeamRequest {
+export interface JoinTeamRequest {
   invite_code: string;
 }
-export interface joinTeamResponse {
+export interface JoinTeamResponse {
   team_id: number;
   team_name: string;
   team_description: string;
@@ -31,7 +31,7 @@ export interface TeamData {
   invite_code: string;
 }
 
-export interface getTeamsResponse {
+export interface GetTeamsResponse {
   content: TeamData[];
   page: number;
   size: number;
@@ -39,7 +39,7 @@ export interface getTeamsResponse {
   total_pages: number;
 }
 
-export interface getMyTeamInfoResponse {
+export interface GetMyTeamInfoResponse {
   id: number;
   name: string;
   description: string;
