@@ -1,26 +1,27 @@
-import { useState, useMemo } from 'react';
-import { Users, Plus, UserPlus } from 'lucide-react';
+import { Plus, UserPlus, Users } from 'lucide-react';
+import { useMemo, useState } from 'react';
 //import { mockTeams } from '@/mockdata/teamData';
-import Button from '@/components/atoms/Button';
-import TeamListCard from '@/pages/TeamCalendar/components/TeamListCard';
-import CreateTeam from '@/pages/TeamCalendar/components/CreateTeam';
-import JoinTeam from '@/pages/TeamCalendar/components/JoinTeam';
-import Pagination from '@/components/molecules/Pagination';
 import { teamAPI } from '@/apis';
+import Button from '@/components/atoms/Button';
+import Pagination from '@/components/molecules/Pagination';
+import CreateTeam from '@/pages/PersonalCalendar/components/CreateTeam';
+import JoinTeam from '@/pages/PersonalCalendar/components/JoinTeam';
+import TeamListCard from '@/pages/PersonalCalendar/components/TeamListCard';
 import { useTeamStore } from '@/store/team';
 
 interface TeamListModalProps {
   isOpen: boolean;
   onClose: () => void;
+  leaveTeam: (teamId: number) => void;
+  deleteTeam: (teamId: number) => void;
 }
 
-const TeamListModal = ({ isOpen, onClose }: TeamListModalProps) => {
+const TeamListModal = ({ isOpen, onClose, leaveTeam, deleteTeam }: TeamListModalProps) => {
   const [currentView, setCurrentView] = useState<'list' | 'create' | 'join'>('list');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3;
 
-  const { teams, addTeam } = useTeamStore();
-
+  const { teams, refreshTeams } = useTeamStore();
   const paginationData = useMemo(() => {
     const totalItems = teams.length;
     const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -43,11 +44,14 @@ const TeamListModal = ({ isOpen, onClose }: TeamListModalProps) => {
 
   const handleCreateTeam = async (teamData: { name: string; description: string }) => {
     try {
-      const response = await teamAPI.createTeam({
+      await teamAPI.createTeam({
         team_name: teamData.name,
         team_description: teamData.description,
       });
-      addTeam(response);
+
+      // 팀 목록을 새로고침하여 최신 데이터를 가져옴
+      await refreshTeams();
+
       alert(`"${teamData.name}" 팀이 생성되었습니다!`);
       setCurrentView('list');
     } catch {}
@@ -55,10 +59,13 @@ const TeamListModal = ({ isOpen, onClose }: TeamListModalProps) => {
 
   const handleJoinTeam = async (inviteCode: string) => {
     try {
-      const response = await teamAPI.joinTeam({
+      await teamAPI.joinTeam({
         invite_code: inviteCode,
       });
-      addTeam(response);
+
+      // 팀 목록을 새로고침하여 최신 데이터를 가져옴
+      await refreshTeams();
+
       alert('팀 가입 성공');
       setCurrentView('list');
     } catch {}
@@ -96,7 +103,7 @@ const TeamListModal = ({ isOpen, onClose }: TeamListModalProps) => {
       >
         <button
           onClick={handleClose}
-          className="absolute top-4 right-4 z-10 text-gray-500 hover:text-gray-700 text-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 rounded"
+          className="absolute top-4 right-4 z-10 text-2xl text-gray-500 rounded hover:text-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
           aria-label="Close modal"
         >
           &times;
@@ -114,12 +121,12 @@ const TeamListModal = ({ isOpen, onClose }: TeamListModalProps) => {
             </div>
 
             {/* 팀 목록 뷰 */}
-            <div className="w-1/3 p-6 overflow-y-auto">
+            <div className="overflow-y-auto p-6 w-1/3">
               <div className="pt-8 pb-0">
-                <div className="flex items-start justify-between mb-4">
+                <div className="flex justify-between items-start mb-4">
                   <div className="flex flex-col">
                     <h2 className="text-xl font-semibold text-gray-900">팀 관리</h2>
-                    <p className="text-sm text-gray-600 leading-relaxed">
+                    <p className="text-sm leading-relaxed text-gray-600">
                       참여 중인 팀을 관리하고 새로운 팀을 만들거나 참여하세요.
                     </p>
                   </div>
@@ -145,11 +152,11 @@ const TeamListModal = ({ isOpen, onClose }: TeamListModalProps) => {
 
                 {/* 팀 목록 */}
                 {teams.length === 0 ? (
-                  <div className="text-center py-40">
-                    <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center rounded-full bg-gray-100">
+                  <div className="py-40 text-center">
+                    <div className="flex justify-center items-center mx-auto mb-4 w-16 h-16 bg-gray-100 rounded-full">
                       <Users className="w-8 h-8 text-gray-400" />
                     </div>
-                    <p className="text-gray-500 mb-4">참여 중인 팀이 없습니다</p>
+                    <p className="mb-4 text-gray-500">참여 중인 팀이 없습니다</p>
                     <Button
                       onClick={() => setCurrentView('create')}
                       text="첫 번째 팀 만들기"
@@ -159,14 +166,13 @@ const TeamListModal = ({ isOpen, onClose }: TeamListModalProps) => {
                   </div>
                 ) : (
                   <>
-                    <div className="space-y-3 pb-4">
+                    <div className="pb-4 space-y-3">
                       {paginationData.currentItems.map((team) => (
                         <TeamListCard
-                          key={team.team_code}
+                          key={team.id}
                           team={team}
-                          onSettingsClick={() => {
-                            // TODO: 팀 설정 탭 추후 구현
-                          }}
+                          leaveTeam={leaveTeam}
+                          deleteTeam={deleteTeam}
                         />
                       ))}
                     </div>

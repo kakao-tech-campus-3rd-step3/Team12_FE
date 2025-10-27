@@ -26,7 +26,17 @@ const MetaFields: React.FC<MetaFieldsProps> = ({ formData, range, updateFormData
         placeholder="일정 제목을 입력하세요"
         required
         error={error === 'title' ? '일정 제목을 입력해주세요' : undefined}
-        className="p-4"
+        className="m-4"
+      />
+      <FormInput
+        id="description"
+        label="메모"
+        value={formData.description}
+        onChange={(value) => {
+          updateFormData({ description: value });
+        }}
+        placeholder="메모를 입력하세요"
+        className="m-4"
       />
       <div className="flex gap-4 -mt-1">
         <FormInput

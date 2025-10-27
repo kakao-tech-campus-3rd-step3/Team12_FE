@@ -1,8 +1,9 @@
 import RootLayout from '@/layout/RootLayout';
+import Signup from '@/pages/Signup';
 import Login from '@/pages/Login';
 import PersonalCalendarPage from '@/pages/PersonalCalendar';
-import Signup from '@/pages/Signup';
 import TeamCalendarPage from '@/pages/TeamCalendar';
+import TimeTablePage from '@/pages/TimeTable';
 import { createBrowserRouter, Link } from 'react-router-dom';
 import { RouterPath } from './path';
 
@@ -14,6 +15,10 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <PersonalCalendarPage />,
+      },
+      {
+        path: RouterPath.TIMETABLE,
+        element: <TimeTablePage />,
       },
       {
         path: RouterPath.TEAM_CALENDAR.DEFAULT,

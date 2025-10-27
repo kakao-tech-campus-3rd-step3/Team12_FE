@@ -1,5 +1,5 @@
+import { useRef } from 'react';
 import { Image } from 'lucide-react';
-import React, { useRef } from 'react';
 
 interface ImageInputProps {
   selectedImage: File | null;

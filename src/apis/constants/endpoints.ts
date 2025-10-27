@@ -7,11 +7,23 @@ export const AUTH_ENDPOINTS = {
   USER_INFO: '/api/members/me',
 } as const;
 
-export const CALENDAR_ENDPOINTS = {
+export const PERSONAL_CALENDAR_ENDPOINTS = {
   GET_EVENTS: '/api/events',
   ADD_EVENT: '/api/events/add',
   MODIFY_EVENT: '/api/events/modify',
   DELETE_EVENT: (eventId: number) => `/api/events/${eventId}`,
+} as const;
+
+export const TEAM_CALENDAR_ENDPOINTS = {
+  GET_EVENTS: (teamId: number) => `/api/events/team/${teamId}`,
+  ADD_EVENT: '/api/events/team/add',
+  MODIFY_EVENT: '/api/events/team/modify',
+  DELETE_EVENT: (eventId: number) => `/api/events/team/${eventId}`,
+  ADD_RECURRING_EVENT: (teamId: number) => `/api/events/team/recurring/add/${teamId}`,
+  MODIFY_RECURRING_ALL_EVENT: (eventId: number) => `/api/events/team/recurring/modify/${eventId}`,
+  MODIFY_RECURRING_ONE_EVENT: (eventId: number) => `/api/events/team/recurring/instance/${eventId}`,
+  DELETE_RECURRING_ALL_EVENT: (eventId: number) => `/api/events/team/recurring/${eventId}`,
+  DELETE_RECURRING_ONE_EVENT: (eventId: number) => `/api/events/team/recurring/instance/${eventId}`,
 } as const;
 
 export const EVERYTIME_ENDPOINTS = {
@@ -21,6 +33,9 @@ export const EVERYTIME_ENDPOINTS = {
 } as const;
 
 export const TEAM_ENDPOINTS = {
+  GET_TEAMS: '/api/teams',
   JOIN_TEAM: '/api/teams/join',
   CREATE_TEAM: '/api/teams',
+  LEAVE_TEAM: (teamId: number) => `/api/teams/${teamId}/member`, // 팀 탈퇴
+  DELETE_TEAM: (teamId: number) => `/api/teams/${teamId}/team`, // 팀 삭제
 };

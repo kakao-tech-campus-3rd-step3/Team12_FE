@@ -18,10 +18,9 @@ const TimeFields: React.FC<TimeFieldsProps> = ({ formData, range, updateFormData
       <div
         className={`transition-all duration-300 ${!formData.allDay ? 'opacity-100 h-auto' : 'opacity-0 h-0 overflow-hidden'}`}
       >
-        <div className="flex flex-row gap-7 ml-4 -mt-4">
+        <div className="flex flex-row gap-6 ml-4 -mt-4">
           <FormInput
             id="startTime"
-            label="시작 시간"
             value={getTimePart(formData.startTime) || ''}
             onChange={(value) => {
               updateFormData({
@@ -34,7 +33,6 @@ const TimeFields: React.FC<TimeFieldsProps> = ({ formData, range, updateFormData
           />
           <FormInput
             id="endTime"
-            label="종료 시간"
             value={getTimePart(formData.endTime) || ''}
             onChange={(value) => {
               updateFormData({

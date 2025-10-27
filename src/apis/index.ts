@@ -2,12 +2,13 @@ export { apiClient } from '@/apis/client/apiClients';
 export {
   API_BASE_URL,
   AUTH_ENDPOINTS,
-  CALENDAR_ENDPOINTS,
+  PERSONAL_CALENDAR_ENDPOINTS,
+  TEAM_CALENDAR_ENDPOINTS,
   EVERYTIME_ENDPOINTS,
   TEAM_ENDPOINTS,
 } from '@/apis/constants/endpoints';
 export { authAPI } from '@/apis/services/auth';
-export { calendarAPI } from '@/apis/services/calendar';
+export { personalCalendarAPI, teamCalendarAPI } from '@/apis/services/calendar';
 export { everytimeAPI } from '@/apis/services/everytime';
 export { teamAPI } from '@/apis/services/team';
 export type * from '@/apis/types/auth';

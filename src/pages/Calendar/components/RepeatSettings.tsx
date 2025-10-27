@@ -19,7 +19,7 @@ const RepeatSettings: React.FC<RepeatSettingsProps> = ({ formData, updateFormDat
   ];
 
   return (
-    <div className="p-4 mt-2">
+    <div className="pt-4 px-4 mt-2">
       <div className="space-y-2">
         <FormInput
           id="repeat"
@@ -119,7 +119,7 @@ const RepeatSettings: React.FC<RepeatSettingsProps> = ({ formData, updateFormDat
             <FormInput
               id="repeatCount"
               label="반복 횟수"
-              value={formData.repeatCount.toString()}
+              value={formData.repeatCount?.toString() || ''}
               onChange={(value) => updateFormData({ repeatCount: parseInt(value) || 1 })}
               type="input"
               placeholder="1"

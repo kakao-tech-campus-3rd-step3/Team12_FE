@@ -1,28 +1,57 @@
-import Button from '@/components/atoms/Button';
-import Logo from '@/components/atoms/Logo';
-import { RouterPath } from '@/routes/path';
-import { useAuthStore } from '@/store/useAuthStore';
-import { Lock, User } from 'lucide-react';
+import { AxiosError } from 'axios';
 import { useState } from 'react';
+import { Lock, User } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { useAuthStore } from '@/store/useAuthStore';
+import { RouterPath } from '@/routes/path';
+import Logo from '@/components/atoms/Logo';
+import Button from '@/components/atoms/Button';
+import { AuthInput } from '@/components/atoms/AuthInput';
+
+const loginSchema = z.object({
+  email: z.string().min(1, '이메일을 입력해주세요.').email('유효한 이메일 형식이 아닙니다.'),
+  password: z.string().min(1, '비밀번호를 입력해주세요.'),
+});
+
+type LoginFormData = z.infer<typeof loginSchema>;
 
 const Login = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-  });
-  const { login, error } = useAuthStore();
+  const { login } = useAuthStore();
+  const [backendError, setBackendError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    login(formData)
-      .then(() => {
-        navigate(RouterPath.HOME.DEFAULT);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+    mode: 'onBlur',
+  });
+
+  const onSubmit = async (data: LoginFormData) => {
+    setBackendError(null);
+
+    try {
+      await login(data);
+      navigate(RouterPath.HOME.DEFAULT);
+    } catch (error) {
+      let backendMessage = '로그인에 실패했습니다.';
+
+      if (error instanceof AxiosError) {
+        backendMessage = error.response?.data?.message || backendMessage;
+      }
+
+      const errorMessage =
+        backendMessage === '자격 증명에 실패하였습니다.'
+          ? '아이디 또는 비밀번호가 올바르지 않습니다.'
+          : backendMessage;
+
+      setBackendError(errorMessage);
+    }
   };
 
   return (
@@ -31,46 +60,44 @@ const Login = () => {
         <div className="mb-6">
           <Logo />
         </div>
-        <div className="space-y-6">
-          <form onSubmit={handleSubmit}>
+        <div className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div className="space-y-1.5">
-              <div className="flex items-center px-3 py-3 rounded-lg border border-gray-300 transition cursor-pointer hover:border-blue-500 focus-within:border-blue-500">
-                <User className="mr-2 w-5 h-5 text-gray-400" />
-                <input
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))}
-                  placeholder="이메일"
-                  className="flex-1 bg-transparent border-none outline-none"
-                />
-              </div>
-              <div className="flex items-center px-3 py-3 rounded-lg border border-gray-300 transition cursor-pointer hover:border-blue-500 focus-within:border-blue-500">
-                <Lock className="mr-2 w-5 h-5 text-gray-400" />
-                <input
-                  type="password"
-                  value={formData.password}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, password: e.target.value }))}
-                  placeholder="비밀번호"
-                  className="flex-1 bg-transparent border-none outline-none"
-                />
-              </div>
+              <AuthInput
+                icon={User}
+                type="email"
+                placeholder="이메일"
+                error={errors.email?.message}
+                {...register('email')}
+              />
+
+              <AuthInput
+                icon={Lock}
+                type="password"
+                placeholder="비밀번호"
+                error={errors.password?.message}
+                {...register('password')}
+              />
             </div>
-            {error && <div className="mb-4 text-sm text-center text-red-500">{error}</div>}
+
+            {backendError && (
+              <div className="mt-3 px-3 py-2 text-xs text-red-600 bg-red-50 border border-red-200 rounded-md text-center">
+                {backendError}
+              </div>
+            )}
+
             <Button
               type="submit"
               variant="primary"
               size="md"
               noWrapper={true}
               fullWidth={true}
-              className="mt-6 w-[100%]"
+              className="mt-3 w-[100%]"
             >
               로그인하기
             </Button>
           </form>
 
-          <p className="text-xs text-center text-gray-500 cursor-pointer hover:underline">
-            비밀번호를 잊으셨나요?
-          </p>
           <Link
             to={RouterPath.SIGNUP}
             className="block mt-2 mb-6 text-xs text-center text-gray-500 hover:underline"

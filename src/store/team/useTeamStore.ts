@@ -1,20 +1,16 @@
+import { teamAPI } from '@/apis/services/team';
+import type { TeamData } from '@/apis/types/team';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-interface Team {
-  team_id: number;
-  team_name: string;
-  team_description: string;
-  team_code?: string;
-}
-
 interface TeamState {
-  teams: Team[];
-  currentTeam: Team | null;
+  teams: TeamData[];
+  currentTeam: TeamData | null;
 
-  setTeams: (teams: Team[]) => void;
-  setCurrentTeam: (team: Team | null) => void;
-  addTeam: (team: Team) => void;
+  setTeams: (teams: TeamData[]) => void;
+  setCurrentTeam: (team: TeamData | null) => void;
+  addTeam: (team: TeamData) => void;
+  refreshTeams: () => Promise<void>;
 }
 
 export const useTeamStore = create<TeamState>()(
@@ -26,6 +22,14 @@ export const useTeamStore = create<TeamState>()(
       setTeams: (teams) => set({ teams }),
       setCurrentTeam: (team) => set({ currentTeam: team }),
       addTeam: (team) => set((state) => ({ teams: [...state.teams, team] })),
+      refreshTeams: async () => {
+        try {
+          const response = await teamAPI.getTeams();
+          set({ teams: response.content });
+        } catch (error) {
+          console.error('팀 목록 새로고침 실패:', error);
+        }
+      },
     }),
     {
       name: 'team-storage',

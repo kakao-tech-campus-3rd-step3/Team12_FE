@@ -11,7 +11,7 @@ interface ButtonProps {
   icon?: ReactNode;
   iconPosition?: 'left' | 'right';
   /**주요 버튼 형태 구분**/
-  variant?: 'primary' | 'secondary' | 'outline';
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
   size?: 'sm' | 'md' | 'lg';
   wrapperClassName?: string;
   noWrapper?: boolean;
@@ -40,6 +40,7 @@ const Button = ({
     secondary: 'text-gray-700 bg-gray-100 hover:bg-gray-200 focus-visible:ring-gray-500',
     outline:
       'text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 focus-visible:ring-blue-500',
+    ghost: 'text-gray-400 bg-transparent hover:bg-gray-50 border-none focus-visible:ring-gray-300',
   };
 
   const sizeStyles = {
@@ -68,13 +69,13 @@ const Button = ({
       )}
     >
       {icon && iconPosition === 'left' && (
-        <span className={`${iconSizes[size]} flex items-center justify-center flex-shrink-0`}>
+        <span className={`flex flex-shrink-0 justify-center items-center ${iconSizes[size]}`}>
           {icon}
         </span>
       )}
       <span className="flex-1 text-center">{children || text}</span>
       {icon && iconPosition === 'right' && (
-        <span className={`${iconSizes[size]} flex items-center justify-center flex-shrink-0`}>
+        <span className={`flex flex-shrink-0 justify-center items-center ${iconSizes[size]}`}>
           {icon}
         </span>
       )}

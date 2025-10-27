@@ -1,7 +1,7 @@
-import { useState } from 'react';
 import Button from '@/components/atoms/Button';
 import { FormInput } from '@/components/atoms/FormInput';
 import { FormTextarea } from '@/components/atoms/FormTextarea';
+import { useState } from 'react';
 
 interface CreateTeamProps {
   onBack: () => void;
@@ -26,19 +26,19 @@ const CreateTeam = ({ onBack, onCreateTeam }: CreateTeamProps) => {
   };
 
   return (
-    <div className="h-full flex flex-col pt-7 pb-5 p-7 h-full">
+    <div className="flex flex-col p-7 pt-7 pb-5 h-full">
       {/* 헤더 */}
       <div className="flex items-center mb-6">
         <div className="flex flex-col">
           <h2 className="text-xl font-semibold text-gray-900">새 팀 만들기</h2>
-          <p className="text-sm text-gray-600 leading-relaxed">
+          <p className="text-sm leading-relaxed text-gray-600">
             새로운 팀을 만들고 멤버들과 함께 일정을 관리하세요.
           </p>
         </div>
       </div>
 
       {/* 폼 */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex flex-col flex-1">
         <div className="flex-1 space-y-6">
           <FormInput
             id="teamName"
@@ -73,7 +73,7 @@ const CreateTeam = ({ onBack, onCreateTeam }: CreateTeamProps) => {
               variant="outline"
               size="md"
               noWrapper={true}
-              className="w-full flex justify-center items-center"
+              className="flex justify-center items-center w-full"
             />
           </div>
           <div className="flex-1">

@@ -1,15 +1,31 @@
-import { calendarAPI } from '@/apis';
-import { useEvents, useModal } from '@/hooks';
-import DateModal from '@/pages/Calendar/components/DateModal';
-import type { CalendarEvent, modifyCalendarEventRequest } from '@/types/calendar';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import interactionPlugin from '@fullcalendar/interaction';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useParams, useSearchParams } from 'react-router-dom';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import interactionPlugin from '@fullcalendar/interaction';
+import { personalCalendarAPI, teamCalendarAPI } from '@/apis';
+import { useEvents, useModal } from '@/hooks';
+import { useTeamStore } from '@/store/team/useTeamStore';
+import { generateRRule } from '@/utils/rruleUtils';
+import { parseEventId } from '@/utils/eventUtils';
+import DateModal from '@/pages/Calendar/components/DateModal';
+import type { CalendarEvent, modifyCalendarEventRequest } from '@/types/calendar';
+import type { FormData } from '@/hooks/calendar/useFormData';
 
-const CalendarPage = () => {
+//개인 캘린더와 팀 캘린더를 분리하기 위한 mode 설정
+type CalendarMode = 'personal' | 'team';
+
+interface CalendarProps {
+  mode: CalendarMode;
+}
+
+const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
+  //store에서 팀 id 가져오기 -> url에서 팀 id 가져오기
+  const { currentTeam } = useTeamStore();
+  const { id: urlTeamId } = useParams<{ id: string }>();
+  const teamId = mode === 'team' ? (currentTeam?.id ?? Number(urlTeamId)) : undefined;
+
   const { setModalType, setIsOpen, isOpen, modalType } = useModal();
   const {
     events,
@@ -20,6 +36,15 @@ const CalendarPage = () => {
     handleEventDrop,
     handleEventResize,
   } = useEvents();
+
+  //초기 로딩 시 팀/개인 분기해서 캘린더 가져오기
+  useEffect(() => {
+    if (mode === 'team') {
+      void getEvents({ teamId, mode: 'team' });
+    } else {
+      void getEvents({ mode: 'personal' });
+    }
+  }, [getEvents, mode, teamId]);
 
   const notNull = <T,>(value: T | null): value is T => value !== null;
 
@@ -50,7 +75,9 @@ const CalendarPage = () => {
         const hasTime = event.start_time.includes('T') && event.end_time.includes('T');
 
         return {
-          id: event.event_id.toString(),
+          id: event.is_recurring
+            ? `${event.event_id}_${event.start_time}`
+            : event.event_id.toString(),
           title: event.title,
           start: hasTime ? startDate.toISOString() : formatLocalDate(startDate),
           end: hasTime ? endDate.toISOString() : formatLocalDate(endDate),
@@ -91,15 +118,46 @@ const CalendarPage = () => {
     }
   }, [currentDate, currentView]);
 
-  // 마운트 시 이벤트 초기 로딩
-  useEffect(() => {
-    void getEvents();
-  }, [getEvents]);
-
   // 모달에서 이벤트 저장 핸들러
-  const handleSaveEvent = (eventData: Omit<CalendarEvent, 'event_id'>) => {
+  const handleSaveEvent = async (
+    eventData: Omit<CalendarEvent, 'event_id'>,
+    formData: FormData,
+  ) => {
     if (modalType === 'add') {
-      calendarAPI.addEvent({
+      if (mode === 'team') {
+        if (!teamId) {
+          console.error('팀이 선택되지 않았습니다.');
+          return;
+        }
+
+        const rrule = generateRRule(formData);
+
+        //반복 일정 추가
+        if (rrule) {
+          await teamCalendarAPI.addTeamRecurringEvent(teamId, {
+            title: eventData.title,
+            description: eventData.description,
+            first_start_time: eventData.start_time,
+            first_end_time: eventData.end_time,
+            is_private: eventData.is_private,
+            rrule: rrule,
+          });
+          await getEvents({ teamId, mode: 'team' });
+        } else {
+          //일반 일정 추가
+          await teamCalendarAPI.addTeamEvent({
+            team_id: teamId,
+            title: eventData.title,
+            description: eventData.description,
+            start_time: eventData.start_time,
+            end_time: eventData.end_time,
+            is_private: eventData.is_private,
+          });
+          addEvent(eventData);
+        }
+        return;
+      }
+      personalCalendarAPI.addEvent({
         title: eventData.title,
         description: eventData.description,
         start_time: eventData.start_time,
@@ -118,27 +176,92 @@ const CalendarPage = () => {
       if (eventData.description !== selectedEvent.description) {
         modifyData.description = eventData.description;
       }
-      if (eventData.start_time !== selectedEvent.start_time) {
-        modifyData.start_time = eventData.start_time;
-      }
-      if (eventData.end_time !== selectedEvent.end_time) {
-        modifyData.end_time = eventData.end_time;
-      }
       if (eventData.is_private !== selectedEvent.is_private) {
         modifyData.is_private = eventData.is_private;
+      }
+      if (
+        eventData.start_time !== selectedEvent.start_time ||
+        eventData.end_time !== selectedEvent.end_time
+      ) {
+        modifyData.start_time = eventData.start_time;
+        modifyData.end_time = eventData.end_time;
       }
 
       console.log('modify payload:', modifyData);
 
-      calendarAPI.modifyEvent(modifyData);
+      if (mode === 'team') {
+        await teamCalendarAPI.modifyTeamEvent(modifyData);
+      } else {
+        await personalCalendarAPI.modifyEvent(modifyData);
+      }
       updateEvent(selectedEvent.event_id, eventData);
     }
   };
 
   // 모달에서 이벤트 삭제 핸들러
-  const handleDeleteEvent = (eventId: number) => {
+  const handleDeleteEvent = async (eventId: number) => {
+    if (mode === 'team') {
+      await teamCalendarAPI.deleteTeamEvent(eventId);
+    } else {
+      await personalCalendarAPI.deleteEvent(eventId);
+    }
     removeEvent(eventId);
-    calendarAPI.deleteEvent(eventId);
+  };
+
+  const handleDeleteRecurringOne = async (eventId: number) => {
+    if (mode === 'team' && selectedEvent) {
+      await teamCalendarAPI.deleteTeamRecurringOneEvent(eventId, {
+        original_start_time: selectedEvent.start_time,
+      });
+      await getEvents({ teamId, mode: 'team' });
+    }
+  };
+
+  const handleDeleteRecurringAll = async (eventId: number) => {
+    if (mode === 'team') {
+      await teamCalendarAPI.deleteTeamRecurringAllEvents(eventId);
+      await getEvents({ teamId, mode: 'team' });
+    }
+  };
+
+  // 반복 일정 단일 인스턴스 수정
+  const handleEditRecurringOne = async (
+    eventId: number,
+    eventData: import('@/apis/types/calendar').modifyTeamCalendarRecurringOneEventRequest,
+  ) => {
+    if (mode === 'team') {
+      console.log('수정 요청', eventData);
+
+      // 1. 수정 API 호출
+      const response = await teamCalendarAPI.modifyTeamRecurringOneEvent(eventId, eventData);
+      console.log('수정 응답', response);
+
+      // 2. 약간의 지연 (DB 커밋 대기)
+      await new Promise((resolve) => setTimeout(resolve, 300));
+
+      // 3. 재조회
+      await getEvents({ teamId, mode: 'team' });
+      console.log('재조회된 이벤트들', events);
+
+      // 4. 수정된 이벤트가 있는지 확인
+      const updatedEvent = events?.find(
+        (e) => e.event_id === eventId && e.start_time === eventData.start_time,
+      );
+      console.log('수정된 이벤트 찾음?', updatedEvent);
+
+      calendarRef.current?.getApi()?.refetchEvents();
+    }
+  };
+
+  // 반복 일정 전체 수정
+  const handleEditRecurringAll = async (
+    eventId: number,
+    eventData: import('@/apis/types/calendar').modifyTeamCalendarRecurringAllEventsRequest,
+  ) => {
+    if (mode === 'team') {
+      await teamCalendarAPI.modifyTeamRecurringAllEvents(eventId, eventData);
+      await getEvents({ teamId, mode: 'team' });
+    }
   };
 
   return (
@@ -258,11 +381,20 @@ const CalendarPage = () => {
               }}
               eventClick={(info) => {
                 if (!events) return;
-                const event = events.find((e) => e.event_id.toString() === info.event.id);
+                const { eventId, startTime } = parseEventId(info.event.id);
+                const event = events.find((e) => {
+                  // 일반 일정 및 반복 일정 조회 분기
+                  if (startTime) {
+                    // 반복 일정: event_id와 start_time 모두 비교
+                    return e.event_id === eventId && e.start_time === startTime;
+                  }
+                  // 일반 일정: event_id만 비교
+                  return e.event_id === eventId;
+                });
                 if (event) {
                   setSelectedEvent(event);
                   setSelectedDate(undefined);
-                  setModalType('edit');
+                  setModalType(event.is_recurring ? 'recurringAction' : 'edit');
                   setIsOpen(true);
                 }
               }}
@@ -299,7 +431,11 @@ const CalendarPage = () => {
         selectedEvent={selectedEvent}
         selectedDate={selectedDate}
         onSave={handleSaveEvent}
+        onEditRecurringOne={handleEditRecurringOne}
+        onEditRecurringAll={handleEditRecurringAll}
         onDelete={handleDeleteEvent}
+        onDeleteRecurringOne={handleDeleteRecurringOne}
+        onDeleteRecurringAll={handleDeleteRecurringAll}
         onChangeModalType={setModalType}
       />
     </div>

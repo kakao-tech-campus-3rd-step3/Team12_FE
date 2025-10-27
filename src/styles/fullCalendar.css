@@ -85,7 +85,7 @@
 
   .fc-prev-button:hover,
   .fc-next-button:hover {
-    @apply shadow-md transform -translate-y-0.5 !bg-gray-200 !border-gray-200;
+    @apply shadow-md !bg-gray-200 !border-gray-200;
   }
   /* 새 일정 버튼 스타일 */
   .fc-addEvent-button {
@@ -165,7 +165,7 @@
   }
 
   .fc-event:hover {
-    @apply shadow-md transform scale-105 !z-10;
+    @apply shadow-md transform !z-10;
   }
 
   /* 일반 단일 날짜 이벤트 */
@@ -175,12 +175,12 @@
 
   /* 여러 날에 걸친 이벤트 - 시작 부분 */
   .fc-event.fc-daygrid-event.fc-event-start {
-    @apply !rounded-l-xl !rounded-r-sm !mr-0;
+    @apply !rounded-l-lg !rounded-r-sm !mr-0;
   }
 
   /* 여러 날에 걸친 이벤트 - 끝 부분 */
   .fc-event.fc-daygrid-event.fc-event-end {
-    @apply !rounded-r-xl !ml-0;
+    @apply !rounded-r-lg !ml-0;
   }
 
   /* 여러 날에 걸친 이벤트 - 중간 부분 */
@@ -195,12 +195,12 @@
 
   /* 이벤트 텍스트 스타일 */
   .fc-event-title {
-    @apply !font-medium !text-sm !overflow-visible !whitespace-nowrap;
+    @apply !font-medium !text-xs !overflow-visible !whitespace-nowrap;
   }
 
   /* 이벤트 시간 표시 */
   .fc-event-time {
-    @apply !text-xs !opacity-90 !mr-1;
+    @apply !text-xs !opacity-90 !mr-2 !ml-1;
   }
 
   /* 날짜 셀 스타일 */
@@ -238,16 +238,16 @@
 
   /* 날짜 셀 내부 요소들도 둥글게 */
   .fc-daygrid-day-events {
-    @apply !rounded-xl;
+    @apply !rounded-lg;
   }
 
   /* 날짜 셀 내부 모든 요소들 둥글게 */
   .fc-daygrid-day-top {
-    @apply !rounded-t-xl;
+    @apply !rounded-t-lg;
   }
 
   .fc-daygrid-day-bottom {
-    @apply !rounded-b-xl;
+    @apply !rounded-b-lg;
   }
 
   /* 날짜 숫자 스타일 */
