@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { MessageCircleMore, X } from 'lucide-react';
 import Drawer from '@/components/organisms/Drawer';
 import FullCalendar from '@/pages/Calendar/FullCalendar';

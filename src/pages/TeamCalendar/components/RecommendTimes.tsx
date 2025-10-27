@@ -129,8 +129,8 @@ const RecommendTimes: React.FC<RecommendTimesProps> = ({ onViewAvailability }) =
             className="mb-4"
           />
         </div>
-        <div className="flex flex-col lg:flex-row lg:gap-6">
-          <div className="mb-3 lg:w-1/2 lg:mb-0">
+        <div className="flex flex-col gap-6">
+          <div className="mb-3 lg:mb-0">
             {/* 모바일: 토글 버튼 O, 태블릿: datepicker 항상 표시 , 데스크탑: 토글 버튼 O */}
             <div className="lg:hidden">
               <DatePickerSection forceShow={false} />
@@ -140,7 +140,7 @@ const RecommendTimes: React.FC<RecommendTimesProps> = ({ onViewAvailability }) =
             </div>
           </div>
 
-          <div className="mt-1 lg:w-1/2">
+          <div className="mt-1">
             <TimeSlotCards />
             <div className="mt-4 sm:mt-6">
               <Button onClick={handleViewMore} text="더 많은 시간 확인하기" fullWidth={true} />
