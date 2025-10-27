@@ -33,6 +33,9 @@ const TeamSidebar = ({ onViewAvailability }: TeamSidebarProps) => {
 
   //토글 동작
   const handleToggle = () => {
+    if (!isSidebarOpen && activeSidebarTab === null) {
+      setActiveSidebarTab('teamInfo');
+    }
     setIsSidebarOpen(!isSidebarOpen);
   };
 
