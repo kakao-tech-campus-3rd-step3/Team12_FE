@@ -20,44 +20,23 @@
       min-width: 350px;
     }
   }
-  /* 헤더 스타일 - 두 줄로 나누기 */
+  /* 헤더 스타일 - 한 줄 레이아웃 */
   .fc-toolbar {
-    @apply mb-0 flex flex-col gap-2;
+    @apply mb-0 flex flex-row items-center justify-between gap-4;
   }
 
-  /* 첫 번째 줄: 왼쪽과 오른쪽 버튼들을 한 줄에 배치 */
-  .fc-toolbar-chunk:first-child,
-  .fc-toolbar-chunk:last-child {
-    @apply flex items-center gap-3;
-  }
-
-  /* 두 번째 줄: 중앙 네비게이션을 별도 줄에 배치 */
-  .fc-toolbar-chunk:nth-child(2) {
-    @apply flex justify-center items-center;
-  }
-
-  /* 첫 번째 줄을 가로로 배치 */
+  /* 왼쪽: 이전/제목/다음 네비게이션 */
   .fc-toolbar-chunk:first-child {
-    @apply justify-start;
+    @apply flex items-center gap-3 justify-start;
   }
 
+  /* 오른쪽: 오늘 + 월/주/일 뷰 버튼 */
   .fc-toolbar-chunk:last-child {
-    @apply justify-end;
-  }
-
-  /* 첫 번째 줄을 가로로 배치하기 위한 래퍼 */
-  .fc-toolbar-chunk:first-child::after {
-    content: '';
-    flex: 1;
-  }
-
-  .fc-toolbar-chunk:last-child::before {
-    content: '';
-    flex: 1;
+    @apply flex items-center gap-3 justify-end;
   }
 
   .fc-toolbar-title {
-    @apply text-xl font-semibold text-gray-900 w-[160px];
+    @apply text-xl font-semibold text-gray-900 text-center min-w-[160px];
   }
 
   /* 헤더 버튼 그룹 스타일 */
@@ -80,30 +59,21 @@
   /* 네비게이션 버튼 스타일 */
   .fc-prev-button,
   .fc-next-button {
-    @apply rounded-lg px-3 py-2 font-medium transition-all duration-200 shadow-sm !bg-gray-50 !border !border-gray-300 !text-gray-700;
+    @apply rounded-lg px-3 py-2 font-medium transition-all duration-200 !bg-gray-50 !text-gray-400;
   }
 
   .fc-prev-button:hover,
   .fc-next-button:hover {
     @apply shadow-md !bg-gray-200 !border-gray-200;
   }
-  /* 새 일정 버튼 스타일 */
-  .fc-addEvent-button {
-    @apply rounded-lg px-4 py-2 font-medium transition-all duration-200 shadow-sm
-  !bg-blue-500 !border-blue-500 !text-white hover:bg-blue-600 hover:border-blue-600;
-  }
-
-  .fc-addEvent-button:hover {
-    @apply shadow-md transform -translate-y-0.5;
-  }
 
   /* 오늘 버튼 스타일 */
   .fc-today-button {
-    @apply rounded-lg px-4 py-2 font-medium transition-all duration-200 shadow-sm !bg-mainGreen !border-mainGreen !text-white hover:bg-mainGreen hover:border-mainGreen;
+    @apply rounded-lg px-4 py-2 font-medium transition-all duration-200 shadow-sm !bg-mainGreen !text-white hover:bg-mainGreen hover:border-mainGreen;
   }
 
   .fc-today-button:hover {
-    @apply shadow-md transform -translate-y-0.5 !bg-mainGreen/80 !border-mainGreen/80;
+    @apply shadow-md transform -translate-y-0.5 !bg-mainGreen/100 !border-mainGreen/80;
   }
 
   /* 뷰 버튼 그룹 스타일 */
