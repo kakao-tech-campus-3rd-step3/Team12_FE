@@ -1,8 +1,10 @@
 import { useState, useEffect, useRef, useLayoutEffect } from 'react';
-import { Send } from 'lucide-react';
+import { Send, Users } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
 import Button from '@/components/atoms/Button';
 import { useTeamChat } from '@/hooks/team/useTeamChat';
 import { useAuthStore } from '@/store/useAuthStore';
+import { teamAPI } from '@/apis';
 
 interface TeamChatProps {
   teamId: number;
@@ -13,6 +15,11 @@ const TeamChat = ({ teamId }: TeamChatProps) => {
   const { messages, isConnected, sendMessage, loadMoreMessages, isLoadingMessages, hasMore } =
     useTeamChat(teamId);
   const { user } = useAuthStore();
+
+  const { data: teamInfo } = useQuery({
+    queryKey: ['teamInfo', teamId],
+    queryFn: () => teamAPI.getMyTeam(teamId),
+  });
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
@@ -93,8 +100,11 @@ const TeamChat = ({ teamId }: TeamChatProps) => {
       <div className="flex items-center justify-between px-5 py-3 sticky top-0 z-10">
         <div className="flex items-center gap-2">
           <div>
-            <h3 className="text-base font-semibold text-gray-900">팀 채팅</h3>
-            <p className="text-xs text-gray-500">팀원 4명</p>
+            <h3 className="text-base font-semibold text-gray-900">{teamInfo?.name || '팀 채팅'}</h3>
+            <div className="flex text-xs text-gray-500 mt-1">
+              <Users className="w-3.5 h-3.5 mr-1" />
+              {teamInfo?.count || 0}명
+            </div>
           </div>
         </div>
       </div>

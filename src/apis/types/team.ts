@@ -31,10 +31,18 @@ export interface TeamData {
   invite_code: string;
 }
 
-export interface GetTeamsResponse {
+export interface getTeamsResponse {
   content: TeamData[];
   page: number;
   size: number;
   total_elements: number;
   total_pages: number;
+}
+
+export interface getMyTeamInfoResponse {
+  id: number;
+  name: string;
+  description: string;
+  count: number;
+  code: string;
 }
