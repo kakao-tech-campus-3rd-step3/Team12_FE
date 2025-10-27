@@ -1,16 +1,18 @@
 import { useState } from 'react';
 import { ChevronLeft, ChevronRight, ShieldHalf, Calendar, Clock } from 'lucide-react';
+import TeamInfo from '@/pages/TeamCalendar/components/TeamInfo';
 import TeamMembers from '@/pages/TeamCalendar/components/TeamMembers';
 import UpcomingTeamSchedule from '@/pages/TeamCalendar/components/UpcomingTeamSchedule';
 import RecommendTimes from '@/pages/TeamCalendar/components/RecommendTimes';
 
 interface TeamSidebarProps {
   onViewAvailability?: () => void;
+  teamId: number;
 }
 
 type TabType = 'teamInfo' | 'upcomingSchedule' | 'recommendTimes' | null;
 
-const TeamSidebar = ({ onViewAvailability }: TeamSidebarProps) => {
+const TeamSidebar = ({ onViewAvailability, teamId }: TeamSidebarProps) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [activeSidebarTab, setActiveSidebarTab] = useState<TabType>('teamInfo');
 
@@ -42,7 +44,12 @@ const TeamSidebar = ({ onViewAvailability }: TeamSidebarProps) => {
   const renderContent = () => {
     switch (activeSidebarTab) {
       case 'teamInfo':
-        return <TeamMembers />;
+        return (
+          <>
+            <TeamInfo teamId={teamId} />
+            <TeamMembers />
+          </>
+        );
       case 'upcomingSchedule':
         return <UpcomingTeamSchedule />;
       case 'recommendTimes':
