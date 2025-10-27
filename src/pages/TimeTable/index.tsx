@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { RouterPath } from '@/routes/path';
 import Button from '@/components/atoms/Button';
 import ImageUploadTab from '@/pages/TimeTable/components/ImageUploadTab';
-import EverytimeLinkTab from '@/pages/TimeTable/components/EveryTimeLinkTab';
+import EverytimeLinkTab from '@/pages/TimeTable/components/EverytimeLinkTab';
 import { useTimetableData } from '@/hooks/timetable/useTimetableData';
 import { useImageParsing } from '@/hooks/timetable/useImageParsing';
 import { useImageUpload } from '@/hooks/timetable/useImageUpload';
@@ -85,9 +85,9 @@ const TimeTablePage = () => {
 
   return (
     <>
-      <div className="max-w-4xl mx-auto p-3 m-1 rounded-lg /border border-gray-200">
+      <div className="max-w-4xl p-3 m-1 mx-auto border-gray-200 rounded-lg /border">
         {/* 탭 버튼 */}
-        <div className="flex border-b border-gray-200 mb-6">
+        <div className="flex mb-6 border-b border-gray-200">
           <button
             onClick={() => setActiveTab('image')}
             className={`px-6 py-3 font-medium transition-colors ${
@@ -132,28 +132,28 @@ const TimeTablePage = () => {
           />
         )}
         {/* 날짜 입력 필드 */}
-        <div className="space-y-3 mt-6">
+        <div className="mt-6 space-y-3">
           <div className="flex flex-row space-x-2">
-            <label className="flex justify-between items-center mb-2 text-sm font-bold text-gray-700 text-nowrap">
+            <label className="flex items-center justify-between mb-2 text-sm font-bold text-gray-700 text-nowrap">
               학기 시작일 :
             </label>
             <input
               type="date"
               value={startDate.toISOString().split('T')[0]}
               onChange={(e) => setStartDate(new Date(e.target.value))}
-              className="px-3 py-2 w-full text-gray-700 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 text-gray-700 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
 
           <div className="flex flex-row space-x-2">
-            <label className="flex justify-between items-center mb-2 text-sm font-bold text-gray-700 text-nowrap">
+            <label className="flex items-center justify-between mb-2 text-sm font-bold text-gray-700 text-nowrap">
               학기 종료일 :
             </label>
             <input
               type="date"
               value={endDate.toISOString().split('T')[0]}
               onChange={(e) => setEndDate(new Date(e.target.value))}
-              className="px-3 py-2 w-full text-gray-700 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 text-gray-700 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
         </div>
