@@ -1,4 +1,5 @@
 import type { CalendarEvent } from '@/types/calendar';
+import { formatDateTimeShort } from '@/utils/dateTimeUtils';
 
 export const UpcomingScheduleItem = ({ event }: { event: CalendarEvent }) => {
   const today = new Date();
@@ -9,7 +10,7 @@ export const UpcomingScheduleItem = ({ event }: { event: CalendarEvent }) => {
     <div className="flex flex-row justify-between items-center p-2 bg-white rounded-lg border border-mainBlue/40">
       <div>
         <p className="text-sm font-medium text-[#1C398E]">{event.title}</p>
-        <p className="text-xs text-mainBlue">{event.start_time}</p>
+        <p className="text-xs text-mainBlue">{formatDateTimeShort(event.start_time)}</p>
       </div>
       {diffDays < 2 ? (
         <div className="flex gap-1 items-center p-1 rounded-lg bg-red-100/80">
