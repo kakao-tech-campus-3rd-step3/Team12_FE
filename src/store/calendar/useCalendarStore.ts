@@ -4,11 +4,13 @@ import { create } from 'zustand';
 
 interface CalendarState {
   events: CalendarEvent[] | null;
+  upcomingEvents: CalendarEvent[] | null;
   isAuthenticated: boolean;
   getEvents: (teamOrPersonalOption?: {
     teamId?: number;
     mode?: 'team' | 'personal';
   }) => Promise<CalendarEvent[] | null>;
+  getUpcomingEvents: () => Promise<CalendarEvent[] | null>;
   addEvent: (event: Omit<CalendarEvent, 'event_id'>) => void;
   removeEvent: (eventId: number) => void;
   updateEvent: (eventId: number, updates: Partial<CalendarEvent>) => void;
@@ -17,6 +19,7 @@ interface CalendarState {
 export const useCalendarStore = create<CalendarState>((set) => ({
   // Test Data
   events: [],
+  upcomingEvents: [],
   isAuthenticated: false,
   getEvents: async (teamOrPersonalOption) => {
     try {
@@ -60,6 +63,17 @@ export const useCalendarStore = create<CalendarState>((set) => ({
       const status = err?.response?.status;
       const data = err?.response?.data;
       console.error('Failed to fetch events', { status, data, error: err });
+      return null;
+    }
+  },
+  getUpcomingEvents: async (): Promise<CalendarEvent[] | null> => {
+    try {
+      const response = await personalCalendarAPI.getUpcomingEvents();
+      set({ upcomingEvents: response.data });
+      return response.data;
+    } catch (error) {
+      console.error('Failed to fetch upcoming events:', error);
+      set({ upcomingEvents: [] });
       return null;
     }
   },
