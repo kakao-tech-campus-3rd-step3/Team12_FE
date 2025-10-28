@@ -21,7 +21,7 @@ export type CalendarEvent = {
 };
 
 export type getCalendarEventsResponse = {
-  events: CalendarEvent[];
+  data: CalendarEvent[];
 };
 
 export type addCalendarEventRequest = {

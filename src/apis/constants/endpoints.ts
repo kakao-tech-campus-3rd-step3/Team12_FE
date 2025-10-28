@@ -13,6 +13,7 @@ export const AUTH_ENDPOINTS = {
 
 export const PERSONAL_CALENDAR_ENDPOINTS = {
   GET_EVENTS: '/api/events',
+  GET_UPCOMMING_EVENTS: '/api/events/upcomming',
   ADD_EVENT: '/api/events/add',
   MODIFY_EVENT: '/api/events/modify',
   DELETE_EVENT: (eventId: number) => `/api/events/${eventId}`,
