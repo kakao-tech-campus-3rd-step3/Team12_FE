@@ -1,25 +1,29 @@
 import { PERSONAL_CALENDAR_ENDPOINTS, TEAM_CALENDAR_ENDPOINTS, apiClient } from '@/apis';
 import type {
-  addCalendarEventRequest,
-  addCalendarEventResponse,
-  modifyCalendarEventRequest,
-  modifyCalendarEventResponse,
-} from '@/types/calendar';
-import type {
   addTeamCalendarEventRequest,
   addTeamCalendarEventResponse,
   addTeamCalendarRecurringEventRequest,
+  deleteTeamCalendarRecurringOneEventRequest,
   modifyTeamCalendarEventRequest,
   modifyTeamCalendarRecurringAllEventsRequest,
   modifyTeamCalendarRecurringOneEventRequest,
-  deleteTeamCalendarRecurringOneEventRequest,
 } from '@/apis/types/calendar';
+import type {
+  addCalendarEventRequest,
+  addCalendarEventResponse,
+  getCalendarEventsResponse,
+  modifyCalendarEventRequest,
+  modifyCalendarEventResponse,
+} from '@/types/calendar';
 
 export const personalCalendarAPI = {
   getEvents: (params: { startAt: string; endAt: string }) => {
     return apiClient.get(PERSONAL_CALENDAR_ENDPOINTS.GET_EVENTS, {
       params,
     });
+  },
+  getTodayEvents: (): Promise<getCalendarEventsResponse> => {
+    return apiClient.get(PERSONAL_CALENDAR_ENDPOINTS.GET_TODAY_EVENTS);
   },
   addEvent: (event: addCalendarEventRequest): Promise<addCalendarEventResponse> => {
     return apiClient.post(PERSONAL_CALENDAR_ENDPOINTS.ADD_EVENT, event);
