@@ -38,7 +38,7 @@ const TeamInfo: React.FC<TeamInfoProps> = ({ teamId }) => {
 
   return (
     <div className=" mb-8">
-      <div className="bg-white rounded-xl p-4 border border-blue-400 shadow-md">
+      <div className="bg-white rounded-xl p-4 border border-mainBlue/70 shadow-md">
         {/* 팀 이름 */}
         <div className="flex justify-between">
           <p className="text-xl font-semibold text-gray-900">{teamInfo.name}</p>

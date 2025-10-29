@@ -75,7 +75,7 @@ const TeamSidebar = ({ onViewAvailability, teamId }: TeamSidebarProps) => {
           )}
         </button>
 
-        <div className="w-8 h-px bg-gray-200 my-1" />
+        <div className="w-8 bg-gray-200 my-1" />
 
         {/* 탭 아이콘 */}
         {tabs.map((tab) => {
@@ -103,9 +103,9 @@ const TeamSidebar = ({ onViewAvailability, teamId }: TeamSidebarProps) => {
       {/* 사이드바 */}
       <div
         className={`bg-white border-r border-gray-200 transition-all duration-300 ease-in-out overflow-hidden
-          ${isSidebarOpen ? 'w-110' : 'w-0'}`}
+          ${isSidebarOpen ? 'w-105' : 'w-0'}`}
       >
-        <div className="h-full overflow-y-auto p-6">
+        <div className="h-full overflow-y-auto p-5">
           {isSidebarOpen && activeSidebarTab && (
             <div className="transition-opacity duration-300">{renderContent()}</div>
           )}
