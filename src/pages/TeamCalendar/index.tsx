@@ -20,8 +20,9 @@ const TeamCalendarPage = () => {
   return (
     <div className="min-h-[calc(100vh-70px)] bg-gradient-to-br from-blue-50 to-indigo-100">
       <div className="hidden transition-all duration-500 ease-in-out xl:flex h-[calc(100vh-70px)]">
-        <TeamSidebar teamId={teamId} onViewAvailability={() => setShowAvailability(true)} />
-
+        {!showAvailability && (
+          <TeamSidebar teamId={teamId} onViewAvailability={() => setShowAvailability(true)} />
+        )}
         {!showAvailability ? (
           <>
             <div className="flex-1 transition-all duration-500 ease-in-out">
