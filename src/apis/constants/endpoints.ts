@@ -44,4 +44,6 @@ export const TEAM_ENDPOINTS = {
   DELETE_TEAM: (teamId: number) => `/api/teams/${teamId}/team`, // 팀 삭제
   CHAT_WEBSOCKET: (teamId: number, token: string) => `/ws/teams/${teamId}/chat?token=${token}`,
   CHAT_MESSAGES: (teamId: number) => `/api/teams/${teamId}/chat/messages`,
+
+  GET_TEAM_UPCOMING_SCHEDULE: (teamId: number) => `/api/events/team/${teamId}/upcomming`,
 };

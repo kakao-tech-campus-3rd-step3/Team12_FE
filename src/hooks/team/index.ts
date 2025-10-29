@@ -1,1 +1,6 @@
-export { useDeleteTeam, useLeaveTeam, default as useTeam } from './useTeam';
+export {
+  useDeleteTeam,
+  useLeaveTeam,
+  default as useTeam,
+  useTeamUpcomingSchedule,
+} from './useTeam';

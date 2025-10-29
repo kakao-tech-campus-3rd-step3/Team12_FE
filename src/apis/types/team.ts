@@ -38,3 +38,15 @@ export interface GetTeamsResponse {
   total_elements: number;
   total_pages: number;
 }
+
+//팀 다가오는 일정
+export interface TeamUpcomingSchedule {
+  event_id: number;
+  title: string;
+  description: string;
+  start_time: string;
+  end_time: string;
+  is_private: boolean;
+  is_recurring: boolean;
+}
+export type GetTeamUpcomingSchedule = TeamUpcomingSchedule[];

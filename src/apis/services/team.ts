@@ -6,6 +6,7 @@ import type {
   createTeamResponse,
   joinTeamRequest,
   joinTeamResponse,
+  GetTeamUpcomingSchedule,
 } from '@/apis/types/team';
 
 export const teamAPI = {
@@ -23,5 +24,11 @@ export const teamAPI = {
   },
   deleteTeam: (teamId: number): Promise<void> => {
     return apiClient.delete(TEAM_ENDPOINTS.DELETE_TEAM(teamId));
+  },
+
+  getTeamUpcomingSchedule: (teamId: number): Promise<GetTeamUpcomingSchedule> => {
+    return apiClient
+      .get(TEAM_ENDPOINTS.GET_TEAM_UPCOMING_SCHEDULE(teamId))
+      .then((response) => response.data);
   },
 };
