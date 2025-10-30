@@ -11,11 +11,11 @@ interface PersonalSideBarProps {
   setIsSetting: (isSetting: boolean) => void;
 }
 
-type TabType = 'quickActions' | 'myClass' | 'myTeam' | 'todaySchedule' | null;
+type TabType = 'myClass' | 'myTeam' | 'todaySchedule' | null;
 
 const PersonalSideBar = ({ teams, isLoading, setIsSetting }: PersonalSideBarProps) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [activeSidebarTab, setActiveSidebarTab] = useState<TabType>('quickActions');
+  const [activeSidebarTab, setActiveSidebarTab] = useState<TabType>('myClass');
 
   const tabs = [
     // { id: 'quickActions' as TabType, label: '빠른 작업', icon: Zap },
@@ -38,7 +38,7 @@ const PersonalSideBar = ({ teams, isLoading, setIsSetting }: PersonalSideBarProp
   //토글 동작
   const handleToggle = () => {
     if (!isSidebarOpen && activeSidebarTab === null) {
-      setActiveSidebarTab('quickActions');
+      setActiveSidebarTab('myClass');
     }
     setIsSidebarOpen(!isSidebarOpen);
   };
