@@ -18,7 +18,9 @@ type WebSocketMessage = NewMessageResponse | ErrorResponse;
 
 //메세지 시간순 정렬
 const sortMessagesByTime = (messages: ChatMessage[]): ChatMessage[] => {
-  return messages.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+  return [...messages].sort(
+    (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+  );
 };
 
 export const useTeamChat = (teamId: number) => {
