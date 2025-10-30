@@ -1,0 +1,187 @@
+import { useState, useEffect, useRef, useLayoutEffect } from 'react';
+import { Send, Users } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import Button from '@/components/atoms/Button';
+import { useTeamChat } from '@/hooks/team/useTeamChat';
+import { useAuthStore } from '@/store/useAuthStore';
+import { teamAPI } from '@/apis';
+
+interface TeamChatProps {
+  teamId: number;
+}
+
+const TeamChat = ({ teamId }: TeamChatProps) => {
+  const [inputMessage, setInputMessage] = useState('');
+  const { messages, isConnected, sendMessage, loadMoreMessages, isLoadingMessages, hasMore } =
+    useTeamChat(teamId);
+  const { user } = useAuthStore();
+
+  const { data: teamInfo } = useQuery({
+    queryKey: ['teamInfo', teamId],
+    queryFn: () => teamAPI.getMyTeam(teamId),
+  });
+
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const previousScrollHeightRef = useRef(0);
+  const isFirstRenderRef = useRef(true);
+  const lastMessageIdRef = useRef<number | null>(null);
+  const isLoadingOldMessagesRef = useRef(false);
+
+  useEffect(() => {
+    if (isFirstRenderRef.current && messages.length > 0) {
+      messagesEndRef.current?.scrollIntoView();
+      isFirstRenderRef.current = false;
+      lastMessageIdRef.current = messages[messages.length - 1]?.id || null;
+    }
+  }, [messages]);
+
+  //메세지 전송 -> 스크롤 이동
+  useLayoutEffect(() => {
+    if (!isFirstRenderRef.current && messages.length > 0) {
+      const lastMessage = messages[messages.length - 1];
+      const isNewMessage =
+        lastMessageIdRef.current !== null && lastMessage.id !== lastMessageIdRef.current;
+
+      // 과거 메시지 로드 중이 아니고, 새 메시지가 추가되었을 때만 스크롤
+      if (isNewMessage && !isLoadingOldMessagesRef.current) {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      }
+
+      lastMessageIdRef.current = lastMessage.id;
+    }
+  }, [messages]);
+
+  const handleScroll = () => {
+    const container = messagesContainerRef.current;
+    if (!container || isLoadingMessages || !hasMore) return;
+
+    //최상단 -> 이전 메세지 추가 조회
+    if (container.scrollTop === 0) {
+      previousScrollHeightRef.current = container.scrollHeight;
+      isLoadingOldMessagesRef.current = true;
+      loadMoreMessages();
+    }
+  };
+
+  //이전 메세지 조회 -> 스크롤 위치 고정
+  useLayoutEffect(() => {
+    const container = messagesContainerRef.current;
+    if (container && previousScrollHeightRef.current > 0 && isLoadingOldMessagesRef.current) {
+      requestAnimationFrame(() => {
+        const newScrollHeight = container.scrollHeight;
+        const scrollDiff = newScrollHeight - previousScrollHeightRef.current;
+
+        const originalScrollBehavior = container.style.scrollBehavior;
+        container.style.scrollBehavior = 'auto';
+        container.scrollTop = scrollDiff;
+        container.style.scrollBehavior = originalScrollBehavior;
+
+        previousScrollHeightRef.current = 0;
+        isLoadingOldMessagesRef.current = false;
+      });
+    }
+  }, [messages]);
+
+  const handleSendMessage = () => {
+    if (!inputMessage.trim()) return;
+    sendMessage(inputMessage);
+    setInputMessage('');
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    handleSendMessage();
+  };
+
+  return (
+    <div className="flex flex-col w-full h-full rounded-xl shadow-lg border border-gray-200 bg-white">
+      {/* 헤더 */}
+      <div className="flex items-center justify-between px-5 py-3 sticky top-0 z-10">
+        <div className="flex items-center gap-2">
+          <div>
+            <h3 className="text-base font-semibold text-gray-900">{teamInfo?.name || '팀 채팅'}</h3>
+            <div className="flex text-xs text-gray-500 mt-1">
+              <Users className="w-3.5 h-3.5 mr-1" />
+              {teamInfo?.count || 0}명
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 메시지 목록 */}
+      <div
+        ref={messagesContainerRef}
+        onScroll={handleScroll}
+        className="flex-1 overflow-y-auto px-4 py-5 space-y-1"
+        style={{
+          scrollBehavior: 'smooth',
+        }}
+      >
+        {messages.length === 0 ? (
+          <div className="flex flex-col items-center justify-center h-full text-gray-400">
+            <p className="text-sm">아직 메시지가 없습니다</p>
+            <p className="text-xs mt-1">첫 메시지를 보내보세요!</p>
+          </div>
+        ) : (
+          <>
+            {messages.map((message) => {
+              //"나"인지 확인
+              const isMyMessage = user?.user_id
+                ? String(message.senderId) === String(user.user_id)
+                : false;
+              return (
+                <div
+                  key={message.id}
+                  className={`flex ${isMyMessage ? 'justify-end' : 'justify-start'}`}
+                >
+                  <div
+                    className={`flex flex-col ${isMyMessage ? 'items-end' : 'items-start'} max-w-[70%]`}
+                  >
+                    {!isMyMessage && (
+                      <span className="text-xs font-medium text-gray-700 mb-1 px-1">
+                        {message.senderName}
+                      </span>
+                    )}
+                    <div
+                      className={`px-4 py-2.5 rounded-2xl ${
+                        isMyMessage
+                          ? 'bg-blue-600 text-white rounded-br-sm'
+                          : 'bg-gray-100 text-gray-800 rounded-bl-sm'
+                      }`}
+                    >
+                      <p className="text-sm break-words">{message.content}</p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+            <div ref={messagesEndRef} />
+          </>
+        )}
+      </div>
+
+      {/* 입력 영역 */}
+      <div className="px-3 py-3">
+        <form onSubmit={handleSubmit} className="flex items-center gap-2">
+          <input
+            type="text"
+            placeholder="메시지 보내기"
+            value={inputMessage}
+            onChange={(e) => setInputMessage(e.target.value)}
+            disabled={!isConnected}
+            className="flex-1 px-4 py-2.5 bg-gray-100 rounded-full text-gray-800 placeholder-gray-400 focus:outline-none transition-all"
+          />
+          <Button
+            type="submit"
+            icon={<Send className="w-5 h-5 rotate-45 -ml-1" />}
+            className="p-y-2 rounded-full text-white shadow-md justify-center"
+            noWrapper
+          />
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default TeamChat;

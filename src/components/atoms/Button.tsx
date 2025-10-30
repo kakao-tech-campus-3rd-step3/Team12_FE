@@ -73,7 +73,7 @@ const Button = ({
           {icon}
         </span>
       )}
-      <span className="flex-1 text-center">{children || text}</span>
+      {(children || text) && <span className="flex-1 text-center">{children || text}</span>}
       {icon && iconPosition === 'right' && (
         <span className={`flex flex-shrink-0 justify-center items-center ${iconSizes[size]}`}>
           {icon}

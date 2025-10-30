@@ -96,7 +96,7 @@ const RecommendTimes: React.FC<RecommendTimesProps> = ({ onViewAvailability }) =
   );
 
   return (
-    <div className="overflow-hidden p-6 w-full bg-white rounded-xl border shadow-lg border-mainBlue/70">
+    <div className="overflow-hidden p-5 w-full bg-white rounded-xl border shadow-md border-mainBlue/70">
       <h2 className="mb-4 text-lg font-semibold text-gray-800">가장 빠른 팀 일정 추천</h2>
 
       {/* 데스크탑 뷰 */}
