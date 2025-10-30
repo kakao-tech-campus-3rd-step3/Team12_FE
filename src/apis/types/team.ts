@@ -55,10 +55,20 @@ export interface GetTeamMembersParams {
   teamId: number;
   page?: number;
   limit?: number;
+}
 export interface GetMyTeamInfoResponse {
   id: number;
   name: string;
   description: string;
   count: number;
   code: string;
+}
+
+export interface GetTeamAvailabilityResponse {
+  available: Availability[];
+}
+export interface Availability {
+  start_time: string;
+  end_time: string;
+  available_member: number;
 }

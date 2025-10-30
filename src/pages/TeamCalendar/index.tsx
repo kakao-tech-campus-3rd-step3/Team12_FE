@@ -1,14 +1,14 @@
-import { useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { MessageCircleMore, X } from 'lucide-react';
 import Drawer from '@/components/organisms/Drawer';
 import FullCalendar from '@/pages/Calendar/FullCalendar';
 import RecommendTimes from '@/pages/TeamCalendar/components/RecommendTimes';
 import TeamAvailability from '@/pages/TeamCalendar/components/TeamAvailability';
-import TeamMembers from '@/pages/TeamCalendar/components/TeamMembers';
-import UpcomingTeamSchedule from '@/pages/TeamCalendar/components/UpcomingTeamSchedule';
 import TeamChat from '@/pages/TeamCalendar/components/TeamChat';
+import TeamMembers from '@/pages/TeamCalendar/components/TeamMembers';
 import TeamSidebar from '@/pages/TeamCalendar/components/TeamSidebar';
+import UpcomingTeamSchedule from '@/pages/TeamCalendar/components/UpcomingTeamSchedule';
+import { MessageCircleMore, X } from 'lucide-react';
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 const TeamCalendarPage = () => {
   const [showAvailability, setShowAvailability] = useState(false);
@@ -31,7 +31,7 @@ const TeamCalendarPage = () => {
           </>
         ) : (
           <div className="flex-1 transition-all duration-500 ease-in-out">
-            <TeamAvailability onBack={() => setShowAvailability(false)} />
+            <TeamAvailability teamId={teamId} onBack={() => setShowAvailability(false)} />
           </div>
         )}
       </div>
@@ -80,7 +80,7 @@ const TeamCalendarPage = () => {
             </div>
           ) : (
             <div className="flex-1">
-              <TeamAvailability onBack={() => setShowAvailability(false)} />
+              <TeamAvailability teamId={teamId} onBack={() => setShowAvailability(false)} />
             </div>
           )}
         </div>

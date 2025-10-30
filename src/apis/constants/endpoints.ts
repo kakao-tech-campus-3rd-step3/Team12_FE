@@ -44,6 +44,7 @@ export const TEAM_ENDPOINTS = {
   GET_MY_TEAM_INFO: (teamId: number) => `/api/teams/${teamId}`,
   LEAVE_TEAM: (teamId: number) => `/api/teams/${teamId}/member`, // 팀 탈퇴
   DELETE_TEAM: (teamId: number) => `/api/teams/${teamId}/team`, // 팀 삭제
+  GET_AVAILABILITY: (teamId: number) => `/api/teams/${teamId}/when-to-meet`,
 
   //팀 채팅
   CHAT_WEBSOCKET: (teamId: number, token: string) => `/ws/teams/${teamId}/chat?token=${token}`,

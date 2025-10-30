@@ -1,5 +1,9 @@
 import { teamAPI } from '@/apis/services/team';
-import type { GetTeamsResponse } from '@/apis/types/team';
+import type {
+  GetMyTeamInfoResponse,
+  GetTeamAvailabilityResponse,
+  GetTeamsResponse,
+} from '@/apis/types/team';
 import { queryKeys } from '@/lib/queryKeys';
 import { useTeamStore } from '@/store/team';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -90,6 +94,30 @@ export const useDeleteTeam = () => {
   return {
     deleteTeam,
     isLoading: isPending,
+    error,
+  };
+};
+
+export const useGetMyTeam = (teamId: number) => {
+  const { data, isLoading, error } = useQuery<GetMyTeamInfoResponse>({
+    queryKey: ['team', teamId],
+    queryFn: () => teamAPI.getMyTeam(teamId),
+  });
+  return {
+    data,
+    isLoading,
+    error,
+  };
+};
+
+export const useGetTeamAvailability = (teamId: number) => {
+  const { data, isLoading, error } = useQuery<GetTeamAvailabilityResponse>({
+    queryKey: queryKeys.teamAvailability,
+    queryFn: () => teamAPI.getTeamAvailability(teamId),
+  });
+  return {
+    data,
+    isLoading,
     error,
   };
 };

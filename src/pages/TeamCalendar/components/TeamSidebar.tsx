@@ -1,9 +1,9 @@
-import { useState } from 'react';
-import { ChevronLeft, ChevronRight, ShieldHalf, Calendar, Clock } from 'lucide-react';
+import RecommendTimes from '@/pages/TeamCalendar/components/RecommendTimes';
 import TeamInfo from '@/pages/TeamCalendar/components/TeamInfo';
 import TeamMembers from '@/pages/TeamCalendar/components/TeamMembers';
 import UpcomingTeamSchedule from '@/pages/TeamCalendar/components/UpcomingTeamSchedule';
-import RecommendTimes from '@/pages/TeamCalendar/components/RecommendTimes';
+import { Calendar, ChevronLeft, ChevronRight, Clock, ShieldHalf } from 'lucide-react';
+import { useState } from 'react';
 
 interface TeamSidebarProps {
   onViewAvailability?: () => void;
@@ -47,7 +47,7 @@ const TeamSidebar = ({ onViewAvailability, teamId }: TeamSidebarProps) => {
         return (
           <>
             <TeamInfo teamId={teamId} />
-            <TeamMembers />
+            <TeamMembers teamId={teamId} />
           </>
         );
       case 'upcomingSchedule':
