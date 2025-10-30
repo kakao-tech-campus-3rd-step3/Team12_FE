@@ -1,4 +1,12 @@
-export type ModalType = 'add' | 'edit' | 'delete';
+export type ModalType =
+  | 'add'
+  | 'edit'
+  | 'recurringAction'
+  | 'editRecurring'
+  | 'editRecurringOne'
+  | 'editRecurringAll'
+  | 'delete'
+  | 'deleteRecurring';
 
 export type RepeatType = 'none' | 'daily' | 'weekly' | 'monthly';
 
@@ -9,6 +17,7 @@ export type CalendarEvent = {
   start_time: string; // ISO string e.g. 2025-09-18T10:00:00
   end_time: string; // ISO string e.g. 2025-09-18T11:00:00
   is_private: boolean;
+  is_recurring?: boolean;
 };
 
 export type getCalendarEventsResponse = {
@@ -47,6 +56,7 @@ export type modifyCalendarEventResponse = {
   start_time: string;
   end_time: string;
   is_private: boolean;
+  is_recurring?: boolean;
 };
 
 export type deleteCalendarEventResponse = {
