@@ -38,6 +38,7 @@ export const EVERYTIME_ENDPOINTS = {
 
 export const TEAM_ENDPOINTS = {
   GET_TEAMS: '/api/teams',
+  GET_TEAM_MEMBERS: (teamId: number) => `/api/teams/${teamId}/members`,
   JOIN_TEAM: '/api/teams/join',
   CREATE_TEAM: '/api/teams',
   GET_MY_TEAM_INFO: (teamId: number) => `/api/teams/${teamId}`,
