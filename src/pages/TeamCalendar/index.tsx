@@ -62,7 +62,7 @@ const TeamCalendarPage = () => {
       <div className="block min-h-screen xl:hidden">
         <div className="flex flex-col min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 ease-in-out uration-500">
           <Drawer>
-            <TeamMembers />
+            <TeamMembers teamId={teamId} />
             <UpcomingTeamSchedule />
           </Drawer>
 
