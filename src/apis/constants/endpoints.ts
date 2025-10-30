@@ -1,8 +1,8 @@
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+export const API_BASE_URL = '/api-proxy';
 //웹소켓
 export const WS_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL?.replace('http://', 'ws://')?.replace('https://', 'wss://') ||
-  import.meta.env.VITE_WS_FALLBACK_URL;
+  '/api-proxy'?.replace('http://', 'ws://')?.replace('https://', 'wss://') ||
+  '/api-proxy';
 
 export const AUTH_ENDPOINTS = {
   SIGNUP: '/api/members/signup',
