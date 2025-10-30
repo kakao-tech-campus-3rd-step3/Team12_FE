@@ -39,6 +39,22 @@ export interface GetTeamsResponse {
   total_pages: number;
 }
 
+export interface TeamMemberResponse {
+  id: number;
+  role: 'LEADER' | 'MEMBER';
+  name: string;
+}
+export interface GetTeamMembersResponse {
+  content: TeamMemberResponse[];
+  page: number;
+  size: number;
+  total_elements: number;
+  total_pages: number;
+}
+export interface GetTeamMembersParams {
+  teamId: number;
+  page?: number;
+  limit?: number;
 export interface GetMyTeamInfoResponse {
   id: number;
   name: string;
