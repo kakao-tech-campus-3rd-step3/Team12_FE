@@ -52,10 +52,11 @@ export interface GetTeamMembersResponse {
   total_pages: number;
 }
 export interface GetTeamMembersParams {
-  teamId: number;
-  page?: number;
-  limit?: number;
+ teamId: number;
+ page?: number;
+ limit?: number;
 }
+
 export interface GetMyTeamInfoResponse {
   id: number;
   name: string;
