@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ChevronLeft, ChevronRight, ShieldHalf, Calendar, Clock } from 'lucide-react';
+import { useDeleteTeamMember } from '@/hooks/team';
 import TeamInfo from '@/pages/TeamCalendar/components/TeamInfo';
 import TeamMembers from '@/pages/TeamCalendar/components/TeamMembers';
 import UpcomingTeamSchedule from '@/pages/TeamCalendar/components/UpcomingTeamSchedule';
@@ -15,6 +16,8 @@ type TabType = 'teamInfo' | 'upcomingSchedule' | 'recommendTimes' | null;
 const TeamSidebar = ({ onViewAvailability, teamId }: TeamSidebarProps) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [activeSidebarTab, setActiveSidebarTab] = useState<TabType>('teamInfo');
+
+  const deleteTeamMemberMutation = useDeleteTeamMember(teamId);
 
   const tabs = [
     { id: 'teamInfo' as TabType, label: '팀 정보', icon: ShieldHalf },
@@ -41,13 +44,17 @@ const TeamSidebar = ({ onViewAvailability, teamId }: TeamSidebarProps) => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
+  const handleDeleteMember = async (memberId: number) => {
+    await deleteTeamMemberMutation.mutateAsync(memberId);
+  };
+
   const renderContent = () => {
     switch (activeSidebarTab) {
       case 'teamInfo':
         return (
           <>
             <TeamInfo teamId={teamId} />
-            <TeamMembers />
+            <TeamMembers teamId={teamId} onDeleteMember={handleDeleteMember} />
           </>
         );
       case 'upcomingSchedule':
