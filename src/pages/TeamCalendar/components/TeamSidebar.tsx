@@ -47,7 +47,7 @@ const TeamSidebar = ({ onViewAvailability, teamId }: TeamSidebarProps) => {
         return (
           <>
             <TeamInfo teamId={teamId} />
-            <TeamMembers />
+            <TeamMembers teamId={teamId} />
           </>
         );
       case 'upcomingSchedule':
@@ -103,7 +103,7 @@ const TeamSidebar = ({ onViewAvailability, teamId }: TeamSidebarProps) => {
       {/* 사이드바 */}
       <div
         className={`bg-white border-r border-gray-200 transition-all duration-300 ease-in-out overflow-hidden
-          ${isSidebarOpen ? 'w-105' : 'w-0'}`}
+          ${isSidebarOpen ? 'w-95' : 'w-0'}`}
       >
         <div className="h-full overflow-y-auto p-5">
           {isSidebarOpen && activeSidebarTab && (

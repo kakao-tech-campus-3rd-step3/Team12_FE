@@ -41,7 +41,7 @@ const RecommendTimes: React.FC<RecommendTimesProps> = ({ onViewAvailability }) =
         />
       )}
       {(showDatePicker || forceShow) && (
-        <div className="p-4 rounded-lg border border-gray-200">
+        <div className="p-2 rounded-lg border border-gray-200">
           <SelectDurationCalendar range={range} setRange={setRange} onSearch={handleSearch} />
         </div>
       )}
@@ -96,7 +96,7 @@ const RecommendTimes: React.FC<RecommendTimesProps> = ({ onViewAvailability }) =
   );
 
   return (
-    <div className="overflow-hidden p-5 w-full bg-white rounded-xl border shadow-md border-mainBlue/70">
+    <div className="overflow-hidden p-5 w-full bg-white rounded-xl border shadow-md border-mainBlue/70 xl:border-0 xl:shadow-none xl:p-1">
       <h2 className="mb-4 text-lg font-semibold text-gray-800">가장 빠른 팀 일정 추천</h2>
 
       {/* 데스크탑 뷰 */}
@@ -131,9 +131,8 @@ const RecommendTimes: React.FC<RecommendTimesProps> = ({ onViewAvailability }) =
         </div>
         <div className="flex flex-col lg:flex-row lg:gap-6">
           <div className="mb-3 lg:w-1/2 lg:mb-0">
-            {/* 모바일: 토글 버튼 O, 태블릿: datepicker 항상 표시 , 데스크탑: 토글 버튼 O */}
             <div className="lg:hidden">
-              <DatePickerSection forceShow={false} />
+              <DatePickerSection forceShow={true} />
             </div>
             <div className="hidden lg:block xl:hidden">
               <DatePickerSection forceShow={true} />
