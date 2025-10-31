@@ -11,9 +11,15 @@ import type {
 import type {
   addCalendarEventRequest,
   addCalendarEventResponse,
+  addCalendarRecurringEventRequest,
+  deleteCalendarRecurringOneEventRequest,
   getCalendarEventsResponse,
   modifyCalendarEventRequest,
   modifyCalendarEventResponse,
+  modifyCalendarRecurringAllEventRequest,
+  modifyCalendarRecurringAllEventResponse,
+  modifyCalendarRecurringOneEventRequest,
+  modifyCalendarRecurringOneEventResponse,
 } from '@/types/calendar';
 
 export const personalCalendarAPI = {
@@ -33,6 +39,33 @@ export const personalCalendarAPI = {
   },
   deleteEvent: (eventId: number) => {
     return apiClient.delete(PERSONAL_CALENDAR_ENDPOINTS.DELETE_EVENT(eventId));
+  },
+
+  // 반복 일정
+  addRecurringEvent: (
+    event: addCalendarRecurringEventRequest,
+  ): Promise<addCalendarEventResponse> => {
+    return apiClient.post(PERSONAL_CALENDAR_ENDPOINTS.ADD_RECURRING_EVENT, event);
+  },
+  modifyRecurringAllEvent: (
+    eventId: number,
+    event: modifyCalendarRecurringAllEventRequest,
+  ): Promise<modifyCalendarRecurringAllEventResponse> => {
+    return apiClient.patch(PERSONAL_CALENDAR_ENDPOINTS.MODIFY_RECURRING_ALL_EVENT(eventId), event);
+  },
+  modifyRecurringOneEvent: (
+    eventId: number,
+    event: modifyCalendarRecurringOneEventRequest,
+  ): Promise<modifyCalendarRecurringOneEventResponse> => {
+    return apiClient.patch(PERSONAL_CALENDAR_ENDPOINTS.MODIFY_RECURRING_ONE_EVENT(eventId), event);
+  },
+  deleteRecurringAllEvent: (eventId: number) => {
+    return apiClient.delete(PERSONAL_CALENDAR_ENDPOINTS.DELETE_RECURRING_ALL_EVENT(eventId));
+  },
+  deleteRecurringOneEvent: (eventId: number, event: deleteCalendarRecurringOneEventRequest) => {
+    return apiClient.delete(PERSONAL_CALENDAR_ENDPOINTS.DELETE_RECURRING_ONE_EVENT(eventId), {
+      data: event,
+    });
   },
 };
 
