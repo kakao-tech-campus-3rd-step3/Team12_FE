@@ -10,6 +10,7 @@ import type {
   GetTeamsResponse,
   JoinTeamRequest,
   JoinTeamResponse,
+  GetTeamUpcomingSchedule,
 } from '@/apis/types/team';
 
 export const teamAPI = {
@@ -33,6 +34,16 @@ export const teamAPI = {
   },
   getTeamAvailability: (teamId: number): Promise<GetTeamAvailabilityResponse> => {
     return apiClient.get(TEAM_ENDPOINTS.GET_AVAILABILITY(teamId)).then((response) => response.data);
+  },
+
+  deleteTeamMember: (teamId: number, memberId: number) => {
+    return apiClient.delete(TEAM_ENDPOINTS.DELETE_TEAM_MEMBER(teamId, memberId));
+  },
+  
+  getTeamUpcomingSchedule: (teamId: number): Promise<GetTeamUpcomingSchedule> => {
+    return apiClient
+      .get(TEAM_ENDPOINTS.GET_TEAM_UPCOMING_SCHEDULE(teamId))
+      .then((response) => response.data);
   },
 
   getTeamMembers: ({

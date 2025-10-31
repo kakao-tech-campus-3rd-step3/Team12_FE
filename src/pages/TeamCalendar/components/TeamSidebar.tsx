@@ -1,4 +1,7 @@
 import RecommendTimes from '@/pages/TeamCalendar/components/RecommendTimes';
+import { useState } from 'react';
+import { ChevronLeft, ChevronRight, ShieldHalf, Calendar, Clock } from 'lucide-react';
+import { useDeleteTeamMember } from '@/hooks/team';
 import TeamInfo from '@/pages/TeamCalendar/components/TeamInfo';
 import TeamMembers from '@/pages/TeamCalendar/components/TeamMembers';
 import UpcomingTeamSchedule from '@/pages/TeamCalendar/components/UpcomingTeamSchedule';
@@ -15,6 +18,8 @@ type TabType = 'teamInfo' | 'upcomingSchedule' | 'recommendTimes' | null;
 const TeamSidebar = ({ onViewAvailability, teamId }: TeamSidebarProps) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [activeSidebarTab, setActiveSidebarTab] = useState<TabType>('teamInfo');
+
+  const deleteTeamMemberMutation = useDeleteTeamMember(teamId);
 
   const tabs = [
     { id: 'teamInfo' as TabType, label: '팀 정보', icon: ShieldHalf },
@@ -41,13 +46,18 @@ const TeamSidebar = ({ onViewAvailability, teamId }: TeamSidebarProps) => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
+  const handleDeleteMember = async (memberId: number) => {
+    await deleteTeamMemberMutation.mutateAsync(memberId);
+  };
+
   const renderContent = () => {
     switch (activeSidebarTab) {
       case 'teamInfo':
         return (
           <>
             <TeamInfo teamId={teamId} />
-            <TeamMembers teamId={teamId} />
+
+            <TeamMembers teamId={teamId} onDeleteMember={handleDeleteMember} />
           </>
         );
       case 'upcomingSchedule':
@@ -103,7 +113,7 @@ const TeamSidebar = ({ onViewAvailability, teamId }: TeamSidebarProps) => {
       {/* 사이드바 */}
       <div
         className={`bg-white border-r border-gray-200 transition-all duration-300 ease-in-out overflow-hidden
-          ${isSidebarOpen ? 'w-105' : 'w-0'}`}
+          ${isSidebarOpen ? 'w-95' : 'w-0'}`}
       >
         <div className="h-full overflow-y-auto p-5">
           {isSidebarOpen && activeSidebarTab && (

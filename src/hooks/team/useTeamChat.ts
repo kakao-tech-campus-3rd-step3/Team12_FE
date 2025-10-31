@@ -29,9 +29,10 @@ export const useTeamChat = (teamId: number) => {
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [nextCursor, setNextCursor] = useState<number | null>(null);
+  const [unReadCount, setUnReadCount] = useState(0);
 
   const wsRef = useRef<WebSocket | null>(null);
-  const { accessToken } = useAuthStore();
+  const { accessToken, user } = useAuthStore();
   const isInitialLoadRef = useRef(true);
 
   //초기 메세지 조회
@@ -45,13 +46,21 @@ export const useTeamChat = (teamId: number) => {
       setMessages(sortedMessages);
       setHasMore(response.hasNext);
       setNextCursor(response.nextCursor);
+
+      const lastReadId = localStorage.getItem(`team_${teamId}_lastRead`);
+      if (lastReadId && user?.user_id) {
+        const unreadMessages = sortedMessages.filter(
+          (msg) => msg.id > Number(lastReadId) && String(msg.senderId) !== String(user.user_id),
+        );
+        setUnReadCount(unreadMessages.length);
+      }
     } catch (error) {
       console.error('메세지 불러오기 실패', error);
     } finally {
       setIsLoadingMessages(false);
       isInitialLoadRef.current = false;
     }
-  }, [teamId]);
+  }, [teamId, user]);
 
   //추가 메세지 조회 - 무한 스크롤
   const loadMoreMessages = useCallback(async () => {
@@ -105,6 +114,14 @@ export const useTeamChat = (teamId: number) => {
 
       if (message.type === 'NEW_MESSAGE') {
         setMessages((prev) => [...prev, message.data]);
+
+        const isMyMessage = user?.user_id
+          ? String(message.data.senderId) === String(user.user_id)
+          : false;
+
+        if (!isMyMessage) {
+          setUnReadCount((prev) => prev + 1);
+        }
       } else if (message.type === 'ERROR') {
         console.error('서버 에러', message.message);
       }
@@ -133,7 +150,17 @@ export const useTeamChat = (teamId: number) => {
       ws.onerror = null;
       ws.onclose = null;
     };
-  }, [teamId, accessToken]);
+  }, [teamId, accessToken, user]);
+
+  const markAsRead = useCallback(() => {
+    if (messages.length > 0) {
+      const lastMessageId = messages[messages.length - 1].id;
+      localStorage.setItem(`team_${teamId}_lastRead`, String(lastMessageId));
+      console.log('읽음 처리:', lastMessageId);
+    }
+
+    setUnReadCount(0);
+  }, [messages, teamId]);
 
   //메세지 전송
   const sendMessage = useCallback((content: string) => {
@@ -155,5 +182,7 @@ export const useTeamChat = (teamId: number) => {
     loadMoreMessages,
     isLoadingMessages,
     hasMore,
+    unReadCount,
+    markAsRead,
   };
 };

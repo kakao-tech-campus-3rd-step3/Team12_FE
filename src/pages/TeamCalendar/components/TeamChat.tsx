@@ -8,12 +8,13 @@ import { teamAPI } from '@/apis';
 
 interface TeamChatProps {
   teamId: number;
+  chatData: ReturnType<typeof useTeamChat>;
 }
 
-const TeamChat = ({ teamId }: TeamChatProps) => {
+const TeamChat = ({ teamId, chatData }: TeamChatProps) => {
   const [inputMessage, setInputMessage] = useState('');
   const { messages, isConnected, sendMessage, loadMoreMessages, isLoadingMessages, hasMore } =
-    useTeamChat(teamId);
+    chatData;
   const { user } = useAuthStore();
 
   const { data: teamInfo } = useQuery({

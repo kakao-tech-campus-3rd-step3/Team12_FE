@@ -13,9 +13,15 @@ export const AUTH_ENDPOINTS = {
 
 export const PERSONAL_CALENDAR_ENDPOINTS = {
   GET_EVENTS: '/api/events',
+  GET_UPCOMMING_EVENTS: '/api/events/upcomming',
   ADD_EVENT: '/api/events/add',
   MODIFY_EVENT: '/api/events/modify',
   DELETE_EVENT: (eventId: number) => `/api/events/${eventId}`,
+  ADD_RECURRING_EVENT: '/api/events/recurring/add',
+  MODIFY_RECURRING_ALL_EVENT: (eventId: number) => `/api/events/recurring/modify/${eventId}`,
+  MODIFY_RECURRING_ONE_EVENT: (eventId: number) => `/api/events/recurring/instance/${eventId}`,
+  DELETE_RECURRING_ALL_EVENT: (eventId: number) => `/api/events/recurring/${eventId}`,
+  DELETE_RECURRING_ONE_EVENT: (eventId: number) => `/api/events/recurring/instance/${eventId}`,
 } as const;
 
 export const TEAM_CALENDAR_ENDPOINTS = {
@@ -46,7 +52,13 @@ export const TEAM_ENDPOINTS = {
   DELETE_TEAM: (teamId: number) => `/api/teams/${teamId}/team`, // 팀 삭제
   GET_AVAILABILITY: (teamId: number) => `/api/teams/${teamId}/when-to-meet`,
 
+  //팀원 제거 (팀장 권한)
+  DELETE_TEAM_MEMBER: (teamId: number, memberId: number) =>
+    `/api/teams/${teamId}/members/${memberId}`,
+
   //팀 채팅
   CHAT_WEBSOCKET: (teamId: number, token: string) => `/ws/teams/${teamId}/chat?token=${token}`,
   CHAT_MESSAGES: (teamId: number) => `/api/teams/${teamId}/chat/messages`,
+
+  GET_TEAM_UPCOMING_SCHEDULE: (teamId: number) => `/api/events/team/${teamId}/upcomming`,
 };
