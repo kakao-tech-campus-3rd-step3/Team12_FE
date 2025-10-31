@@ -60,7 +60,7 @@ const TeamCalendarPage = () => {
 
       {/*모바일 뷰*/}
       <div className="block min-h-screen xl:hidden">
-        <div className="flex flex-col min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 ease-in-out uration-500">
+        <div className="flex flex-col min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 ease-in-out duration-500">
           <Drawer>
             <TeamMembers teamId={teamId} />
             <UpcomingTeamSchedule />
@@ -68,7 +68,7 @@ const TeamCalendarPage = () => {
 
           {!showAvailability ? (
             <div className="flex flex-col flex-1">
-              <div className="overflow-x-auto border-gray-200 order-b">
+              <div className="overflow-x-auto border-gray-200 border-b">
                 <div className="p-2 rounded-lg border border-gray-100">
                   <RecommendTimes onViewAvailability={() => setShowAvailability(true)} />
                 </div>
