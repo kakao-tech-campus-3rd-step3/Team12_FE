@@ -110,7 +110,7 @@ const PersonalSideBar = ({ teams, isLoading, setIsSetting }: PersonalSideBarProp
         className={`bg-white border-r border-gray-200 transition-all duration-300 ease-in-out overflow-hidden
           ${isSidebarOpen ? 'w-64' : 'w-0'}`}
       >
-        <div className="overflow-y-auto p-5 h-full">
+        <div className="overflow-y-auto pt-5 px-2 h-full">
           {isSidebarOpen && activeSidebarTab && (
             <div className="transition-opacity duration-300">{renderContent()}</div>
           )}
