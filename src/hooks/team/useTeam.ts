@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 // 팀 목록 조회 훅
 const useTeam = () => {
   const { teams, setTeams } = useTeamStore();
-  const { data, isLoading, error } = useQuery<GetTeamsResponse>({
+  const { data, isLoading, error, refetch } = useQuery<GetTeamsResponse>({
     queryKey: queryKeys.teams,
     queryFn: () => teamAPI.getTeams(),
   });
@@ -35,6 +35,7 @@ const useTeam = () => {
     error,
     isSetting,
     setIsSetting,
+    refetch,
   };
 };
 
