@@ -1,26 +1,41 @@
 import { Paperclip } from 'lucide-react';
 import type { TeamUpcomingSchedule } from '@/apis';
 import { formatDateWithWeekday, getTimePart } from '@/utils/dateTimeUtils';
+import { ScheduleCard } from '@/components/molecules/ScheduleCard';
 
-export const UpcomingTeamScheduleItem = ({ schedule }: { schedule: TeamUpcomingSchedule }) => {
+interface UpcomingTeamScheduleItemProps {
+  schedule: TeamUpcomingSchedule;
+  showDDay?: boolean;
+}
+
+export const UpcomingTeamScheduleItem = ({
+  schedule,
+  showDDay = false,
+}: UpcomingTeamScheduleItemProps) => {
   const date = formatDateWithWeekday(schedule.start_time);
   const startTime = getTimePart(schedule.start_time);
   const endTime = getTimePart(schedule.end_time);
 
+  // D-day 계산
+  const calculateDDay = (startTime: string) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const targetDate = new Date(startTime);
+    targetDate.setHours(0, 0, 0, 0);
+    const diffTime = targetDate.getTime() - today.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+  };
+
+  const dDay = showDDay ? calculateDDay(schedule.start_time) : undefined;
+
   return (
-    <div className="flex flex-row justify-between items-center p-3 bg-white rounded-lg border border-mainBlue/70 shadow-md">
-      <div className="space-y-1">
-        <p className="text-sm font-medium">{schedule.title}</p>
-        <p className="text-xs text-gray-600">
-          {date} {startTime}-{endTime}
-        </p>
-        {schedule.description && (
-          <p className="flex gap-1 items-center text-xs text-gray-400">
-            <Paperclip className="w-3.5 h-3.5" />
-            {schedule.description}
-          </p>
-        )}
-      </div>
-    </div>
+    <ScheduleCard
+      title={schedule.title}
+      dateTime={`${date} ${startTime}-${endTime}`}
+      description={schedule.description || undefined}
+      descriptionIcon={schedule.description ? <Paperclip className="w-3.5 h-3.5" /> : undefined}
+      dDay={dDay}
+    />
   );
 };
