@@ -68,7 +68,7 @@ const getAvailabilityLevel = (
 const getColorClass = (level: AvailabilityLevel): string => {
   switch (level) {
     case 'high':
-      return 'bg-green-500';
+      return 'bg-green-400';
     case 'medium':
       return 'bg-green-300';
     case 'low':
@@ -311,7 +311,7 @@ const AvailabilityGrid: React.FC<AvailabilityGridProps> = ({ availabilityData, d
     <>
       {/* 요일 헤더 */}
       <div className="flex gap-1 mb-2">
-        <div className="w-16"></div>
+        <div className="w-12"></div>
         <div className="grid flex-1 grid-cols-7 gap-1">
           {dateHeaders.map((date, index) => {
             const weekday = WEEKDAYS_MON_FIRST[(date.getDay() + 6) % 7]; // 월요일을 0으로
@@ -331,12 +331,12 @@ const AvailabilityGrid: React.FC<AvailabilityGridProps> = ({ availabilityData, d
         {groupedData.map((group) => (
           <div key={group.hour} className="flex gap-0">
             {/* 시간 레이블 (1시간 단위) */}
-            <div className="flex justify-center items-start w-16 text-sm font-medium text-gray-600">
+            <div className="flex justify-center items-start w-12 text-sm font-medium text-gray-600">
               {group.hour}
             </div>
 
             {/* 15분 단위 슬롯 4개 */}
-            <div className="flex-1 space-y-0 border-l border-gray-300 border-y">
+            <div className="flex-1 space-y-0 border-l border-gray-300">
               {group.slots.map((slot) => (
                 <div key={slot.time} className="grid grid-cols-7 gap-0">
                   {slot.days.map((dayAvailability, dayIndex) => (
@@ -442,7 +442,7 @@ const TeamAvailability: React.FC<TeamAvailabilityProps> = ({ teamId, onBack }) =
 
   return (
     <div className="p-2 min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 md:p-2">
-      <div className="mx-auto max-w-7xl">
+      <div className="mx-auto max-w-5xl">
         <div className="flex flex-col gap-6 xl:flex-row">
           {/* 중앙: 가용성 테이블 */}
           <div className="overflow-x-auto flex-1 p-6 bg-white rounded-xl border shadow-lg border-mainBlue/70">
