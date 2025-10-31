@@ -35,9 +35,9 @@ export const teamAPI = {
   getTeamUpcomingSchedule: (teamId: number): Promise<GetTeamUpcomingSchedule> => {
     return apiClient
       .get(TEAM_ENDPOINTS.GET_TEAM_UPCOMING_SCHEDULE(teamId))
-  
+      .then((response) => response.data);
   },
-  
+
   getTeamMembers: ({
     teamId,
     page = 1,
