@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { MessageCircleMore, X } from 'lucide-react';
+import { useTeamChat } from '@/hooks/team/useTeamChat';
 import Drawer from '@/components/organisms/Drawer';
 import FullCalendar from '@/pages/Calendar/FullCalendar';
 import RecommendTimes from '@/pages/TeamCalendar/components/RecommendTimes';
@@ -16,6 +17,16 @@ const TeamCalendarPage = () => {
 
   const { id } = useParams<{ id: string }>();
   const teamId = id ? Number(id) : 0;
+
+  const chatData = useTeamChat(teamId);
+  const { unReadCount, markAsRead } = chatData;
+
+  const handleChatReadTag = () => {
+    if (!showChat) {
+      markAsRead();
+    }
+    setShowChat(!showChat);
+  };
 
   return (
     <div className="min-h-[calc(100vh-70px)] bg-gradient-to-br from-blue-50 to-indigo-100">
@@ -38,7 +49,7 @@ const TeamCalendarPage = () => {
 
       {/*플로팅 버튼 - 채팅 */}
       <button
-        onClick={() => setShowChat(!showChat)}
+        onClick={handleChatReadTag}
         className={`fixed bottom-6 right-6 w-14 h-14 rounded-3xl hover:scale-103 transition-all flex items-center justify-center z-50 cursor-pointer ${
           showChat
             ? 'bg-gray-100 shadow-[0_10px_40px_rgb(0,0,0,0.2)]'
@@ -48,13 +59,20 @@ const TeamCalendarPage = () => {
         {showChat ? (
           <X className="w-7 h-7 text-gray-500 font-bold stroke-[2.5]" />
         ) : (
-          <MessageCircleMore className="w-7 h-7 text-white" />
+          <>
+            <MessageCircleMore className="w-7 h-7 text-white" />
+            {unReadCount > 0 && (
+              <div className="absolute -top-1 -right-1 min-w-5 h-5 bg-red-500 rounded-full flex items-center justify-center px-1">
+                <span className="text-white text-xs">{unReadCount > 99 ? '99+' : unReadCount}</span>
+              </div>
+            )}
+          </>
         )}
       </button>
 
       {showChat && (
         <div className="fixed bottom-24 right-6 w-90 h-[600px] z-50">
-          <TeamChat teamId={teamId} />
+          <TeamChat teamId={teamId} chatData={chatData} />
         </div>
       )}
 
