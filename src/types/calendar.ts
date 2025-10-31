@@ -21,7 +21,7 @@ export type CalendarEvent = {
 };
 
 export type getCalendarEventsResponse = {
-  events: CalendarEvent[];
+  data: CalendarEvent[];
 };
 
 // 공통 베이스 Response 타입
