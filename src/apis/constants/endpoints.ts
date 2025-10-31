@@ -1,8 +1,8 @@
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-//웹소켓 base url
+//웹소켓
 export const WS_BASE_URL =
   import.meta.env.VITE_API_BASE_URL?.replace('http://', 'ws://')?.replace('https://', 'wss://') ||
-  'ws://uni-schedule-lb-1153657976.ap-northeast-2.elb.amazonaws.com';
+  import.meta.env.VITE_WS_FALLBACK_URL;
 
 export const AUTH_ENDPOINTS = {
   SIGNUP: '/api/members/signup',
@@ -38,10 +38,14 @@ export const EVERYTIME_ENDPOINTS = {
 
 export const TEAM_ENDPOINTS = {
   GET_TEAMS: '/api/teams',
+  GET_TEAM_MEMBERS: (teamId: number) => `/api/teams/${teamId}/members`,
   JOIN_TEAM: '/api/teams/join',
   CREATE_TEAM: '/api/teams',
+  GET_MY_TEAM_INFO: (teamId: number) => `/api/teams/${teamId}`,
   LEAVE_TEAM: (teamId: number) => `/api/teams/${teamId}/member`, // 팀 탈퇴
   DELETE_TEAM: (teamId: number) => `/api/teams/${teamId}/team`, // 팀 삭제
+
+  //팀 채팅
   CHAT_WEBSOCKET: (teamId: number, token: string) => `/ws/teams/${teamId}/chat?token=${token}`,
   CHAT_MESSAGES: (teamId: number) => `/api/teams/${teamId}/chat/messages`,
 
