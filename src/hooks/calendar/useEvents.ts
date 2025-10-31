@@ -1,5 +1,4 @@
 import { useCalendarStore } from '@/store/calendar';
-import { type CalendarEvent } from '@/types/calendar';
 
 const toIsoLocal = (date: Date | string): string => {
   if (typeof date === 'string') return date;
@@ -12,32 +11,34 @@ const toIsoLocal = (date: Date | string): string => {
   return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
 };
 
-const useEvents = () => {
-  const { events, addEvent, removeEvent, updateEvent, getEvents } = useCalendarStore();
+const useEvents = (mode?: 'personal' | 'team', teamId?: number) => {
+  const { events, addEvent, removeEvent, updateEvent, getEvents, getTodayEvents } =
+    useCalendarStore();
 
-  const handleEventDrop = (eventId: number, newStart: Date, newEnd?: Date) => {
-    const updates: Partial<CalendarEvent> = {
+  const teamOrPersonalOption = mode ? { mode, teamId } : undefined;
+
+  const handleEventDrop = async (eventId: number, newStart: Date, newEnd?: Date) => {
+    const updates = {
+      event_id: eventId,
       start_time: toIsoLocal(newStart),
+      ...(newEnd && { end_time: toIsoLocal(newEnd) }),
     };
-    if (newEnd) {
-      updates.end_time = toIsoLocal(newEnd);
-    }
-    updateEvent(eventId, updates);
+    await updateEvent(updates, teamOrPersonalOption);
   };
 
-  const handleEventResize = (eventId: number, newStart: Date, newEnd?: Date) => {
-    const updates: Partial<CalendarEvent> = {
+  const handleEventResize = async (eventId: number, newStart: Date, newEnd?: Date) => {
+    const updates = {
+      event_id: eventId,
       start_time: toIsoLocal(newStart),
+      ...(newEnd && { end_time: toIsoLocal(newEnd) }),
     };
-    if (newEnd) {
-      updates.end_time = toIsoLocal(newEnd);
-    }
-    updateEvent(eventId, updates);
+    await updateEvent(updates, teamOrPersonalOption);
   };
 
   return {
     events,
     getEvents,
+    getTodayEvents,
     addEvent,
     removeEvent,
     updateEvent,
