@@ -35,7 +35,7 @@ export const UpcomingTeamScheduleList = () => {
   return (
     <div className="space-y-2">
       {sortedSchedules.map((schedule) => (
-        <UpcomingTeamScheduleItem key={schedule.event_id} schedule={schedule} showDDay={true} />
+        <UpcomingTeamScheduleItem key={schedule.event_id} schedule={schedule} />
       ))}
     </div>
   );
