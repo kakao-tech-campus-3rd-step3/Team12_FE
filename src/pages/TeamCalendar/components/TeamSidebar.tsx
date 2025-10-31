@@ -47,7 +47,7 @@ const TeamSidebar = ({ onViewAvailability, teamId }: TeamSidebarProps) => {
         return (
           <>
             <TeamInfo teamId={teamId} />
-            <TeamMembers />
+            <TeamMembers teamId={teamId} />
           </>
         );
       case 'upcomingSchedule':
