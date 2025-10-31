@@ -93,4 +93,17 @@ export const useDeleteTeam = () => {
   };
 };
 
+export const useTeamUpcomingSchedule = (teamId: number | null) => {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['teamUpcomingSchedule', teamId],
+    queryFn: () => teamAPI.getTeamUpcomingSchedule(teamId!),
+    enabled: !!teamId,
+  });
+  return {
+    schedules: data ?? [],
+    isLoading,
+    error,
+  };
+};
+
 export default useTeam;

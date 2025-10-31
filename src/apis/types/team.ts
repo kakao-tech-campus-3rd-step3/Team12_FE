@@ -1,3 +1,4 @@
+//팀 생성
 export interface CreateTeamRequest {
   team_name: string;
   team_description: string;
@@ -9,6 +10,7 @@ export interface CreateTeamResponse {
   team_code: string;
 }
 
+//팀 가입
 export interface JoinTeamRequest {
   invite_code: string;
 }
@@ -22,6 +24,7 @@ export interface TeamMember {
   name: string;
 }
 
+//단일 팀 정보 조회
 export interface TeamData {
   id: number;
   team_name: string;
@@ -31,6 +34,7 @@ export interface TeamData {
   invite_code: string;
 }
 
+//팀 목록 조회
 export interface GetTeamsResponse {
   content: TeamData[];
   page: number;
@@ -39,6 +43,19 @@ export interface GetTeamsResponse {
   total_pages: number;
 }
 
+//팀 다가오는 일정
+export interface TeamUpcomingSchedule {
+  event_id: number;
+  title: string;
+  description: string;
+  start_time: string;
+  end_time: string;
+  is_private: boolean;
+  is_recurring: boolean;
+}
+export type GetTeamUpcomingSchedule = TeamUpcomingSchedule[];
+
+//팀
 export interface TeamMemberResponse {
   id: number;
   role: 'LEADER' | 'MEMBER';

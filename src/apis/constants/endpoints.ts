@@ -48,4 +48,6 @@ export const TEAM_ENDPOINTS = {
   //팀 채팅
   CHAT_WEBSOCKET: (teamId: number, token: string) => `/ws/teams/${teamId}/chat?token=${token}`,
   CHAT_MESSAGES: (teamId: number) => `/api/teams/${teamId}/chat/messages`,
+
+  GET_TEAM_UPCOMING_SCHEDULE: (teamId: number) => `/api/events/team/${teamId}/upcomming`,
 };
