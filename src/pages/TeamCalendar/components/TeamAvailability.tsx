@@ -74,9 +74,9 @@ const getColorClass = (level: AvailabilityLevel): string => {
     case 'low':
       return 'bg-green-100';
     case 'none':
-      return 'bg-gray-300';
+      return 'bg-gray-100';
     default:
-      return 'bg-gray-200';
+      return 'bg-white';
   }
 };
 
@@ -327,22 +327,22 @@ const AvailabilityGrid: React.FC<AvailabilityGridProps> = ({ availabilityData, d
       </div>
 
       {/* 시간대별 가용성 */}
-      <div className="space-y-2">
+      <div className="space-y-0">
         {groupedData.map((group) => (
-          <div key={group.hour} className="flex gap-1">
+          <div key={group.hour} className="flex gap-0">
             {/* 시간 레이블 (1시간 단위) */}
             <div className="flex justify-center items-start w-16 text-sm font-medium text-gray-600">
               {group.hour}
             </div>
 
             {/* 15분 단위 슬롯 4개 */}
-            <div className="flex-1 space-y-0">
+            <div className="flex-1 space-y-0 border-l border-gray-300 border-y">
               {group.slots.map((slot) => (
-                <div key={slot.time} className="grid grid-cols-7 gap-1">
+                <div key={slot.time} className="grid grid-cols-7 gap-0">
                   {slot.days.map((dayAvailability, dayIndex) => (
                     <div
                       key={`${slot.time}-${dayIndex}`}
-                      className={`h-4 rounded-sm border border-gray-100 transition-opacity cursor-pointer ${getColorClass(dayAvailability.level)} hover:opacity-80`}
+                      className={`h-4 border-r border-gray-300 transition-opacity cursor-pointer ${getColorClass(dayAvailability.level)} hover:opacity-80`}
                       title={`${slot.time} - ${getLevelText(dayAvailability.level, dayAvailability.count)}`}
                     ></div>
                   ))}
