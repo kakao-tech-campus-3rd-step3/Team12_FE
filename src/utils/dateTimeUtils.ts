@@ -43,3 +43,18 @@ export const formatDateShort = (date: Date | undefined): string => {
   const day = date.getDate().toString().padStart(2, '0');
   return `${year}/${month}/${day}`;
 };
+
+/**
+ * ISO 날짜 문자열을 "M월 D일 요일" 형식으로 포맷
+ * @param isoString ISO 날짜 문자열 (예: "2025-09-12T11:00:00")
+ * @returns "9월 12일 금요일" 형식의 문자열
+ */
+export const formatDateWithWeekday = (isoString: string): string => {
+  const date = new Date(isoString);
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
+  const weekday = weekdays[date.getDay()];
+
+  return `${month}월 ${day}일 ${weekday}요일`;
+};
