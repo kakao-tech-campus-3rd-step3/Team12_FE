@@ -99,10 +99,20 @@ export const useTeamChat = (teamId: number) => {
     }
 
     const wsPath = TEAM_ENDPOINTS.CHAT_WEBSOCKET(teamId, accessToken);
-    const wsUrl = `${WS_BASE_URL}${wsPath}`;
 
-    console.log('웹소켓 연결 시도:', wsUrl);
-    const ws = new WebSocket(wsUrl);
+// .env의 fallback URL 사용
+const fallbackUrl = import.meta.env.VITE_WS_FALLBACK_URL;
+
+// 기본 URL이 없거나 잘못된 경우 fallback 사용
+const baseUrl = WS_BASE_URL || fallbackUrl;
+
+// 혹시 프로토콜 빠진 경우 대비
+const wsUrl = baseUrl.startsWith('ws')
+  ? `${baseUrl}${wsPath}`
+  : `wss://${baseUrl}${wsPath}`;
+
+const ws = new WebSocket(wsUrl);
+
 
     ws.onopen = () => {
       console.log('웹소켓 연결 성공');
