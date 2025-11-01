@@ -1,23 +1,31 @@
-import { upcomingTeamSchedule } from '@/mockdata/scheduleData';
-import { MapPin } from 'lucide-react';
+import { Paperclip } from 'lucide-react';
+import type { TeamUpcomingSchedule } from '@/apis';
+import { formatDateWithWeekday, getTimePart } from '@/utils/dateTimeUtils';
+import { ScheduleCard } from '@/components/molecules/ScheduleCard';
 
-export const UpcomingTeamScheduleItem = ({
-  schedule,
-}: {
-  schedule: (typeof upcomingTeamSchedule)[0];
-}) => {
+interface UpcomingTeamScheduleItemProps {
+  schedule: TeamUpcomingSchedule;
+}
+
+export const UpcomingTeamScheduleItem = ({ schedule }: UpcomingTeamScheduleItemProps) => {
+  const date = formatDateWithWeekday(schedule.start_time);
+  const startTime = getTimePart(schedule.start_time);
+  const endTime = getTimePart(schedule.end_time);
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const targetDate = new Date(schedule.start_time);
+  targetDate.setHours(0, 0, 0, 0);
+  const diffTime = targetDate.getTime() - today.getTime();
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
   return (
-    <div className="flex flex-row justify-between items-center p-3.5 bg-white rounded-lg border border-mainBlue/70">
-      <div className="space-y-1">
-        <p className="text-sm font-medium">{schedule.title}</p>
-        <p className="text-xs text-gray-700">
-          {schedule.date} {schedule.startTime}-{schedule.endTime}
-        </p>
-        <p className="flex gap-1 items-center text-xs text-mainBlue">
-          <MapPin className="w-4 h-4" />
-          {schedule.location}
-        </p>
-      </div>
-    </div>
+    <ScheduleCard
+      title={schedule.title}
+      dateTime={`${date} ${startTime}-${endTime}`}
+      description={schedule.description || undefined}
+      descriptionIcon={schedule.description ? <Paperclip className="w-3.5 h-3.5" /> : undefined}
+      dDay={diffDays}
+    />
   );
 };

@@ -1,5 +1,6 @@
 export const queryKeys = {
   teams: ['teams'] as const,
+  teamAvailability: ['teamAvailability'] as const,
   events: ['events'] as const,
   auth: ['auth'] as const,
 

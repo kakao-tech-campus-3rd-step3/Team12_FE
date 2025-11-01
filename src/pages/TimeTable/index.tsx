@@ -1,12 +1,12 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { RouterPath } from '@/routes/path';
 import Button from '@/components/atoms/Button';
-import ImageUploadTab from '@/pages/TimeTable/components/ImageUploadTab';
-import EverytimeLinkTab from '@/pages/TimeTable/components/EverytimeLinkTab';
-import { useTimetableData } from '@/hooks/timetable/useTimetableData';
 import { useImageParsing } from '@/hooks/timetable/useImageParsing';
 import { useImageUpload } from '@/hooks/timetable/useImageUpload';
+import { useTimetableData } from '@/hooks/timetable/useTimetableData';
+import EverytimeLinkTab from '@/pages/TimeTable/components/EverytimeLinkTab';
+import ImageUploadTab from '@/pages/TimeTable/components/ImageUploadTab';
+import { RouterPath } from '@/routes/path';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const TimeTablePage = () => {
   const navigate = useNavigate();
@@ -85,7 +85,7 @@ const TimeTablePage = () => {
 
   return (
     <>
-      <div className="max-w-4xl p-3 m-1 mx-auto border-gray-200 rounded-lg /border">
+      <div className="p-3 m-1 mx-auto max-w-4xl rounded-lg border-gray-200 /border">
         {/* 탭 버튼 */}
         <div className="flex mb-6 border-b border-gray-200">
           <button

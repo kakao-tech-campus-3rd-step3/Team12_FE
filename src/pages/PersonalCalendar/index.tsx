@@ -1,10 +1,9 @@
 import Drawer from '@/components/organisms/Drawer';
 import { useDeleteTeam, useLeaveTeam, useTeam } from '@/hooks/team';
 import FullCalendar from '@/pages/Calendar/FullCalendar';
-import LinkStatus from '@/pages/PersonalCalendar/components/LinkStatus';
 import MyClass from '@/pages/PersonalCalendar/components/MyClass';
 import MyTeam from '@/pages/PersonalCalendar/components/MyTeam';
-import QuickActions from '@/pages/PersonalCalendar/components/QuickActions';
+import PersonalSideBar from '@/pages/PersonalCalendar/components/PersonalSideBar';
 import TeamListModal from '@/pages/PersonalCalendar/components/TeamListModal';
 import TodaySchedule from '@/pages/PersonalCalendar/components/TodaySchedule';
 import UpcomingSchedule from '@/pages/PersonalCalendar/components/UpcomingSchedule';
@@ -15,38 +14,45 @@ const PersonalCalendarPage = () => {
   const { deleteTeam } = useDeleteTeam();
 
   return (
-    <div className="flex overflow-x-hidden min-h-screen">
-      {/* 사이드바 영역 - 큰 화면에서는 고정 너비 */}
-      <div className="xl:w-60 xl:flex-shrink-0">
-        <Drawer>
-          <QuickActions />
-          <MyClass />
-          <MyTeam teams={teams} isLoading={isLoading} setIsSetting={() => setIsSetting(true)} />
-          <TodaySchedule />
-        </Drawer>
-      </div>
-
-      {/* 메인 콘텐츠 영역 */}
-      <div className="flex overflow-x-hidden flex-col flex-1 pb-4 bg-gradient-to-br from-blue-50 to-indigo-100 lg:flex-row xl:pl-0">
-        <div className="flex-1 lg:flex-[3]">
-          <FullCalendar mode="personal" />
-        </div>
-
-        <div className="flex flex-col m-2 gap-8 lg:flex-[1] lg:max-w-sm">
-          <UpcomingSchedule />
-          <LinkStatus />
+    <div className="min-h-[calc(100vh-70px)] bg-gradient-to-br from-blue-50 to-indigo-100">
+      {/* 데스크톱 뷰 */}
+      <div className="hidden xl:flex h-[calc(100vh-70px)]">
+        <PersonalSideBar teams={teams} isLoading={isLoading} setIsSetting={setIsSetting} />
+        <div className="flex overflow-x-hidden flex-1">
+          <div className="flex-1 lg:flex-[3]">
+            <FullCalendar mode="personal" />
+          </div>
+          <div className="flex flex-col m-2 gap-8 lg:flex-[1] lg:max-w-sm">
+            <UpcomingSchedule />
+            {/* <LinkStatus /> */}
+          </div>
         </div>
       </div>
 
-      {/* {isSetting && (
-        <TeamSettingModal
-          isOpen={isSetting}
-          teams={teams}
-          onClose={() => setIsSetting(false)}
-          leaveTeam={leaveTeam}
-          deleteTeam={deleteTeam}
-        />
-      )} */}
+      {/* 모바일 뷰 */}
+      <div className="block min-h-screen xl:hidden">
+        <div className="flex overflow-x-hidden flex-col min-h-screen">
+          <div className="xl:w-60 xl:flex-shrink-0">
+            <Drawer>
+              {/* <QuickActions /> */}
+              <MyClass />
+              <MyTeam teams={teams} isLoading={isLoading} setIsSetting={() => setIsSetting(true)} />
+              <TodaySchedule />
+            </Drawer>
+          </div>
+
+          <div className="flex overflow-x-hidden flex-col flex-1 pb-4 bg-gradient-to-br from-blue-50 to-indigo-100 lg:flex-row xl:pl-0">
+            <div className="flex-1 lg:flex-[3]">
+              <FullCalendar mode="personal" />
+            </div>
+
+            <div className="flex flex-col m-2 gap-8 lg:flex-[1] lg:max-w-sm">
+              <UpcomingSchedule />
+              {/* <LinkStatus /> */}
+            </div>
+          </div>
+        </div>
+      </div>
 
       {isSetting && (
         <TeamListModal

@@ -1,7 +1,7 @@
-import type { Member, TimeSlot, Team } from '@/types/team';
+import type { Member, Team, TimeSlot } from '@/types/team';
 
 export const mockMembers: Member[] = [
- { id: 1, name: '김민수', role: 'MEMBER' },
+  { id: 1, name: '김민수', role: 'MEMBER' },
   { id: 2, name: '박지영', role: 'MEMBER' },
   { id: 3, name: '강민재', role: 'MEMBER' },
   { id: 4, name: '송하늘', role: 'MEMBER' },
