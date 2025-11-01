@@ -2,6 +2,8 @@ import { teamAPI } from '@/apis/services/team';
 import type {
   GetMyTeamInfoResponse,
   GetTeamAvailabilityResponse,
+  GetTeamRecommendTimesParams,
+  GetTeamRecommendTimesResponse,
   GetTeamsResponse,
 } from '@/apis/types/team';
 import { queryKeys } from '@/lib/queryKeys';
@@ -107,12 +109,16 @@ export const useGetMyTeam = (teamId: number) => {
 };
 
 export const useGetTeamAvailability = (teamId: number) => {
-  const { data, isLoading, error } = useQuery<GetTeamAvailabilityResponse>({
+  const {
+    data: teamAvailability,
+    isLoading,
+    error,
+  } = useQuery<GetTeamAvailabilityResponse>({
     queryKey: queryKeys.teamAvailability,
     queryFn: () => teamAPI.getTeamAvailability(teamId),
   });
   return {
-    data,
+    teamAvailability,
     isLoading,
     error,
   };
@@ -139,6 +145,30 @@ export const useTeamTodaySchedule = (teamId: number | null) => {
   });
   return {
     schedules: data ?? [],
+    isLoading,
+    error,
+  };
+};
+
+export const useTeamRecommendTimes = ({
+  teamId,
+  N,
+  start_time,
+  end_time,
+  required_time,
+}: GetTeamRecommendTimesParams) => {
+  const {
+    data: teamRecommendTimes,
+    isLoading,
+    error,
+  } = useQuery<GetTeamRecommendTimesResponse>({
+    queryKey: queryKeys.teamRecommendTimes,
+    queryFn: () =>
+      teamAPI.getTeamRecommendTimes({ teamId, N, start_time, end_time, required_time }),
+  });
+
+  return {
+    teamRecommendTimes,
     isLoading,
     error,
   };

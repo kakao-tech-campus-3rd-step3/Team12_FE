@@ -50,7 +50,6 @@ export interface TeamSchedule {
   description: string;
   start_time: string;
   end_time: string;
-  is_private: boolean;
   is_recurring: boolean;
 }
 export type GetTeamSchedule = TeamSchedule[];
@@ -82,11 +81,26 @@ export interface GetMyTeamInfoResponse {
   code: string;
 }
 
-export interface GetTeamAvailabilityResponse {
-  available: Availability[];
-}
 export interface Availability {
   start_time: string;
   end_time: string;
   available_member: number;
 }
+
+export type GetTeamAvailabilityResponse = Availability[];
+
+export interface RecommendTime {
+  week: string;
+  status: string;
+  start_time: string;
+  end_time: string;
+  available: number;
+}
+export interface GetTeamRecommendTimesParams {
+  teamId: number;
+  N: number;
+  start_time: string;
+  end_time: string;
+  required_time: string;
+}
+export type GetTeamRecommendTimesResponse = RecommendTime[];

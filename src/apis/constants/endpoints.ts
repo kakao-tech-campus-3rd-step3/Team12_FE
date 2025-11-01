@@ -64,4 +64,12 @@ export const TEAM_ENDPOINTS = {
 
   GET_TEAM_UPCOMING_SCHEDULE: (teamId: number) => `/api/events/team/${teamId}/upcomming`,
   GET_TEAM_TODAY_SCHEDULE: (teamId: number) => `/api/events/team/${teamId}/today`,
+  GET_TEAM_RECOMMEND_TIMES: (
+    teamId: number,
+    N: number,
+    start_time: string,
+    end_time: string,
+    required_time: string,
+  ) =>
+    `/api/teams/${teamId}/when-to-meet/recommend?N=${N}&start_time=${start_time}&end_time=${end_time}&required_time=${required_time}`,
 };

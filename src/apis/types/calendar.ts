@@ -10,7 +10,6 @@ export type getTeamCalendarEventsResponse = {
   description?: string;
   start_time: string;
   end_time?: string;
-  is_private: boolean;
   is_recurring: boolean;
 }[];
 
@@ -21,7 +20,6 @@ export interface addTeamCalendarEventRequest {
   description?: string;
   start_time: string;
   end_time?: string;
-  is_private: boolean;
 }
 export interface addTeamCalendarEventResponse {
   event_id: number;
@@ -29,7 +27,6 @@ export interface addTeamCalendarEventResponse {
   description?: string;
   start_time: string;
   end_time?: string;
-  is_private: boolean;
 }
 
 //팀 반복 일정 추가
@@ -38,7 +35,6 @@ export interface addTeamCalendarRecurringEventRequest {
   description?: string;
   first_start_time: string;
   first_end_time: string;
-  is_private: boolean;
   rrule: string;
 }
 export interface addTeamCalendarRecurringEventResponse {
@@ -47,7 +43,6 @@ export interface addTeamCalendarRecurringEventResponse {
   description: string;
   start_time: string;
   end_time: string;
-  is_private: boolean;
 }
 
 interface CalendarEventUpdateBase {
@@ -55,7 +50,6 @@ interface CalendarEventUpdateBase {
   description?: string;
   start_time?: string;
   end_time?: string;
-  is_private?: boolean;
 }
 
 //팀 일정 수정
