@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useState, useRef, useEffect } from 'react';
 import { RouterPath } from '@/routes/path';
+import { authAPI } from '@/apis';
 
 const Header = () => {
   const navigate = useNavigate();
@@ -31,6 +32,27 @@ const Header = () => {
       setIsLoadingUserInfo(false);
     }
   };
+
+  const handleSignout = async () => {
+    const confirmed = window.confirm(
+      '탈퇴 시 모든 데이터가 삭제되며 복구할 수 없습니다. \n팀 리더인 경우 팀이 삭제되며 복구할 수 없습니다. \n정말로 회원 탈퇴하시겠습니까? ',
+    );
+    if (!confirmed) return;
+    try {
+      await authAPI.signout();
+
+      logout();
+
+      alert('회원 탈퇴가 완료되었습니다.');
+      navigate(RouterPath.LOGIN);
+      setIsDropdownOpen(false);
+    } catch (error) {
+      console.error('회원 탈퇴 실패:', error);
+      alert('회원 탈퇴에 실패했습니다. 다시 시도해주세요.');
+    }
+  };
+
+  if (!confirm) return;
 
   // 로그인 후 사용자 정보 자동 조회
   useEffect(() => {
@@ -76,9 +98,16 @@ const Header = () => {
 
             <button
               onClick={handleLogout}
-              className="w-full py-2 px-4 text-sm text-red-600 hover:bg-red-50 transition-all duration-200"
+              className="w-full py-3 px-4 text-sm text-red-600 hover:bg-red-50 transition-all duration-200 cursor-pointer"
             >
               로그아웃
+            </button>
+            <div className="border-b border-gray-100" />
+            <button
+              onClick={handleSignout}
+              className="w-full py-3 px-4 text-sm text-red-600 hover:bg-red-50 transition-all duration-200 cursor-pointer"
+            >
+              탈퇴하기
             </button>
           </div>
         )}
