@@ -4,6 +4,7 @@ import { useAuthStore } from '@/store/useAuthStore';
 import { useState, useRef, useEffect } from 'react';
 import { RouterPath } from '@/routes/path';
 import { authAPI } from '@/apis';
+import ConfirmModal from '@/components/atoms/ConfirmModal';
 
 const Header = () => {
   const navigate = useNavigate();
@@ -11,6 +12,7 @@ const Header = () => {
   const [isLoadingUserInfo, setIsLoadingUserInfo] = useState(false);
   const { user, isAuthenticated, logout, getUserInfo } = useAuthStore();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isSignoutModalOpen, setIsSignoutModalOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // 사용자 성 추출 함수
@@ -34,10 +36,6 @@ const Header = () => {
   };
 
   const handleSignout = async () => {
-    const confirmed = window.confirm(
-      '탈퇴 시 모든 데이터가 삭제되며 복구할 수 없습니다. \n팀 리더인 경우 팀이 삭제되며 복구할 수 없습니다. \n정말로 회원 탈퇴하시겠습니까? ',
-    );
-    if (!confirmed) return;
     try {
       await authAPI.signout();
 
@@ -104,7 +102,10 @@ const Header = () => {
             </button>
             <div className="border-b border-gray-100" />
             <button
-              onClick={handleSignout}
+              onClick={() => {
+                setIsSignoutModalOpen(true);
+                setIsDropdownOpen(false);
+              }}
               className="w-full py-3 px-4 text-sm text-red-600 hover:bg-red-50 transition-all duration-200 cursor-pointer"
             >
               탈퇴하기
@@ -116,46 +117,61 @@ const Header = () => {
   };
 
   return (
-    <nav className="sticky top-0 z-50 py-1 bg-white border-b border-gray-200">
-      <div className="flex justify-between items-center ml-1 mr-2 sm:ml-3 sm:mr-6">
-        <div>
-          <Logo className="scale-75 sm:scale-80" />
-        </div>
+    <>
+      <nav className="sticky top-0 z-50 py-1 bg-white border-b border-gray-200">
+        <div className="flex justify-between items-center ml-1 mr-2 sm:ml-3 sm:mr-6">
+          <div>
+            <Logo className="scale-75 sm:scale-80" />
+          </div>
 
-        <div className="flex items-center gap-1 sm:gap-2">
-          {isAuthenticated ? (
-            <>
-              <div className="flex items-center gap-2">
-                <div className="relative" ref={dropdownRef}>
-                  <button
-                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                    className="flex items-center justify-center w-8 h-8 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors cursor-pointer"
-                  >
-                    <span className="text-sm font-medium">{userInitial}</span>
-                  </button>
-                  <UserProfile isOpen={isDropdownOpen} />
+          <div className="flex items-center gap-1 sm:gap-2">
+            {isAuthenticated ? (
+              <>
+                <div className="flex items-center gap-2">
+                  <div className="relative" ref={dropdownRef}>
+                    <button
+                      onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                      className="flex items-center justify-center w-8 h-8 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors cursor-pointer"
+                    >
+                      <span className="text-sm font-medium">{userInitial}</span>
+                    </button>
+                    <UserProfile isOpen={isDropdownOpen} />
+                  </div>
                 </div>
-              </div>
-            </>
-          ) : (
-            <>
-              <Link
-                to="/login"
-                className="px-3 sm:px-6 py-2 text-sm sm:text-base font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition cursor-pointer"
-              >
-                로그인
-              </Link>
-              <Link
-                to="/signup"
-                className="px-3 sm:px-6 py-2 text-sm sm:text-base font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition cursor-pointer"
-              >
-                회원가입
-              </Link>
-            </>
-          )}
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/login"
+                  className="px-3 sm:px-6 py-2 text-sm sm:text-base font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition cursor-pointer"
+                >
+                  로그인
+                </Link>
+                <Link
+                  to="/signup"
+                  className="px-3 sm:px-6 py-2 text-sm sm:text-base font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition cursor-pointer"
+                >
+                  회원가입
+                </Link>
+              </>
+            )}
+          </div>
         </div>
-      </div>
-    </nav>
+      </nav>
+
+      {/* 회원 탈퇴 확인 모달 */}
+      <ConfirmModal
+        isOpen={isSignoutModalOpen}
+        title="회원 탈퇴"
+        message={
+          '탈퇴 시 모든 데이터가 삭제되며 복구할 수 없습니다.\n팀 리더인 경우 팀이 삭제되며 복구할 수 없습니다.\n\n정말로 회원 탈퇴하시겠습니까?'
+        }
+        confirmText="탈퇴하기"
+        confirmButtonColor="bg-red-600 hover:bg-red-700"
+        onConfirm={handleSignout}
+        onClose={() => setIsSignoutModalOpen(false)}
+      />
+    </>
   );
 };
 
