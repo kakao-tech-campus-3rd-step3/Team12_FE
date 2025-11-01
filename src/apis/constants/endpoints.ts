@@ -9,6 +9,9 @@ export const AUTH_ENDPOINTS = {
   LOGIN: '/api/members/login',
   REFRESH: '/api/members/refresh',
   USER_INFO: '/api/members/me',
+
+  SEND_VERIFICATION_CODE: '/api/auth/email/send', // 이메일 인증 코드 발송
+  VERITY_VERIFICATION_CODE: '/api/auth/email/verify', // 이메일 인증 코드 검증
 } as const;
 
 export const PERSONAL_CALENDAR_ENDPOINTS = {

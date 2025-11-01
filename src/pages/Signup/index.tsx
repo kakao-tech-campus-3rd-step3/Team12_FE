@@ -1,10 +1,12 @@
 import { AxiosError } from 'axios';
 import { useState } from 'react';
 import { KeyRound, Lock, Mail, User } from 'lucide-react';
+import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { authAPI } from '@/apis';
 import { RouterPath } from '@/routes/path';
 import { useAuthStore } from '@/store/useAuthStore';
 import Logo from '@/components/atoms/Logo';
@@ -29,17 +31,43 @@ const Signup = () => {
   const [showVerification, setShowVerification] = useState(false);
   const [verificationCode, setVerificationCode] = useState('');
   const [backendError, setBackendError] = useState<string | null>(null);
+  const [isSendingCode, setIsSendingCode] = useState(false);
   const navigate = useNavigate();
   const { signup } = useAuthStore();
 
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<SignupFormData>({
     resolver: zodResolver(signupSchema),
     mode: 'onBlur',
   });
+
+  const userEmail = watch('email');
+
+  const handleSendVerificationCode = async () => {
+    if (!userEmail || errors.email) {
+      toast.error('유효한 이메일을 입력해주세요.');
+      return;
+    }
+
+    setIsSendingCode(true);
+    try {
+      const response = await authAPI.sendEmailVerification(userEmail);
+      toast.success('인증 코드가 발송되었습니다.\n이메일을 확인해주세요.');
+      setShowVerification(true);
+      console.log('만료 시간:', response.data.expires_at);
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const message = error.response?.data?.message || '인증 코드 발송에 실패했습니다.';
+        toast.error(message);
+      }
+    } finally {
+      setIsSendingCode(false);
+    }
+  };
 
   const onSubmit = async (data: SignupFormData) => {
     setBackendError(null);
@@ -87,13 +115,13 @@ const Signup = () => {
               />
               <Button
                 type="button"
-                onClick={() => setShowVerification(true)}
+                onClick={handleSendVerificationCode}
                 variant="primary"
                 size="md"
                 noWrapper={true}
-                className="px-4"
+                className="px-4 cursor-pointer"
               >
-                인증코드
+                {isSendingCode ? '발송중...' : '인증코드'}
               </Button>
             </div>
             {showVerification && (

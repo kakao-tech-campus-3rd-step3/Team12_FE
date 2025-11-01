@@ -24,6 +24,14 @@ export interface RefreshTokenResponse {
   refresh_token: string;
 }
 
+//이메일 인증 코드 발송
+export interface EmailSendRequest {
+  email: string;
+}
+export interface EmailSendResponse {
+  expires_at: string;
+}
+
 //사용자 정보
 export interface UserInfoResponse {
   user_id: number;

@@ -5,6 +5,7 @@ import type {
   LoginRequest,
   LoginResponse,
   RefreshTokenResponse,
+  EmailSendResponse,
 } from '@/apis/types/auth';
 
 export const authAPI = {
@@ -46,6 +47,20 @@ export const authAPI = {
           status: error.response?.status,
           data: error.response?.data,
         });
+        throw error;
+      });
+  },
+
+  //이메일 인증 코드
+  sendEmailVerification: (email: string) => {
+    return apiClient
+      .post<EmailSendResponse>(AUTH_ENDPOINTS.SEND_VERIFICATION_CODE, { email })
+      .then((response) => {
+        console.log('이메일 인증 코드 발송 성공:', response.data);
+        return response;
+      })
+      .catch((error) => {
+        console.error('이메일 인증 코드 발송 실패:', error);
         throw error;
       });
   },
