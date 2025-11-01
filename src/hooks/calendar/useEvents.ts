@@ -19,20 +19,18 @@ const useEvents = (mode?: 'personal' | 'team', teamId?: number) => {
 
   const handleEventDrop = async (eventId: number, newStart: Date, newEnd?: Date) => {
     const updates = {
-      event_id: eventId,
       start_time: toIsoLocal(newStart),
       ...(newEnd && { end_time: toIsoLocal(newEnd) }),
     };
-    await updateEvent(updates, teamOrPersonalOption);
+    await updateEvent(eventId, updates, teamOrPersonalOption);
   };
 
   const handleEventResize = async (eventId: number, newStart: Date, newEnd?: Date) => {
     const updates = {
-      event_id: eventId,
       start_time: toIsoLocal(newStart),
       ...(newEnd && { end_time: toIsoLocal(newEnd) }),
     };
-    await updateEvent(updates, teamOrPersonalOption);
+    await updateEvent(eventId, updates, teamOrPersonalOption);
   };
 
   return {

@@ -37,8 +37,11 @@ export const personalCalendarAPI = {
   addEvent: (event: addCalendarEventRequest): Promise<addCalendarEventResponse> => {
     return apiClient.post(PERSONAL_CALENDAR_ENDPOINTS.ADD_EVENT, event);
   },
-  modifyEvent: (event: modifyCalendarEventRequest): Promise<modifyCalendarEventResponse> => {
-    return apiClient.patch(PERSONAL_CALENDAR_ENDPOINTS.MODIFY_EVENT, event);
+  modifyEvent: (
+    eventId: number,
+    event: modifyCalendarEventRequest,
+  ): Promise<modifyCalendarEventResponse> => {
+    return apiClient.patch(PERSONAL_CALENDAR_ENDPOINTS.MODIFY_EVENT(eventId), event);
   },
   deleteEvent: (eventId: number) => {
     return apiClient.delete(PERSONAL_CALENDAR_ENDPOINTS.DELETE_EVENT(eventId));

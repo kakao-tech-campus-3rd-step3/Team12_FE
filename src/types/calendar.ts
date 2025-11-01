@@ -59,7 +59,6 @@ export type addCalendarRecurringEventRequest = {
 export type addCalendarRecurringEventResponse = BaseCalendarEventResponse;
 
 export type modifyCalendarEventRequest = {
-  event_id: number;
   title?: string;
   description?: string;
   start_time?: string;
