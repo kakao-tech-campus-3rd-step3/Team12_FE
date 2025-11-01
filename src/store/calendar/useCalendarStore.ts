@@ -27,10 +27,6 @@ interface CalendarState {
     teamOrPersonalOption?: { teamId?: number; mode?: 'personal' | 'team' },
   ) => Promise<void>;
   getUpcomingEvents: () => Promise<CalendarEvent[] | null>;
-  addEvent: (event: Omit<CalendarEvent, 'event_id'>) => void;
-  removeEvent: (eventId: number) => void;
-  updateEvent: (eventId: number, updates: Partial<CalendarEvent>) => void;
-
 }
 
 export const useCalendarStore = create<CalendarState>((set) => ({

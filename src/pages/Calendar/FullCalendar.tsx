@@ -148,17 +148,16 @@ const handleSaveEvent = async (
         await getTodayEvents();
       } else {
         // 일반 일정 추가
-        await addEvent(
-          {
-            team_id: teamId,
-            title: eventData.title,
-            description: eventData.description,
-            start_time: eventData.start_time,
-            end_time: eventData.end_time,
-            is_private: eventData.is_private,
-          },
-          { teamId, mode: 'team' },
-        );
+        await teamCalendarAPI.addTeamEvent({
+          team_id: teamId,
+          title: eventData.title,
+          description: eventData.description,
+          start_time: eventData.start_time,
+          end_time: eventData.end_time,
+          is_private: eventData.is_private,
+        });
+        await getEvents({ teamId, mode: 'team' });
+        await getTodayEvents();
       }
       return;
     }

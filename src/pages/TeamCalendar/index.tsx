@@ -10,9 +10,6 @@ import TeamChat from '@/pages/TeamCalendar/components/TeamChat';
 import TeamMembers from '@/pages/TeamCalendar/components/TeamMembers';
 import TeamSidebar from '@/pages/TeamCalendar/components/TeamSidebar';
 import UpcomingTeamSchedule from '@/pages/TeamCalendar/components/UpcomingTeamSchedule';
-import { MessageCircleMore, X } from 'lucide-react';
-import { useState } from 'react';
-import { useParams } from 'react-router-dom';
 
 const TeamCalendarPage = () => {
   const [showAvailability, setShowAvailability] = useState(false);
