@@ -63,4 +63,5 @@ export const TEAM_ENDPOINTS = {
   CHAT_MESSAGES: (teamId: number) => `/api/teams/${teamId}/chat/messages`,
 
   GET_TEAM_UPCOMING_SCHEDULE: (teamId: number) => `/api/events/team/${teamId}/upcomming`,
+  GET_TEAM_TODAY_SCHEDULE: (teamId: number) => `/api/events/team/${teamId}/today`,
 };
