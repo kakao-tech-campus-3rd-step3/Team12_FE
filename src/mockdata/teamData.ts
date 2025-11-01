@@ -1,14 +1,14 @@
-import type { Member, TimeSlot, Team } from '@/types/team';
+import type { Member, Team, TimeSlot } from '@/types/team';
 
 export const mockMembers: Member[] = [
-  { id: 1, name: '김민수', status: '온라인' },
-  { id: 2, name: '박지영', status: '바쁨' },
-  { id: 3, name: '강민재', status: '바쁨' },
-  { id: 4, name: '송하늘', status: '온라인' },
-  { id: 5, name: '이도윤', status: '온라인' },
-  { id: 6, name: '최서연', status: '바쁨' },
-  { id: 7, name: '정우진', status: '온라인' },
-  { id: 8, name: '한지민', status: '바쁨' },
+  { id: 1, name: '김민수', role: 'MEMBER' },
+  { id: 2, name: '박지영', role: 'MEMBER' },
+  { id: 3, name: '강민재', role: 'MEMBER' },
+  { id: 4, name: '송하늘', role: 'MEMBER' },
+  { id: 5, name: '이도윤', role: 'MEMBER' },
+  { id: 6, name: '최서연', role: 'MEMBER' },
+  { id: 7, name: '정우진', role: 'LEADER' },
+  { id: 8, name: '한지민', role: 'MEMBER' },
 ];
 
 export const mockTimeSlots: TimeSlot[] = [

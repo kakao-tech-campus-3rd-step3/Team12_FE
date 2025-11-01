@@ -1,12 +1,13 @@
 import { apiClient } from '@/apis/client/apiClients';
 import { TEAM_ENDPOINTS } from '@/apis/constants/endpoints';
 import type {
-  GetTeamMembersResponse,
-  GetTeamMembersParams,
-  GetTeamsResponse,
-  GetMyTeamInfoResponse,
   CreateTeamRequest,
   CreateTeamResponse,
+  GetMyTeamInfoResponse,
+  GetTeamAvailabilityResponse,
+  GetTeamMembersParams,
+  GetTeamMembersResponse,
+  GetTeamsResponse,
   JoinTeamRequest,
   JoinTeamResponse,
   GetTeamUpcomingSchedule,
@@ -30,6 +31,9 @@ export const teamAPI = {
   },
   deleteTeam: (teamId: number): Promise<void> => {
     return apiClient.delete(TEAM_ENDPOINTS.DELETE_TEAM(teamId));
+  },
+  getTeamAvailability: (teamId: number): Promise<GetTeamAvailabilityResponse> => {
+    return apiClient.get(TEAM_ENDPOINTS.GET_AVAILABILITY(teamId)).then((response) => response.data);
   },
 
   deleteTeamMember: (teamId: number, memberId: number) => {

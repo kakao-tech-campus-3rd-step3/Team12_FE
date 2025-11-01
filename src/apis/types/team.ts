@@ -81,3 +81,12 @@ export interface GetMyTeamInfoResponse {
   count: number;
   code: string;
 }
+
+export interface GetTeamAvailabilityResponse {
+  available: Availability[];
+}
+export interface Availability {
+  start_time: string;
+  end_time: string;
+  available_member: number;
+}

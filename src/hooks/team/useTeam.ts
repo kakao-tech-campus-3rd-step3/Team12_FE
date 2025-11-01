@@ -1,5 +1,9 @@
 import { teamAPI } from '@/apis/services/team';
-import type { GetTeamsResponse } from '@/apis/types/team';
+import type {
+  GetMyTeamInfoResponse,
+  GetTeamAvailabilityResponse,
+  GetTeamsResponse,
+} from '@/apis/types/team';
 import { queryKeys } from '@/lib/queryKeys';
 import { useTeamStore } from '@/store/team';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -14,7 +18,6 @@ const useTeam = () => {
     queryFn: () => teamAPI.getTeams(),
   });
 
-  // API 데이터가 있을 때는 API 데이터를 우선으로 하고, 없을 때는 로컬 스토어 데이터 사용
   useEffect(() => {
     if (data?.content) {
       setTeams(data.content);
@@ -22,8 +25,6 @@ const useTeam = () => {
   }, [data, setTeams]);
 
   const [isSetting, setIsSetting] = useState(false);
-
-  // API 데이터가 있으면 API 데이터를 사용, 없으면 로컬 스토어 데이터 사용
   const currentTeams = data?.content ?? teams;
 
   return {
@@ -50,7 +51,6 @@ export const useLeaveTeam = () => {
   } = useMutation({
     mutationFn: (teamId: number) => teamAPI.leaveTeam(teamId),
     onSuccess: () => {
-      // 팀 목록 다시 조회
       toast.success('팀 탈퇴 성공');
       queryClient.invalidateQueries({ queryKey: queryKeys.teams });
     },
@@ -78,7 +78,6 @@ export const useDeleteTeam = () => {
   } = useMutation({
     mutationFn: (teamId: number) => teamAPI.deleteTeam(teamId),
     onSuccess: () => {
-      // 팀 목록 다시 조회
       toast.success('팀 삭제 성공');
       queryClient.invalidateQueries({ queryKey: queryKeys.teams });
     },
@@ -90,6 +89,31 @@ export const useDeleteTeam = () => {
   return {
     deleteTeam,
     isLoading: isPending,
+    error,
+  };
+};
+
+// ✅ 추가된 훅들 (모두 유지)
+export const useGetMyTeam = (teamId: number) => {
+  const { data, isLoading, error } = useQuery<GetMyTeamInfoResponse>({
+    queryKey: ['team', teamId],
+    queryFn: () => teamAPI.getMyTeam(teamId),
+  });
+  return {
+    data,
+    isLoading,
+    error,
+  };
+};
+
+export const useGetTeamAvailability = (teamId: number) => {
+  const { data, isLoading, error } = useQuery<GetTeamAvailabilityResponse>({
+    queryKey: queryKeys.teamAvailability,
+    queryFn: () => teamAPI.getTeamAvailability(teamId),
+  });
+  return {
+    data,
+    isLoading,
     error,
   };
 };

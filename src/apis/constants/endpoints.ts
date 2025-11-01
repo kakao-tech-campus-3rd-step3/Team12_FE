@@ -52,6 +52,7 @@ export const TEAM_ENDPOINTS = {
   GET_MY_TEAM_INFO: (teamId: number) => `/api/teams/${teamId}`,
   LEAVE_TEAM: (teamId: number) => `/api/teams/${teamId}/member`, // 팀 탈퇴
   DELETE_TEAM: (teamId: number) => `/api/teams/${teamId}/team`, // 팀 삭제
+  GET_AVAILABILITY: (teamId: number) => `/api/teams/${teamId}/when-to-meet`,
 
   //팀원 제거 (팀장 권한)
   DELETE_TEAM_MEMBER: (teamId: number, memberId: number) =>
