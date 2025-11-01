@@ -101,7 +101,14 @@ export const useCalendarStore = create<CalendarState>((set) => ({
 
       // API 호출
       if (mode === 'team') {
-        await teamCalendarAPI.addTeamEvent(event as any);
+        const teamId = teamOrPersonalOption?.teamId;
+        if (!teamId) {
+          throw new Error('팀 ID가 필요합니다');
+        }
+        await teamCalendarAPI.addTeamEvent({
+          ...event,
+          team_id: teamId,
+        } as any);
       } else {
         await personalCalendarAPI.addEvent(event);
       }

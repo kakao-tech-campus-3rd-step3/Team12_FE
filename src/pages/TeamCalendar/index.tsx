@@ -9,7 +9,7 @@ import TeamAvailability from '@/pages/TeamCalendar/components/TeamAvailability';
 import TeamChat from '@/pages/TeamCalendar/components/TeamChat';
 import TeamMembers from '@/pages/TeamCalendar/components/TeamMembers';
 import TeamSidebar from '@/pages/TeamCalendar/components/TeamSidebar';
-import UpcomingTeamSchedule from '@/pages/TeamCalendar/components/UpcomingTeamSchedule';
+import UpcomingTeamSchedule from '@/pages/TeamCalendar/components/TeamSchedule';
 
 const TeamCalendarPage = () => {
   const [showAvailability, setShowAvailability] = useState(false);

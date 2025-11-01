@@ -131,4 +131,17 @@ export const useTeamUpcomingSchedule = (teamId: number | null) => {
   };
 };
 
+export const useTeamTodaySchedule = (teamId: number | null) => {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['teamTodaySchedule', teamId],
+    queryFn: () => teamAPI.getTeamTodaySchedule(teamId!),
+    enabled: !!teamId,
+  });
+  return {
+    schedules: data ?? [],
+    isLoading,
+    error,
+  };
+};
+
 export default useTeam;

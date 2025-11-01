@@ -4,7 +4,7 @@ import { Calendar, ChevronLeft, ChevronRight, Clock, ShieldHalf } from 'lucide-r
 import { useDeleteTeamMember } from '@/hooks/team';
 import TeamInfo from '@/pages/TeamCalendar/components/TeamInfo';
 import TeamMembers from '@/pages/TeamCalendar/components/TeamMembers';
-import UpcomingTeamSchedule from '@/pages/TeamCalendar/components/UpcomingTeamSchedule';
+import UpcomingTeamSchedule from '@/pages/TeamCalendar/components/TeamSchedule';
 
 interface TeamSidebarProps {
   onViewAvailability?: () => void;

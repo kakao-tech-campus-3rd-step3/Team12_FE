@@ -11,7 +11,6 @@ import type {
 import type {
   addCalendarEventRequest,
   addCalendarEventResponse,
-  getCalendarEventsResponse,
   addCalendarRecurringEventRequest,
   deleteCalendarRecurringOneEventRequest,
   modifyCalendarEventRequest,
