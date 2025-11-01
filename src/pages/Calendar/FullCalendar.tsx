@@ -188,7 +188,7 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
         await getTodayEvents();
       }
     } else if (modalType === 'edit' && selectedEvent) {
-      const modifyData: modifyCalendarEventRequest = { event_id: selectedEvent.event_id };
+      const modifyData: modifyCalendarEventRequest = {};
 
       if (eventData.title !== selectedEvent.title) modifyData.title = eventData.title;
       if (eventData.description !== selectedEvent.description)
@@ -206,6 +206,7 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
       console.log('modify payload:', modifyData);
 
       await updateEvent(
+        selectedEvent.event_id,
         modifyData,
         mode === 'team' ? { teamId, mode: 'team' } : { mode: 'personal' },
       );
