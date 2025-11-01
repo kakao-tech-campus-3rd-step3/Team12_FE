@@ -25,11 +25,13 @@ export interface RefreshTokenResponse {
 }
 
 //이메일 인증 코드 발송
-export interface EmailSendRequest {
-  email: string;
-}
 export interface EmailSendResponse {
   expires_at: string;
+}
+
+//이메일 인증 코드 검증
+export interface VerifyCodeResponse {
+  verified: boolean;
 }
 
 //사용자 정보

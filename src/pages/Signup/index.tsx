@@ -30,8 +30,10 @@ type SignupFormData = z.infer<typeof signupSchema>;
 const Signup = () => {
   const [showVerification, setShowVerification] = useState(false);
   const [verificationCode, setVerificationCode] = useState('');
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
   const [backendError, setBackendError] = useState<string | null>(null);
   const [isSendingCode, setIsSendingCode] = useState(false);
+  const [isVerifyingCode, setIsVerifyingCode] = useState(false);
   const navigate = useNavigate();
   const { signup } = useAuthStore();
 
@@ -66,6 +68,26 @@ const Signup = () => {
       }
     } finally {
       setIsSendingCode(false);
+    }
+  };
+
+  const handleVerificationCode = async () => {
+    if (!verificationCode) {
+      toast.error('인증 코드를 입력해주세요.');
+      return;
+    }
+    setIsVerifyingCode(true);
+    try {
+      await authAPI.verifyEmailVerification(userEmail, verificationCode);
+      toast.success('이메일 인증이 완료되었습니다');
+      setIsEmailVerified(true);
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const message = error.response?.data?.message || '인증 코드가 올바르지 않습니다.';
+        toast.error(message);
+      }
+    } finally {
+      setIsVerifyingCode(false);
     }
   };
 
@@ -116,12 +138,13 @@ const Signup = () => {
               <Button
                 type="button"
                 onClick={handleSendVerificationCode}
+                disabled={isSendingCode || !userEmail || !!errors.email || isEmailVerified}
                 variant="primary"
                 size="md"
                 noWrapper={true}
                 className="px-4 cursor-pointer"
               >
-                {isSendingCode ? '발송중...' : '인증코드'}
+                {isSendingCode ? '발송중...' : isEmailVerified ? '인증완료' : '인증코드'}
               </Button>
             </div>
             {showVerification && (
@@ -138,8 +161,16 @@ const Signup = () => {
                     />
                   </div>
                 </div>
-                <Button type="button" variant="primary" size="md" noWrapper={true} className="px-4">
-                  인증하기
+                <Button
+                  type="button"
+                  onClick={handleVerificationCode}
+                  disabled={isVerifyingCode || !verificationCode || isEmailVerified}
+                  variant="primary"
+                  size="md"
+                  noWrapper={true}
+                  className="px-4 cursor-pointer"
+                >
+                  {isVerifyingCode ? '확인중...' : isEmailVerified ? '완료' : '인증하기'}
                 </Button>
               </div>
             )}
@@ -173,6 +204,7 @@ const Signup = () => {
             size="md"
             noWrapper={true}
             fullWidth={true}
+            disabled={!isEmailVerified}
           >
             회원가입 하기
           </Button>

@@ -16,6 +16,7 @@ interface ButtonProps {
   wrapperClassName?: string;
   noWrapper?: boolean;
   type?: 'button' | 'submit' | 'reset';
+  disabled?: boolean;
 }
 
 const Button = ({
@@ -31,6 +32,7 @@ const Button = ({
   wrapperClassName,
   noWrapper = false,
   type = 'button',
+  disabled = false,
 }: ButtonProps) => {
   const baseStyles =
     'font-medium rounded-md transition-colors text-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2';
@@ -59,6 +61,7 @@ const Button = ({
     <button
       type={type}
       onClick={onClick}
+      disabled={disabled}
       className={twMerge(
         baseStyles,
         variantStyles[variant],
