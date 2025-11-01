@@ -1,7 +1,6 @@
 import Drawer from '@/components/organisms/Drawer';
 import { useDeleteTeam, useLeaveTeam, useTeam } from '@/hooks/team';
 import FullCalendar from '@/pages/Calendar/FullCalendar';
-import LinkStatus from '@/pages/PersonalCalendar/components/LinkStatus';
 import MyClass from '@/pages/PersonalCalendar/components/MyClass';
 import MyTeam from '@/pages/PersonalCalendar/components/MyTeam';
 import PersonalSideBar from '@/pages/PersonalCalendar/components/PersonalSideBar';
@@ -25,7 +24,7 @@ const PersonalCalendarPage = () => {
           </div>
           <div className="flex flex-col m-2 gap-8 lg:flex-[1] lg:max-w-sm">
             <UpcomingSchedule />
-            <LinkStatus />
+            {/* <LinkStatus /> */}
           </div>
         </div>
       </div>
@@ -49,7 +48,7 @@ const PersonalCalendarPage = () => {
 
             <div className="flex flex-col m-2 gap-8 lg:flex-[1] lg:max-w-sm">
               <UpcomingSchedule />
-              <LinkStatus />
+              {/* <LinkStatus /> */}
             </div>
           </div>
         </div>

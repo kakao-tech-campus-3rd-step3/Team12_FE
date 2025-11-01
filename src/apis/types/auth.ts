@@ -26,7 +26,7 @@ export interface RefreshTokenResponse {
 
 //사용자 정보
 export interface UserInfoResponse {
-  user_id: string;
+  user_id: number;
   name: string;
   email: string;
 }

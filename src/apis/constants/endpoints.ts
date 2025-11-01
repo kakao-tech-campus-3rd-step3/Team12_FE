@@ -14,6 +14,8 @@ export const AUTH_ENDPOINTS = {
 export const PERSONAL_CALENDAR_ENDPOINTS = {
   GET_EVENTS: '/api/events',
   GET_TODAY_EVENTS: '/api/events/today',
+
+  GET_UPCOMMING_EVENTS: '/api/events/upcomming',
   ADD_EVENT: '/api/events/add',
   MODIFY_EVENT: '/api/events/modify',
   DELETE_EVENT: (eventId: number) => `/api/events/${eventId}`,
@@ -50,6 +52,10 @@ export const TEAM_ENDPOINTS = {
   GET_MY_TEAM_INFO: (teamId: number) => `/api/teams/${teamId}`,
   LEAVE_TEAM: (teamId: number) => `/api/teams/${teamId}/member`, // 팀 탈퇴
   DELETE_TEAM: (teamId: number) => `/api/teams/${teamId}/team`, // 팀 삭제
+
+  //팀원 제거 (팀장 권한)
+  DELETE_TEAM_MEMBER: (teamId: number, memberId: number) =>
+    `/api/teams/${teamId}/members/${memberId}`,
 
   //팀 채팅
   CHAT_WEBSOCKET: (teamId: number, token: string) => `/ws/teams/${teamId}/chat?token=${token}`,

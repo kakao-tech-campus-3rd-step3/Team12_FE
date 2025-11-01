@@ -1,4 +1,5 @@
 import type { TeamData } from '@/apis/types/team';
+import LinkStatus from '@/pages/PersonalCalendar/components/LinkStatus';
 import MyClass from '@/pages/PersonalCalendar/components/MyClass';
 import MyTeam from '@/pages/PersonalCalendar/components/MyTeam';
 import TodaySchedule from '@/pages/PersonalCalendar/components/TodaySchedule';
@@ -48,7 +49,12 @@ const PersonalSideBar = ({ teams, isLoading, setIsSetting }: PersonalSideBarProp
       // case 'quickActions':
       //   return <QuickActions />;
       case 'myClass':
-        return <MyClass />;
+        return (
+          <div className="flex flex-col gap-4">
+            <LinkStatus />
+            <MyClass />
+          </div>
+        );
       case 'myTeam':
         return <MyTeam teams={teams} isLoading={isLoading} setIsSetting={setIsSetting} />;
       case 'todaySchedule':
@@ -104,7 +110,7 @@ const PersonalSideBar = ({ teams, isLoading, setIsSetting }: PersonalSideBarProp
         className={`bg-white border-r border-gray-200 transition-all duration-300 ease-in-out overflow-hidden
           ${isSidebarOpen ? 'w-64' : 'w-0'}`}
       >
-        <div className="overflow-y-auto p-5 h-full">
+        <div className="overflow-y-auto pt-5 px-2 h-full">
           {isSidebarOpen && activeSidebarTab && (
             <div className="transition-opacity duration-300">{renderContent()}</div>
           )}

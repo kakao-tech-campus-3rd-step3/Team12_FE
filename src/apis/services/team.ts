@@ -32,6 +32,10 @@ export const teamAPI = {
     return apiClient.delete(TEAM_ENDPOINTS.DELETE_TEAM(teamId));
   },
 
+  deleteTeamMember: (teamId: number, memberId: number) => {
+    return apiClient.delete(TEAM_ENDPOINTS.DELETE_TEAM_MEMBER(teamId, memberId));
+  },
+  
   getTeamUpcomingSchedule: (teamId: number): Promise<GetTeamUpcomingSchedule> => {
     return apiClient
       .get(TEAM_ENDPOINTS.GET_TEAM_UPCOMING_SCHEDULE(teamId))

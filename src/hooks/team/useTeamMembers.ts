@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { teamAPI } from '@/apis';
 
 interface UseTeamMembersParams {
@@ -15,5 +15,16 @@ export const useTeamMembers = ({ teamId }: UseTeamMembersParams) => {
         limit: 100,
       }),
     enabled: !!teamId,
+  });
+};
+
+export const useDeleteTeamMember = (teamId: number) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (memberId: number) => teamAPI.deleteTeamMember(teamId, memberId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['teamMembers', teamId] });
+    },
   });
 };

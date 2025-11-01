@@ -6,11 +6,13 @@ import { create } from 'zustand';
 interface CalendarState {
   events: CalendarEvent[] | null;
   todayEvents: CalendarEvent[] | null;
+  upcomingEvents: CalendarEvent[] | null;
   isAuthenticated: boolean;
   getEvents: (teamOrPersonalOption?: {
     teamId?: number;
     mode?: 'team' | 'personal';
   }) => Promise<CalendarEvent[] | null>;
+
   getTodayEvents: () => Promise<CalendarEvent[] | null>;
   addEvent: (
     event: addCalendarEventRequest,
@@ -24,12 +26,18 @@ interface CalendarState {
     updates: modifyCalendarEventRequest,
     teamOrPersonalOption?: { teamId?: number; mode?: 'personal' | 'team' },
   ) => Promise<void>;
+  getUpcomingEvents: () => Promise<CalendarEvent[] | null>;
+  addEvent: (event: Omit<CalendarEvent, 'event_id'>) => void;
+  removeEvent: (eventId: number) => void;
+  updateEvent: (eventId: number, updates: Partial<CalendarEvent>) => void;
+
 }
 
 export const useCalendarStore = create<CalendarState>((set) => ({
   // Test Data
   events: [],
   todayEvents: [],
+  upcomingEvents: [],
   isAuthenticated: false,
   getEvents: async (teamOrPersonalOption) => {
     try {
@@ -165,4 +173,16 @@ export const useCalendarStore = create<CalendarState>((set) => ({
       throw error;
     }
   },
+     getUpcomingEvents: async (): Promise<CalendarEvent[] | null> => {
+    try {
+      const response = await personalCalendarAPI.getUpcomingEvents();
+      set({ upcomingEvents: response.data });
+      return response.data;
+    } catch (error) {
+      console.error('Failed to fetch upcoming events:', error);
+      set({ upcomingEvents: [] });
+      return null;
+    }
+  },
+ 
 }));
