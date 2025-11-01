@@ -5,6 +5,7 @@ import { useState, useRef, useEffect } from 'react';
 import { RouterPath } from '@/routes/path';
 import { authAPI } from '@/apis';
 import ConfirmModal from '@/components/atoms/ConfirmModal';
+import { toast } from 'react-toastify';
 
 const Header = () => {
   const navigate = useNavigate();
@@ -41,12 +42,19 @@ const Header = () => {
 
       logout();
 
-      alert('회원 탈퇴가 완료되었습니다.');
+      toast.error('회원 탈퇴가 완료되었습니다.', {
+        position: 'top-right',
+        autoClose: 2000,
+      });
+
       navigate(RouterPath.LOGIN);
       setIsDropdownOpen(false);
     } catch (error) {
       console.error('회원 탈퇴 실패:', error);
-      alert('회원 탈퇴에 실패했습니다. 다시 시도해주세요.');
+      toast.error('회원 탈퇴에 실패했습니다. 다시 시도해주세요.', {
+        position: 'top-right',
+        autoClose: 3000,
+      });
     }
   };
 
