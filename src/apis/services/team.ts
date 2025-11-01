@@ -7,11 +7,14 @@ import type {
   GetTeamAvailabilityResponse,
   GetTeamMembersParams,
   GetTeamMembersResponse,
+  GetTeamRecommendTimesParams,
+  GetTeamRecommendTimesResponse,
+  GetTeamSchedule,
   GetTeamsResponse,
   JoinTeamRequest,
   JoinTeamResponse,
-  GetTeamSchedule,
 } from '@/apis/types/team';
+import { toLocalDateTime } from '@/utils/dateTimeUtils';
 
 export const teamAPI = {
   getTeams: (): Promise<GetTeamsResponse> => {
@@ -59,6 +62,32 @@ export const teamAPI = {
     const params = new URLSearchParams({ page: page.toString(), limit: limit.toString() });
     return apiClient
       .get(`${TEAM_ENDPOINTS.GET_TEAM_MEMBERS(teamId)}?${params}`)
+      .then((response) => response.data);
+  },
+  getTeamRecommendTimes: ({
+    teamId,
+    N,
+    start_time,
+    end_time,
+    required_time,
+  }: GetTeamRecommendTimesParams): Promise<GetTeamRecommendTimesResponse> => {
+    // ISO 문자열을 LocalDateTime 형식으로 변환 (Z 없이)
+    const convertedStartTime = start_time ? toLocalDateTime(new Date(start_time)) : '';
+    const convertedEndTime = end_time ? toLocalDateTime(new Date(end_time)) : '';
+
+    console.log('convertedStartTime', convertedStartTime);
+    console.log('convertedEndTime', convertedEndTime);
+    console.log('required_time', required_time);
+    return apiClient
+      .get(
+        TEAM_ENDPOINTS.GET_TEAM_RECOMMEND_TIMES(
+          teamId,
+          N,
+          convertedStartTime,
+          convertedEndTime,
+          required_time,
+        ),
+      )
       .then((response) => response.data);
   },
 };
