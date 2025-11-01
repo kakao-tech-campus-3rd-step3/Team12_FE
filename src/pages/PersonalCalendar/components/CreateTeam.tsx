@@ -2,6 +2,7 @@ import Button from '@/components/atoms/Button';
 import { FormInput } from '@/components/atoms/FormInput';
 import { FormTextarea } from '@/components/atoms/FormTextarea';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 
 interface CreateTeamProps {
   onBack: () => void;
@@ -14,7 +15,7 @@ const CreateTeam = ({ onBack, onCreateTeam }: CreateTeamProps) => {
 
   const handleCreateTeam = () => {
     if (!teamName.trim()) {
-      alert('팀 이름을 입력해주세요.');
+      toast.error('팀 이름을 입력해주세요.');
       return;
     }
     onCreateTeam({
@@ -23,6 +24,7 @@ const CreateTeam = ({ onBack, onCreateTeam }: CreateTeamProps) => {
     });
     setTeamName('');
     setTeamDescription('');
+    toast.success('팀 생성 성공');
   };
 
   return (

@@ -1,15 +1,16 @@
-import { AxiosError } from 'axios';
-import { useState } from 'react';
-import { KeyRound, Lock, Mail, User } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
+import { AuthInput } from '@/components/atoms/AuthInput';
+import Button from '@/components/atoms/Button';
+import Logo from '@/components/atoms/Logo';
 import { RouterPath } from '@/routes/path';
 import { useAuthStore } from '@/store/useAuthStore';
-import Logo from '@/components/atoms/Logo';
-import Button from '@/components/atoms/Button';
-import { AuthInput } from '@/components/atoms/AuthInput';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { AxiosError } from 'axios';
+import { KeyRound, Lock, Mail, User } from 'lucide-react';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { z } from 'zod';
 
 const signupSchema = z
   .object({
@@ -50,7 +51,7 @@ const Signup = () => {
         email: data.email,
         password: data.password,
       });
-      alert('회원가입이 완료되었습니다. 로그인해주세요!');
+      toast.success('회원가입이 완료되었습니다. 로그인해주세요!');
       navigate(RouterPath.LOGIN);
     } catch (error) {
       let errorMessage = '회원가입에 실패했습니다.';
@@ -133,7 +134,7 @@ const Signup = () => {
           </div>
 
           {backendError && (
-            <div className="px-3 py-2 text-xs text-red-600 bg-red-50 border border-red-200 rounded-md text-center">
+            <div className="px-3 py-2 text-xs text-center text-red-600 bg-red-50 rounded-md border border-red-200">
               {backendError}
             </div>
           )}

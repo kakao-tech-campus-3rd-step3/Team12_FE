@@ -2,6 +2,7 @@ import type { TeamData } from '@/apis/types/team';
 import Button from '@/components/atoms/Button';
 import { Calendar, LogOut, Settings, Trash, Users } from 'lucide-react';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 
 interface TeamListCardProps {
   team: TeamData;
@@ -24,7 +25,7 @@ const TeamListCard = ({ team, leaveTeam, deleteTeam }: TeamListCardProps) => {
   const checkTeamId = (team: TeamData) => {
     if (!team.id || team.id === undefined) {
       console.error('Invalid team_id for leaving team:', team);
-      alert('팀 정보가 올바르지 않습니다.');
+      toast.error('팀 정보가 올바르지 않습니다.');
       return false;
     }
     return true;
@@ -35,6 +36,7 @@ const TeamListCard = ({ team, leaveTeam, deleteTeam }: TeamListCardProps) => {
     }
     setIsActionsOpen(false);
     leaveTeam(team.id);
+    toast.success('팀 탈퇴 성공');
   };
 
   const handleDeleteTeam = () => {
