@@ -6,6 +6,7 @@ import '@/styles/datapicker.css';
 import { generateTimeOptions } from '@/utils/timeUtils';
 import React, { useState } from 'react';
 import type { DateRange } from 'react-day-picker';
+import { toast } from 'react-toastify';
 
 interface RecommendTimesProps {
   onViewAvailability?: () => void;
@@ -23,10 +24,10 @@ const RecommendTimes: React.FC<RecommendTimesProps> = ({ onViewAvailability }) =
 
   const handleSearch = () => {
     if (!range?.from || !range?.to) {
-      alert('날짜 범위를 선택해주세요!');
+      toast.error('날짜 범위를 선택해주세요!');
       return;
     }
-    alert(`선택된 기간: ${range.from.toDateString()} ~ ${range.to.toDateString()}`);
+    toast.success(`선택된 기간: ${range.from.toDateString()} ~ ${range.to.toDateString()}`);
   };
   // 모든 뷰에서 사용되는 공통 컴포넌트
   const DatePickerSection = ({ forceShow = false }: { forceShow?: boolean }) => (

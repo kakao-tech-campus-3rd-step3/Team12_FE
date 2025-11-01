@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import { UserPlus } from 'lucide-react';
 import Button from '@/components/atoms/Button';
+import { UserPlus } from 'lucide-react';
+import { useState } from 'react';
+import { toast } from 'react-toastify';
 
 interface JoinTeamProps {
   onBack: () => void;
@@ -12,20 +13,21 @@ const JoinTeam = ({ onBack, onJoinTeam }: JoinTeamProps) => {
 
   const handleJoinTeam = () => {
     if (!inviteCode.trim()) {
-      alert('초대코드를 입력해주세요.');
+      toast.error('초대코드를 입력해주세요.');
       return;
     }
     onJoinTeam(inviteCode);
     setInviteCode('');
+    toast.success('팀 가입 성공');
   };
 
   return (
-    <div className="p-6 overflow-y-auto">
+    <div className="overflow-y-auto p-6">
       <div className="pt-8 pb-0">
         <div className="flex items-center mb-6">
           <button
             onClick={onBack}
-            className="mr-4 text-gray-600 hover:text-gray-800 transition-colors"
+            className="mr-4 text-gray-600 transition-colors hover:text-gray-800"
           >
             ←
           </button>
@@ -33,16 +35,16 @@ const JoinTeam = ({ onBack, onJoinTeam }: JoinTeamProps) => {
         </div>
 
         <div className="flex flex-col items-center justify-center min-h-[400px]">
-          <div className="w-full max-w-sm space-y-6">
-            <div className="text-center mb-8">
-              <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center rounded-full bg-blue-50">
+          <div className="space-y-6 w-full max-w-sm">
+            <div className="mb-8 text-center">
+              <div className="flex justify-center items-center mx-auto mb-4 w-16 h-16 bg-blue-50 rounded-full">
                 <UserPlus className="w-8 h-8 text-blue-500" />
               </div>
-              <p className="text-gray-600 text-sm">팀 관리자로부터 받은 초대코드를 입력해주세요.</p>
+              <p className="text-sm text-gray-600">팀 관리자로부터 받은 초대코드를 입력해주세요.</p>
             </div>
 
             <div>
-              <label htmlFor="inviteCode" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="inviteCode" className="block mb-2 text-sm font-medium text-gray-700">
                 초대코드
               </label>
               <input
@@ -51,7 +53,7 @@ const JoinTeam = ({ onBack, onJoinTeam }: JoinTeamProps) => {
                 value={inviteCode}
                 onChange={(e) => setInviteCode(e.target.value)}
                 placeholder="초대코드를 입력하세요"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-blue-500 outline-none transition-colors"
+                className="px-4 py-3 w-full rounded-lg border border-gray-300 transition-colors outline-none focus:border-blue-500"
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
                     handleJoinTeam();
@@ -66,7 +68,7 @@ const JoinTeam = ({ onBack, onJoinTeam }: JoinTeamProps) => {
                 text="가입하기"
                 size="md"
                 noWrapper={true}
-                className="w-full h-12 flex items-center justify-center"
+                className="flex justify-center items-center w-full h-12"
               />
             </div>
           </div>
