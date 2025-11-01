@@ -202,7 +202,11 @@ const TeamAvailability: React.FC<TeamAvailabilityProps> = ({ teamId, onBack }) =
           </div>
 
           {/* 오른쪽: 추천 시간대 */}
-          <RecommendedTimeSlots teamId={teamId} memberCount={teamInfo?.count || 0} />
+          <RecommendedTimeSlots
+            teamId={teamId}
+            memberCount={teamInfo?.count || 0}
+            onBack={onBack}
+          />
         </div>
       </div>
     </div>

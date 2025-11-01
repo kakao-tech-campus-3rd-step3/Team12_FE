@@ -5,14 +5,20 @@ import { useTeamRecommendTimes } from '@/hooks/team/useTeam';
 import { formatDateTimeShort } from '@/utils/dateTimeUtils';
 import { useState } from 'react';
 import type { DateRange } from 'react-day-picker';
+import { toast } from 'react-toastify';
 
 // 추천 시간대 컴포넌트
 interface RecommendedTimeSlotsProps {
   teamId: number;
   memberCount: number;
+  onBack?: () => void;
 }
 
-const RecommendedTimeSlots: React.FC<RecommendedTimeSlotsProps> = ({ teamId, memberCount }) => {
+const RecommendedTimeSlots: React.FC<RecommendedTimeSlotsProps> = ({
+  teamId,
+  memberCount,
+  onBack,
+}) => {
   const [selectedDuration, setSelectedDuration] = useState(60);
   const [range, setRange] = useState<DateRange | undefined>();
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<RecommendTime | undefined>();
@@ -31,14 +37,15 @@ const RecommendedTimeSlots: React.FC<RecommendedTimeSlotsProps> = ({ teamId, mem
   };
 
   const handleSelectClick = async (timeSlot: RecommendTime) => {
-    const addTeamEvent = await teamCalendarAPI.addTeamEvent({
+    await teamCalendarAPI.addTeamEvent({
       team_id: teamId,
       title: timeSlot.week,
       description: '',
       start_time: timeSlot.start_time,
       end_time: timeSlot.end_time,
     });
-    console.log('addTeamEvent', addTeamEvent);
+    toast.success('일정이 추가되었습니다.');
+    onBack?.();
   };
 
   return (
