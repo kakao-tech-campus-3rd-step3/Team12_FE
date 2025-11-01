@@ -9,6 +9,7 @@ export const AUTH_ENDPOINTS = {
   LOGIN: '/api/members/login',
   REFRESH: '/api/members/refresh',
   USER_INFO: '/api/members/me',
+  SIGNOUT: '/api/members/me',
 } as const;
 
 export const PERSONAL_CALENDAR_ENDPOINTS = {
@@ -46,19 +47,20 @@ export const EVERYTIME_ENDPOINTS = {
 
 export const TEAM_ENDPOINTS = {
   GET_TEAMS: '/api/teams',
-  GET_TEAM_MEMBERS: (teamId: number) => `/api/teams/${teamId}/members`,
   JOIN_TEAM: '/api/teams/join',
   CREATE_TEAM: '/api/teams',
-  GET_MY_TEAM_INFO: (teamId: number) => `/api/teams/${teamId}`,
   LEAVE_TEAM: (teamId: number) => `/api/teams/${teamId}/member`, // 팀 탈퇴
   DELETE_TEAM: (teamId: number) => `/api/teams/${teamId}/team`, // 팀 삭제
+
+  GET_MY_TEAM_INFO: (teamId: number) => `/api/teams/${teamId}`, // 내 팀 정보 조회
+  GET_TEAM_MEMBERS: (teamId: number) => `/api/teams/${teamId}/members`, // 팀원 정보 조회
+
   GET_AVAILABILITY: (teamId: number) => `/api/teams/${teamId}/when-to-meet`,
 
-  //팀원 제거 (팀장 권한)
   DELETE_TEAM_MEMBER: (teamId: number, memberId: number) =>
-    `/api/teams/${teamId}/members/${memberId}`,
+    `/api/teams/${teamId}/members/${memberId}`, // 팀원 제거 (팀장 권한)
 
-  //팀 채팅
+  // 팀 채팅
   CHAT_WEBSOCKET: (teamId: number, token: string) => `/ws/teams/${teamId}/chat?token=${token}`,
   CHAT_MESSAGES: (teamId: number) => `/api/teams/${teamId}/chat/messages`,
 
@@ -72,4 +74,5 @@ export const TEAM_ENDPOINTS = {
     required_time: string,
   ) =>
     `/api/teams/${teamId}/when-to-meet/recommend?N=${N}&start_time=${start_time}&end_time=${end_time}&required_time=${required_time}`,
+
 };
