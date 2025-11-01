@@ -11,6 +11,7 @@ import type {
 import type {
   addCalendarEventRequest,
   addCalendarEventResponse,
+  getCalendarEventsResponse,
   addCalendarRecurringEventRequest,
   deleteCalendarRecurringOneEventRequest,
   getCalendarEventsResponse,
@@ -28,6 +29,9 @@ export const personalCalendarAPI = {
       params,
     });
   },
+  getTodayEvents: (): Promise<getCalendarEventsResponse> => {
+    return apiClient.get(PERSONAL_CALENDAR_ENDPOINTS.GET_TODAY_EVENTS);
+  };
   getUpcomingEvents: (): Promise<getCalendarEventsResponse> => {
     return apiClient.get(PERSONAL_CALENDAR_ENDPOINTS.GET_UPCOMMING_EVENTS);
   },
