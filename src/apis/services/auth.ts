@@ -90,4 +90,8 @@ export const authAPI = {
         throw error;
       });
   },
+
+  signout: () => {
+    return apiClient.delete(AUTH_ENDPOINTS.SIGNOUT);
+  },
 };

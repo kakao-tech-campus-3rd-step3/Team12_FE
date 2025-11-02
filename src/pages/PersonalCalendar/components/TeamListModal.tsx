@@ -10,6 +10,7 @@ import JoinTeam from '@/pages/PersonalCalendar/components/JoinTeam';
 import TeamListCard from '@/pages/PersonalCalendar/components/TeamListCard';
 import { useTeamStore } from '@/store/team';
 import { useQueryClient } from '@tanstack/react-query';
+import { toast } from 'react-toastify';
 
 interface TeamListModalProps {
   isOpen: boolean;
@@ -55,7 +56,7 @@ const TeamListModal = ({ isOpen, onClose, leaveTeam, deleteTeam }: TeamListModal
       // React Query 캐시를 무효화하여 최신 데이터를 가져옴
       await queryClient.invalidateQueries({ queryKey: queryKeys.teams });
 
-      alert(`"${teamData.name}" 팀이 생성되었습니다!`);
+      toast.success(`"${teamData.name}" 팀이 생성되었습니다!`);
       setCurrentView('list');
     } catch {}
   };
@@ -69,7 +70,7 @@ const TeamListModal = ({ isOpen, onClose, leaveTeam, deleteTeam }: TeamListModal
       // React Query 캐시를 무효화하여 최신 데이터를 가져옴
       await queryClient.invalidateQueries({ queryKey: queryKeys.teams });
 
-      alert('팀 가입 성공');
+      toast.success('팀 가입 성공');
       setCurrentView('list');
     } catch {}
   };
