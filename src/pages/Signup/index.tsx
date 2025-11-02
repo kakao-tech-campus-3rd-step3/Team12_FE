@@ -28,12 +28,12 @@ const signupSchema = z
 type SignupFormData = z.infer<typeof signupSchema>;
 
 const Signup = () => {
-  const [showVerification, setShowVerification] = useState(false);
-  const [verificationCode, setVerificationCode] = useState('');
-  const [isEmailVerified, setIsEmailVerified] = useState(false);
+  const [showVerification, setShowVerification] = useState(false); //인증 코드 입력 필드 표시
+  const [verificationCode, setVerificationCode] = useState(''); //인증코드 저장
+  const [isEmailVerified, setIsEmailVerified] = useState(false); //이메일 인증 완료 여부 저장
+  const [isSendingCode, setIsSendingCode] = useState(false); // 인증 코드 발송 중 상태관리
+  const [isVerifyingCode, setIsVerifyingCode] = useState(false); //인증 코드 검증 중 상태관리
   const [backendError, setBackendError] = useState<string | null>(null);
-  const [isSendingCode, setIsSendingCode] = useState(false);
-  const [isVerifyingCode, setIsVerifyingCode] = useState(false);
   const navigate = useNavigate();
   const { signup } = useAuthStore();
 
@@ -170,7 +170,7 @@ const Signup = () => {
                   noWrapper={true}
                   className="px-4 cursor-pointer"
                 >
-                  {isVerifyingCode ? '확인중...' : isEmailVerified ? '완료' : '인증하기'}
+                  {isVerifyingCode ? '확인중...' : isEmailVerified ? '인증완료' : '인증하기'}
                 </Button>
               </div>
             )}

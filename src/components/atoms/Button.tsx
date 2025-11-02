@@ -45,6 +45,10 @@ const Button = ({
     ghost: 'text-gray-400 bg-transparent hover:bg-gray-50 border-none focus-visible:ring-gray-300',
   };
 
+  const disabledStyles = disabled
+    ? 'bg-gray-400 text-gray-200 cursor-not-allowed hover:bg-gray-400'
+    : '';
+
   const sizeStyles = {
     sm: 'px-3 py-2 text-sm',
     md: 'px-4 py-3 text-base',
@@ -64,7 +68,7 @@ const Button = ({
       disabled={disabled}
       className={twMerge(
         baseStyles,
-        variantStyles[variant],
+        disabled ? disabledStyles : variantStyles[variant],
         sizeStyles[size],
         fullWidth && !noWrapper ? 'w-full' : '',
         icon ? 'flex items-center gap-2' : '',
