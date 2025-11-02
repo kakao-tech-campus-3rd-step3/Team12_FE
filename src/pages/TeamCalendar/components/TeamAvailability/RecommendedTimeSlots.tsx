@@ -55,6 +55,8 @@ const RecommendedTimeSlots: React.FC<RecommendedTimeSlotsProps> = ({
       start_time: timeSlot.start_time,
       end_time: timeSlot.end_time,
     });
+    setIsOpen(false);
+    onBack?.();
   };
 
   const handleSaveEvent = (event: Omit<CalendarEvent, 'event_id'>, formData: FormData) => {
