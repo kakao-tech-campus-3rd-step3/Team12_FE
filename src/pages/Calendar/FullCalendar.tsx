@@ -141,7 +141,6 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
             description: eventData.description,
             first_start_time: eventData.start_time,
             first_end_time: eventData.end_time,
-            is_private: eventData.is_private,
             rrule: rrule,
           });
           await getEvents({ teamId, mode: 'team' });
@@ -154,7 +153,6 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
               description: eventData.description,
               start_time: eventData.start_time,
               end_time: eventData.end_time,
-              is_private: eventData.is_private,
             },
             { teamId, mode: 'team' },
           );
@@ -170,7 +168,6 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
           description: eventData.description,
           first_start_time: eventData.start_time,
           first_end_time: eventData.end_time,
-          is_private: eventData.is_private,
           rrule: rrule,
         });
         await getEvents({ mode: 'personal' });
@@ -182,7 +179,6 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
           description: eventData.description,
           start_time: eventData.start_time,
           end_time: eventData.end_time,
-          is_private: eventData.is_private,
         });
         await addEvent(eventData, { mode: 'personal' });
         await getTodayEvents();
@@ -193,8 +189,6 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
       if (eventData.title !== selectedEvent.title) modifyData.title = eventData.title;
       if (eventData.description !== selectedEvent.description)
         modifyData.description = eventData.description;
-      if (eventData.is_private !== selectedEvent.is_private)
-        modifyData.is_private = eventData.is_private;
       if (
         eventData.start_time !== selectedEvent.start_time ||
         eventData.end_time !== selectedEvent.end_time
@@ -329,7 +323,6 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
                       description: '',
                       start_time: `${today}T09:00:00`,
                       end_time: `${today}T10:00:00`,
-                      is_private: false,
                     });
                   },
                 },
