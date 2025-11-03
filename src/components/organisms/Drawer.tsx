@@ -1,5 +1,5 @@
 import { Sidebar } from 'flowbite-react';
-import { Menu, X } from 'lucide-react';
+import { ChevronLeft, Menu } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { useState } from 'react';
 
@@ -14,7 +14,8 @@ const Drawer = ({ children, className = '' }: DrawerProps) => {
   // Flowbite-React Sidebar 테마 커스터마이징
   const customTheme = {
     root: {
-      inner: 'h-full overflow-y-auto overflow-x-hidden rounded bg-white py-4 px-3 dark:bg-white',
+      inner:
+        'h-full overflow-y-auto overflow-x-hidden rounded-r-lg  rounded-l-none bg-white py-4 px-3 dark:bg-white',
     },
   };
 
@@ -30,7 +31,7 @@ const Drawer = ({ children, className = '' }: DrawerProps) => {
 
       {isOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/50 xl:hidden"
+          className="fixed inset-0 z-50 bg-black/50 xl:hidden"
           onClick={() => setIsOpen(false)}
         />
       )}
@@ -50,9 +51,10 @@ const Drawer = ({ children, className = '' }: DrawerProps) => {
         {/* 모바일에서 닫기 버튼 */}
         <button
           onClick={() => setIsOpen(false)}
-          className="absolute top-4 right-4 z-10 p-2 text-gray-600 xl:hidden hover:text-gray-800"
+          className="flex absolute top-4 left-4 z-10 justify-center items-center p-2 w-12 h-12 text-blue-600 bg-blue-50 rounded-lg transition-all duration-200 cursor-pointer xl:hidden"
+          title="닫기"
         >
-          <X className="w-6 h-6" />
+          <ChevronLeft className="w-6 h-6" />
         </button>
 
         {/* 사이드바 내용 */}
