@@ -145,12 +145,12 @@
 
   /* 여러 날에 걸친 이벤트 - 시작 부분 */
   .fc-event.fc-daygrid-event.fc-event-start {
-    @apply !rounded-l-lg !rounded-r-sm !mr-0;
+    @apply !rounded-l-lg !rounded-r-sm !m-0;
   }
 
   /* 여러 날에 걸친 이벤트 - 끝 부분 */
   .fc-event.fc-daygrid-event.fc-event-end {
-    @apply !rounded-r-lg !ml-0;
+    @apply !rounded-r-lg !m-0;
   }
 
   /* 여러 날에 걸친 이벤트 - 중간 부분 */
@@ -160,7 +160,7 @@
 
   /* 이벤트 내용 영역 */
   .fc-event-main {
-    @apply !overflow-visible !min-h-[20px] !flex !items-center;
+    @apply !overflow-visible !min-h-[20px] !flex !items-center !m-0 !p-0;
   }
 
   /* 이벤트 텍스트 스타일 */
@@ -356,10 +356,19 @@
     border-color: #ef4444 !important;
   }
 
+  .fc-timegrid-col-events {
+    padding: 0 !important;
+    border: none !important;
+  }
+
   /* TimeGrid 이벤트 스타일 */
   .fc-timegrid-event {
-    @apply !rounded-md !shadow-sm;
-    border-left: 3px solid currentColor !important;
+    @apply !rounded-md !shadow-sm !w-[100%];
+    /* border-left: 3px solid currentColor !important; */
+    margin: 0 !important;
+  }
+  .fc-event-main-frame {
+    padding: 0 !important;
   }
 
   /* TimeGrid 오늘 날짜 배경 */
