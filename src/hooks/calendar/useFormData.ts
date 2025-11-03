@@ -9,7 +9,6 @@ import { useEffect, useState } from 'react';
 export interface FormData {
   title: string;
   description: string;
-  private: boolean;
   allDay: boolean;
   repeat: RepeatType;
   startTime?: string;
@@ -34,7 +33,6 @@ const useFormData = ({ isOpen, modalType, selectedEvent, selectedDate }: UseForm
     description: '',
     startTime: '',
     endTime: '',
-    private: false,
     allDay: false,
     repeat: 'none',
     repeatEndType: undefined,
@@ -52,7 +50,6 @@ const useFormData = ({ isOpen, modalType, selectedEvent, selectedDate }: UseForm
           description: selectedEvent.description,
           startTime: selectedEvent.start_time,
           endTime: selectedEvent.end_time,
-          private: selectedEvent.is_private ?? false,
           allDay: false,
           repeat: 'none',
           repeatEndType: undefined,
@@ -68,7 +65,6 @@ const useFormData = ({ isOpen, modalType, selectedEvent, selectedDate }: UseForm
           description: '',
           startTime: selectedDate,
           endTime: selectedDate,
-          private: false,
           allDay: false,
           repeat: 'none',
           repeatEndType: undefined,
@@ -82,7 +78,6 @@ const useFormData = ({ isOpen, modalType, selectedEvent, selectedDate }: UseForm
           description: '',
           startTime: toDateOnly(new Date()),
           endTime: toDateOnly(new Date()),
-          private: false,
           allDay: false,
           repeat: 'none',
           repeatEndType: undefined,
