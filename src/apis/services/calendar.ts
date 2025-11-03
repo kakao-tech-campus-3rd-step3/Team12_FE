@@ -83,9 +83,10 @@ export const teamCalendarAPI = {
     return apiClient.post(TEAM_CALENDAR_ENDPOINTS.ADD_EVENT, teamEvent);
   },
   modifyTeamEvent: (
+    eventId: number,
     teamEvent: modifyTeamCalendarEventRequest,
   ): Promise<modifyCalendarEventResponse> => {
-    return apiClient.patch(TEAM_CALENDAR_ENDPOINTS.MODIFY_EVENT, teamEvent);
+    return apiClient.patch(TEAM_CALENDAR_ENDPOINTS.MODIFY_EVENT(eventId), teamEvent);
   },
   deleteTeamEvent: (eventId: number) => {
     return apiClient.delete(TEAM_CALENDAR_ENDPOINTS.DELETE_EVENT(eventId));
