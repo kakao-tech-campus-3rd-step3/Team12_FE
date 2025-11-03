@@ -46,7 +46,7 @@ const MetaFields: React.FC<MetaFieldsProps> = ({ formData, range, updateFormData
   // 팀원 선택 변경 핸들러
   const handleMemberChange = (memberIds: number[]) => {
     setSelectedMemberIds(memberIds);
-    // 필요시 formData나 다른 상태로 전달할 수 있음
+    updateFormData({ event_participants: memberIds });
   };
 
   return (

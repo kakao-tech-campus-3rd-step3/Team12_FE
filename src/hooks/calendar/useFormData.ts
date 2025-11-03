@@ -17,6 +17,7 @@ export interface FormData {
   repeatEndDate?: string;
   repeatCount: number;
   repeatWeekDays?: string[];
+  event_participants?: number[];
 }
 
 interface UseFormDataProps {

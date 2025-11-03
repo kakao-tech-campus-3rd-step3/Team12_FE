@@ -142,6 +142,9 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
             first_start_time: eventData.start_time,
             first_end_time: eventData.end_time,
             rrule: rrule,
+            ...(formData.event_participants !== undefined
+              ? { event_participants: formData.event_participants }
+              : {}),
           });
           await getEvents({ teamId, mode: 'team' });
           await getTodayEvents();
@@ -153,6 +156,9 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
               description: eventData.description,
               start_time: eventData.start_time,
               end_time: eventData.end_time,
+              ...(formData.event_participants !== undefined
+                ? { event_participants: formData.event_participants }
+                : {}),
             },
             { teamId, mode: 'team' },
           );
