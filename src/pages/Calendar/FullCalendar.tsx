@@ -458,6 +458,7 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
         modalType={modalType}
         selectedEvent={selectedEvent}
         selectedDate={selectedDate}
+        teamId={teamId} // teamId 전달 (mode === 'team'일 때만 값이 있음)
         onSave={handleSaveEvent}
         onEditRecurringOne={handleEditRecurringOne}
         onEditRecurringAll={handleEditRecurringAll}

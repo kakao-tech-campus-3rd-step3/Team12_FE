@@ -21,6 +21,7 @@ interface DateModalProps {
   modalType: ModalType;
   selectedEvent?: CalendarEvent;
   selectedDate?: string;
+  teamId?: number; // teamId 추가
   onSave: (event: Omit<CalendarEvent, 'event_id'>, formData: FormData) => void;
   onEditRecurringOne?: (
     eventId: number,
@@ -42,6 +43,7 @@ const DateModal: React.FC<DateModalProps> = ({
   modalType,
   selectedEvent,
   selectedDate,
+  teamId, // 추가
   onSave,
   onEditRecurringOne,
   onEditRecurringAll,
@@ -298,11 +300,16 @@ const DateModal: React.FC<DateModalProps> = ({
           </div>
         </div>
       ) : (
-        <form onSubmit={handleFormSubmit} className="p-6">
+        <form onSubmit={handleFormSubmit} className="p-1">
           <div className="flex flex-col space-y-2 md:flex-row md:w-full">
             {/** 일정 제목, 비공개 여부, 시간 추가 (모달 우측) */}
             <div className="mt-4">
-              <MetaFields formData={formData} range={range} updateFormData={updateFormData} />
+              <MetaFields 
+                formData={formData} 
+                range={range} 
+                updateFormData={updateFormData}
+                teamId={teamId} // teamId 전달
+              />
               <RepeatSettings formData={formData} updateFormData={updateFormData} />
             </div>
             {/** 기간 선택 (모달 좌측) */}
