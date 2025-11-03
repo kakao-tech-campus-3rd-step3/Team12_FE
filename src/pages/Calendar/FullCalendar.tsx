@@ -260,6 +260,9 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
       await personalCalendarAPI.modifyRecurringOneEvent(eventId, {
         original_start_time: eventData.original_start_time,
         title: eventData.title ?? '',
+        ...(eventData.description && { description: eventData.description }),
+        ...(eventData.start_time && { start_time: eventData.start_time }),
+        ...(eventData.end_time && { end_time: eventData.end_time }),
       });
       await new Promise((resolve) => setTimeout(resolve, 300));
       await getEvents({ mode: 'personal' });

@@ -108,15 +108,18 @@ const DateModal: React.FC<DateModalProps> = ({
         original_start_time: selectedEvent.start_time,
         title: formData.title,
         description: formData.description,
-        is_private: formData.private,
       };
-      if (formData.startTime && formData.endTime) {
-        const startTimeWithTime = formData.startTime.includes('T')
-          ? formData.startTime
-          : `${formData.startTime}T00:00:00`;
-        const endTimeWithTime = formData.endTime.includes('T')
-          ? formData.endTime
-          : `${formData.endTime}T23:59:00`;
+      // start_time과 end_time 중 하나라도 변경되었는지 확인
+      const isStartTimeChanged =
+        formData.startTime && formData.startTime !== selectedEvent.start_time;
+      const isEndTimeChanged = formData.endTime && formData.endTime !== selectedEvent.end_time;
+
+      if (isStartTimeChanged || isEndTimeChanged) {
+        const startTime = formData.startTime || selectedEvent.start_time;
+        const endTime = formData.endTime || selectedEvent.end_time;
+
+        const startTimeWithTime = startTime.includes('T') ? startTime : `${startTime}T00:00:00`;
+        const endTimeWithTime = endTime.includes('T') ? endTime : `${endTime}T23:59:00`;
 
         eventData.start_time = startTimeWithTime;
         eventData.end_time = endTimeWithTime;
@@ -128,15 +131,18 @@ const DateModal: React.FC<DateModalProps> = ({
       const eventData: modifyTeamCalendarRecurringAllEventsRequest = {
         title: formData.title,
         description: formData.description,
-        is_private: formData.private,
       };
-      if (formData.startTime && formData.endTime) {
-        const startTimeWithTime = formData.startTime.includes('T')
-          ? formData.startTime
-          : `${formData.startTime}T00:00:00`;
-        const endTimeWithTime = formData.endTime.includes('T')
-          ? formData.endTime
-          : `${formData.endTime}T23:59:00`;
+      const isStartTimeChanged =
+        formData.startTime && formData.startTime !== selectedEvent.start_time;
+      const isEndTimeChanged = formData.endTime && formData.endTime !== selectedEvent.end_time;
+
+      if (isStartTimeChanged || isEndTimeChanged) {
+        // 변경된 경우 둘 다 보내야 하므로, 변경되지 않은 것은 원래 값 사용
+        const startTime = formData.startTime || selectedEvent.start_time;
+        const endTime = formData.endTime || selectedEvent.end_time;
+
+        const startTimeWithTime = startTime.includes('T') ? startTime : `${startTime}T00:00:00`;
+        const endTimeWithTime = endTime.includes('T') ? endTime : `${endTime}T23:59:00`;
 
         eventData.start_time = startTimeWithTime;
         eventData.end_time = endTimeWithTime;

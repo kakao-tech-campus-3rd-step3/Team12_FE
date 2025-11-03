@@ -44,7 +44,12 @@ const useFormData = ({ isOpen, modalType, selectedEvent, selectedDate }: UseForm
   // 모달이 열릴 때마다 폼 초기화
   useEffect(() => {
     if (isOpen) {
-      if (modalType === 'edit' && selectedEvent) {
+      if (
+        (modalType === 'edit' ||
+          modalType === 'editRecurringOne' ||
+          modalType === 'editRecurringAll') &&
+        selectedEvent
+      ) {
         setFormData({
           title: selectedEvent.title,
           description: selectedEvent.description,
