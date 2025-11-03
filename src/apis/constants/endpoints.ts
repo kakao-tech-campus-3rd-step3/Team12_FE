@@ -13,6 +13,7 @@ export const AUTH_ENDPOINTS = {
 } as const;
 
 export const PERSONAL_CALENDAR_ENDPOINTS = {
+  GET_LECTURES: '/api/lectures',
   GET_EVENTS: '/api/events',
   GET_TODAY_EVENTS: '/api/events/today',
 
@@ -74,5 +75,4 @@ export const TEAM_ENDPOINTS = {
     required_time: string,
   ) =>
     `/api/teams/${teamId}/when-to-meet/recommend?N=${N}&start_time=${start_time}&end_time=${end_time}&required_time=${required_time}`,
-
 };

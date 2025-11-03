@@ -1,7 +1,19 @@
 import type { CalendarEvent } from '@/types/calendar';
 
+export type Lecture = {
+  lectureId: number;
+  eventId: number;
+  name: string;
+  professor?: string;
+  credit?: number;
+  startDate: string;
+  endDate: string;
+};
+
 // API가 배열을 직접 반환하므로 타입을 배열로 변경
 export type getCalendarEventsResponse = CalendarEvent[];
+
+export type getLecturesResponse = Lecture[];
 
 //팀 일정 조회
 export type getTeamCalendarEventsResponse = {

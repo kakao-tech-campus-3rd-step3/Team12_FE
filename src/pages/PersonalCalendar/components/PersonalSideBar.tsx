@@ -1,3 +1,4 @@
+import type { Lecture } from '@/apis/types/calendar';
 import type { TeamData } from '@/apis/types/team';
 import LinkStatus from '@/pages/PersonalCalendar/components/LinkStatus';
 import MyClass from '@/pages/PersonalCalendar/components/MyClass';
@@ -7,6 +8,8 @@ import { BookOpen, Calendar, ChevronLeft, ChevronRight, Users } from 'lucide-rea
 import { useState } from 'react';
 
 interface PersonalSideBarProps {
+  lectures: Lecture[];
+  isLecturesLoading?: boolean;
   teams: TeamData[];
   isLoading: boolean;
   setIsSetting: (isSetting: boolean) => void;
@@ -14,7 +17,13 @@ interface PersonalSideBarProps {
 
 type TabType = 'myClass' | 'myTeam' | 'todaySchedule' | null;
 
-const PersonalSideBar = ({ teams, isLoading, setIsSetting }: PersonalSideBarProps) => {
+const PersonalSideBar = ({
+  lectures = [],
+  isLecturesLoading = false,
+  teams,
+  isLoading,
+  setIsSetting,
+}: PersonalSideBarProps) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [activeSidebarTab, setActiveSidebarTab] = useState<TabType>('myClass');
 
@@ -52,7 +61,7 @@ const PersonalSideBar = ({ teams, isLoading, setIsSetting }: PersonalSideBarProp
         return (
           <div className="flex flex-col gap-4">
             <LinkStatus />
-            <MyClass />
+            <MyClass lectures={lectures} isLoading={isLecturesLoading} />
           </div>
         );
       case 'myTeam':
@@ -110,7 +119,7 @@ const PersonalSideBar = ({ teams, isLoading, setIsSetting }: PersonalSideBarProp
         className={`bg-white border-r border-gray-200 transition-all duration-300 ease-in-out overflow-hidden
           ${isSidebarOpen ? 'w-64' : 'w-0'}`}
       >
-        <div className="overflow-y-auto pt-5 px-2 h-full">
+        <div className="overflow-y-auto px-2 pt-5 h-full">
           {isSidebarOpen && activeSidebarTab && (
             <div className="transition-opacity duration-300">{renderContent()}</div>
           )}

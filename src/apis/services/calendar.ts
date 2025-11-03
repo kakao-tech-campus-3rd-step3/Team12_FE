@@ -4,6 +4,7 @@ import type {
   addTeamCalendarEventResponse,
   addTeamCalendarRecurringEventRequest,
   deleteTeamCalendarRecurringOneEventRequest,
+  getLecturesResponse,
   modifyTeamCalendarEventRequest,
   modifyTeamCalendarRecurringAllEventsRequest,
   modifyTeamCalendarRecurringOneEventRequest,
@@ -23,6 +24,10 @@ import type {
 } from '@/types/calendar';
 
 export const personalCalendarAPI = {
+  getLectures: async (): Promise<getLecturesResponse> => {
+    const response = await apiClient.get(PERSONAL_CALENDAR_ENDPOINTS.GET_LECTURES);
+    return response.data;
+  },
   getEvents: (params: { startAt: string; endAt: string }) => {
     return apiClient.get(PERSONAL_CALENDAR_ENDPOINTS.GET_EVENTS, {
       params,

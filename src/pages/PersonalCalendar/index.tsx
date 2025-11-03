@@ -1,6 +1,8 @@
 import Drawer from '@/components/organisms/Drawer';
+import { useClass } from '@/hooks/calendar/useClass';
 import { useDeleteTeam, useLeaveTeam, useTeam } from '@/hooks/team';
 import FullCalendar from '@/pages/Calendar/FullCalendar';
+import LinkStatus from '@/pages/PersonalCalendar/components/LinkStatus';
 import MyClass from '@/pages/PersonalCalendar/components/MyClass';
 import MyTeam from '@/pages/PersonalCalendar/components/MyTeam';
 import PersonalSideBar from '@/pages/PersonalCalendar/components/PersonalSideBar';
@@ -12,12 +14,18 @@ const PersonalCalendarPage = () => {
   const { teams, isLoading, isSetting, setIsSetting } = useTeam();
   const { leaveTeam } = useLeaveTeam();
   const { deleteTeam } = useDeleteTeam();
-
+  const { lectures, isLoading: isLecturesLoading } = useClass();
   return (
     <div className="min-h-[calc(100vh-70px)] bg-gradient-to-br from-blue-50 to-indigo-100">
       {/* 데스크톱 뷰 */}
       <div className="hidden xl:flex h-[calc(100vh-70px)]">
-        <PersonalSideBar teams={teams} isLoading={isLoading} setIsSetting={setIsSetting} />
+        <PersonalSideBar
+          lectures={lectures ?? []}
+          isLecturesLoading={isLecturesLoading}
+          teams={teams}
+          isLoading={isLoading}
+          setIsSetting={setIsSetting}
+        />
         <div className="flex overflow-x-hidden flex-1">
           <div className="flex-1 lg:flex-[3]">
             <FullCalendar mode="personal" />
@@ -35,7 +43,8 @@ const PersonalCalendarPage = () => {
           <div className="xl:w-60 xl:flex-shrink-0">
             <Drawer>
               {/* <QuickActions /> */}
-              <MyClass />
+              <LinkStatus />
+              <MyClass lectures={lectures ?? []} isLoading={isLecturesLoading} />
               <MyTeam teams={teams} isLoading={isLoading} setIsSetting={() => setIsSetting(true)} />
               <TodaySchedule />
             </Drawer>
