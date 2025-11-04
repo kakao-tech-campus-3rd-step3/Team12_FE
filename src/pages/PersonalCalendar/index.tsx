@@ -1,5 +1,4 @@
 import Drawer from '@/components/organisms/Drawer';
-import { useClass } from '@/hooks/calendar/useClass';
 import { useDeleteTeam, useLeaveTeam, useTeam } from '@/hooks/team';
 import FullCalendar from '@/pages/Calendar/FullCalendar';
 import LinkStatus from '@/pages/PersonalCalendar/components/LinkStatus';
@@ -9,19 +8,26 @@ import PersonalSideBar from '@/pages/PersonalCalendar/components/PersonalSideBar
 import TeamListModal from '@/pages/PersonalCalendar/components/TeamListModal';
 import TodaySchedule from '@/pages/PersonalCalendar/components/TodaySchedule';
 import UpcomingSchedule from '@/pages/PersonalCalendar/components/UpcomingSchedule';
+import { useClassStore } from '@/store/calendar/useClassStore';
+import { useEffect } from 'react';
 
 const PersonalCalendarPage = () => {
   const { teams, isLoading, isSetting, setIsSetting } = useTeam();
   const { leaveTeam } = useLeaveTeam();
   const { deleteTeam } = useDeleteTeam();
-  const { lectures, isLoading: isLecturesLoading } = useClass();
+  const { lectures, lectureNames, getLectures } = useClassStore();
+
+  useEffect(() => {
+    void getLectures();
+  }, [getLectures]);
+
   return (
     <div className="min-h-[calc(100vh-70px)] bg-gradient-to-br from-blue-50 to-indigo-100">
       {/* 데스크톱 뷰 */}
       <div className="hidden xl:flex h-[calc(100vh-70px)]">
         <PersonalSideBar
           lectures={lectures ?? []}
-          isLecturesLoading={isLecturesLoading}
+          lectureNames={lectureNames ?? []}
           teams={teams}
           isLoading={isLoading}
           setIsSetting={setIsSetting}
@@ -44,7 +50,7 @@ const PersonalCalendarPage = () => {
             <Drawer>
               {/* <QuickActions /> */}
               <LinkStatus />
-              <MyClass lectures={lectures ?? []} isLoading={isLecturesLoading} />
+              <MyClass lectures={lectures ?? []} lectureNames={lectureNames ?? []} />
               <MyTeam teams={teams} isLoading={isLoading} setIsSetting={() => setIsSetting(true)} />
               <TodaySchedule />
             </Drawer>

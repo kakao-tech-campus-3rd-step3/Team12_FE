@@ -2,7 +2,7 @@ import type { Lecture } from '@/apis/types/calendar';
 
 interface MyClassProps {
   lectures: Lecture[];
-  isLoading?: boolean;
+  lectureNames: string[];
 }
 
 // 학점별 색상 팔레트
@@ -21,7 +21,7 @@ const getLectureColor = (credit?: number): string => {
   return creditColors[credit] || 'bg-gray-500'; // 매핑된 색상 또는 기본 색상
 };
 
-const MyClass = ({ lectures = [], isLoading = false }: MyClassProps) => {
+const MyClass = ({ lectures = [], lectureNames = [] }: MyClassProps) => {
   return (
     <div className="px-3 mb-8">
       <div className="flex justify-between items-center mb-4">
@@ -31,11 +31,7 @@ const MyClass = ({ lectures = [], isLoading = false }: MyClassProps) => {
         </button>
       </div>
       <div className="space-y-3">
-        {isLoading ? (
-          <div className="flex justify-center items-center p-2 pl-0 rounded-lg">
-            <p className="text-xs text-gray-500">로딩 중...</p>
-          </div>
-        ) : lectures.length === 0 ? (
+        {lectures.length === 0 ? (
           <div className="flex justify-center items-center p-2 pl-0 rounded-lg">
             <p className="text-xs text-gray-500">수업이 없습니다.</p>
           </div>

@@ -9,7 +9,7 @@ import { useState } from 'react';
 
 interface PersonalSideBarProps {
   lectures: Lecture[];
-  isLecturesLoading?: boolean;
+  lectureNames: string[];
   teams: TeamData[];
   isLoading: boolean;
   setIsSetting: (isSetting: boolean) => void;
@@ -19,7 +19,7 @@ type TabType = 'myClass' | 'myTeam' | 'todaySchedule' | null;
 
 const PersonalSideBar = ({
   lectures = [],
-  isLecturesLoading = false,
+  lectureNames = [],
   teams,
   isLoading,
   setIsSetting,
@@ -61,7 +61,7 @@ const PersonalSideBar = ({
         return (
           <div className="flex flex-col gap-4">
             <LinkStatus />
-            <MyClass lectures={lectures} isLoading={isLecturesLoading} />
+            <MyClass lectures={lectures} lectureNames={lectureNames} />
           </div>
         );
       case 'myTeam':

@@ -2,6 +2,7 @@ import { personalCalendarAPI, teamCalendarAPI } from '@/apis';
 import { useEvents, useModal } from '@/hooks';
 import type { FormData } from '@/hooks/calendar/useFormData';
 import DateModal from '@/pages/Calendar/components/DateModal';
+import { useClassStore } from '@/store/calendar/useClassStore';
 import { useTeamStore } from '@/store/team/useTeamStore';
 import type { CalendarEvent, modifyCalendarEventRequest } from '@/types/calendar';
 import { parseEventId } from '@/utils/eventUtils';
@@ -37,6 +38,7 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
     handleEventDrop,
     handleEventResize,
   } = useEvents(mode, teamId);
+  const { lectureNames } = useClassStore();
 
   //초기 로딩 시 팀/개인 분기해서 캘린더 가져오기
   useEffect(() => {
@@ -141,7 +143,6 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
             description: eventData.description,
             first_start_time: eventData.start_time,
             first_end_time: eventData.end_time,
-            is_private: eventData.is_private,
             rrule: rrule,
           });
           await getEvents({ teamId, mode: 'team' });
@@ -296,6 +297,10 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
     }
   };
 
+  const checkEventTitle = (title: string): boolean => {
+    return lectureNames.some((name) => name.toLowerCase() === title.toLowerCase());
+  };
+
   return (
     <div className="p-2">
       <div className="mx-auto max-w-7xl">
@@ -379,6 +384,10 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
               selectable // 날짜 선택 가능 (새 일정 추가)
               editable // 이벤트 편집 가능 (드래그, 리사이즈)
               events={events ? formatEventsForCalendar(events) : []}
+              eventClassNames={(arg) => {
+                // 강의 이벤트인지 체크해서 다른 클래스 적용
+                return checkEventTitle(arg.event.title) ? ['lecture-event'] : [];
+              }}
               dayMaxEvents={false} // 모든 이벤트 표시 (끊김 방지)
               eventDisplay="block" // 이벤트를 블록 형태로 표시
               displayEventTime={true} // 이벤트 시간 표시
