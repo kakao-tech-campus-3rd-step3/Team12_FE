@@ -17,6 +17,7 @@ export const AUTH_ENDPOINTS = {
 } as const;
 
 export const PERSONAL_CALENDAR_ENDPOINTS = {
+  GET_LECTURES: '/api/lectures',
   GET_EVENTS: '/api/events',
   GET_TODAY_EVENTS: '/api/events/today',
 
