@@ -1,5 +1,5 @@
+import { authAPI } from '@/apis/services/auth';
 import { AuthInput } from '@/components/atoms/AuthInput';
-import { authAPI } from '@/apis';
 import Button from '@/components/atoms/Button';
 import Logo from '@/components/atoms/Logo';
 import { RouterPath } from '@/routes/path';
@@ -7,10 +7,10 @@ import { useAuthStore } from '@/store/useAuthStore';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AxiosError } from 'axios';
 import { KeyRound, Lock, Mail, User } from 'lucide-react';
-import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { z } from 'zod';
 
 const signupSchema = z

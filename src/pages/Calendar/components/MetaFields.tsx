@@ -1,9 +1,9 @@
-import type { DateRange } from 'react-day-picker';
 import { FormInput } from '@/components/atoms/FormInput';
+import type { FormData } from '@/hooks/calendar/useFormData';
 import MemberSelectDropdown from '@/pages/Calendar/components/MemberSelectDropdown';
 import { getDatePart } from '@/utils/dateTimeUtils';
-import type { FormData } from '@/hooks/calendar/useFormData';
 import { useState } from 'react';
+import type { DateRange } from 'react-day-picker';
 
 interface MetaFieldsProps {
   formData: FormData;
@@ -54,13 +54,13 @@ const MetaFields: React.FC<MetaFieldsProps> = ({ formData, range, updateFormData
       {/* 일정 제목 라벨 */}
       <label
         htmlFor="title"
-        className="block mb-2 text-sm font-medium text-gray-700 text-nowrap m-4 mb-0"
+        className="block m-4 mb-0 mb-2 text-sm font-medium text-gray-700 text-nowrap"
       >
         일정 제목 <span className="text-red-500">*</span>
       </label>
 
       {/* 일정 제목 입력과 종일 체크박스를 같은 라인에 배치 */}
-      <div className="flex items-center gap-3 m-4 mt-2">
+      <div className="flex gap-3 items-center m-4 mt-2">
         <div className="flex-1">
           <input
             type="text"
@@ -76,7 +76,7 @@ const MetaFields: React.FC<MetaFieldsProps> = ({ formData, range, updateFormData
             }`}
           />
           {error === 'title' && (
-            <p className="text-xs text-red-500 mt-1">일정 제목을 입력해주세요</p>
+            <p className="mt-1 text-xs text-red-500">일정 제목을 입력해주세요</p>
           )}
         </div>
 
@@ -109,7 +109,7 @@ const MetaFields: React.FC<MetaFieldsProps> = ({ formData, range, updateFormData
           </div>
           <label
             htmlFor="allDay"
-            className="text-sm font-medium cursor-pointer text-gray-700 whitespace-nowrap"
+            className="text-sm font-medium text-gray-700 whitespace-nowrap cursor-pointer"
           >
             종일
           </label>
