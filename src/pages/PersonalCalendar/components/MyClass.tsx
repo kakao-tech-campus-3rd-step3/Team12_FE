@@ -21,7 +21,7 @@ const getLectureColor = (credit?: number): string => {
   return creditColors[credit] || 'bg-gray-500'; // 매핑된 색상 또는 기본 색상
 };
 
-const MyClass = ({ lectures = [], lectureNames = [] }: MyClassProps) => {
+const MyClass = ({ lectures = [], lectureNames: _lectureNames = [] }: MyClassProps) => {
   return (
     <div className="px-3 mb-8">
       <div className="flex justify-between items-center mb-4">
