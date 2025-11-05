@@ -1,15 +1,15 @@
-import { useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { MessageCircleMore, X } from 'lucide-react';
-import { useTeamChat } from '@/hooks/team/useTeamChat';
 import Drawer from '@/components/organisms/Drawer';
+import { useTeamChat } from '@/hooks/team/useTeamChat';
 import FullCalendar from '@/pages/Calendar/FullCalendar';
 import RecommendTimes from '@/pages/TeamCalendar/components/RecommendTimes';
-import TeamAvailability from '@/pages/TeamCalendar/components/TeamAvailability';
+import TeamAvailability from '@/pages/TeamCalendar/components/TeamAvailability/TeamAvailability';
 import TeamChat from '@/pages/TeamCalendar/components/TeamChat';
 import TeamMembers from '@/pages/TeamCalendar/components/TeamMembers';
-import TeamSidebar from '@/pages/TeamCalendar/components/TeamSidebar';
 import UpcomingTeamSchedule from '@/pages/TeamCalendar/components/TeamSchedule';
+import TeamSidebar from '@/pages/TeamCalendar/components/TeamSidebar';
+import { MessageCircleMore, X } from 'lucide-react';
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 const TeamCalendarPage = () => {
   const [showAvailability, setShowAvailability] = useState(false);
@@ -62,8 +62,8 @@ const TeamCalendarPage = () => {
           <>
             <MessageCircleMore className="w-7 h-7 text-white" />
             {unReadCount > 0 && (
-              <div className="absolute -top-1 -right-1 min-w-5 h-5 bg-red-500 rounded-full flex items-center justify-center px-1">
-                <span className="text-white text-xs">{unReadCount > 99 ? '99+' : unReadCount}</span>
+              <div className="flex absolute -top-1 -right-1 justify-center items-center px-1 h-5 bg-red-500 rounded-full min-w-5">
+                <span className="text-xs text-white">{unReadCount > 99 ? '99+' : unReadCount}</span>
               </div>
             )}
           </>
@@ -78,7 +78,7 @@ const TeamCalendarPage = () => {
 
       {/*모바일 뷰*/}
       <div className="block min-h-screen xl:hidden">
-        <div className="flex flex-col min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 ease-in-out duration-500">
+        <div className="flex flex-col min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 duration-500 ease-in-out">
           <Drawer>
             <TeamMembers teamId={teamId} />
             <UpcomingTeamSchedule />
@@ -86,9 +86,12 @@ const TeamCalendarPage = () => {
 
           {!showAvailability ? (
             <div className="flex flex-col flex-1">
-              <div className="overflow-x-auto border-gray-200 border-b">
+              <div className="overflow-x-auto border-b border-gray-200">
                 <div className="p-2 rounded-lg border border-gray-100">
-                  <RecommendTimes onViewAvailability={() => setShowAvailability(true)} />
+                  <RecommendTimes
+                    onViewAvailability={() => setShowAvailability(true)}
+                    teamId={teamId}
+                  />
                 </div>
               </div>
 

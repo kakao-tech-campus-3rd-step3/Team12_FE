@@ -23,6 +23,7 @@ interface CalendarState {
     teamOrPersonalOption?: { teamId?: number; mode?: 'personal' | 'team' },
   ) => Promise<void>;
   updateEvent: (
+    eventId: number,
     updates: modifyCalendarEventRequest,
     teamOrPersonalOption?: { teamId?: number; mode?: 'personal' | 'team' },
   ) => Promise<void>;
@@ -146,7 +147,7 @@ export const useCalendarStore = create<CalendarState>((set) => ({
       throw error;
     }
   },
-  updateEvent: async (updates, teamOrPersonalOption) => {
+  updateEvent: async (eventId, updates, teamOrPersonalOption) => {
     try {
       const mode = teamOrPersonalOption?.mode ?? 'personal';
 
@@ -154,9 +155,12 @@ export const useCalendarStore = create<CalendarState>((set) => ({
 
       // API 호출
       if (mode === 'team') {
-        await teamCalendarAPI.modifyTeamEvent(updates as any);
+        await teamCalendarAPI.modifyTeamEvent({
+          event_id: eventId,
+          ...updates,
+        });
       } else {
-        await personalCalendarAPI.modifyEvent(updates);
+        await personalCalendarAPI.modifyEvent(eventId, updates);
       }
 
       // 전체 일정 다시 가져오기
@@ -176,7 +180,7 @@ export const useCalendarStore = create<CalendarState>((set) => ({
       throw error;
     }
   },
-     getUpcomingEvents: async (): Promise<CalendarEvent[] | null> => {
+  getUpcomingEvents: async (): Promise<CalendarEvent[] | null> => {
     try {
       const response = await personalCalendarAPI.getUpcomingEvents();
       set({ upcomingEvents: response.data });
@@ -187,5 +191,4 @@ export const useCalendarStore = create<CalendarState>((set) => ({
       return null;
     }
   },
- 
 }));

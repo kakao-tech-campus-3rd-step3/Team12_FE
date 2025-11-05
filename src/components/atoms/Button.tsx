@@ -16,6 +16,7 @@ interface ButtonProps {
   wrapperClassName?: string;
   noWrapper?: boolean;
   type?: 'button' | 'submit' | 'reset';
+  disabled?: boolean;
 }
 
 const Button = ({
@@ -31,6 +32,7 @@ const Button = ({
   wrapperClassName,
   noWrapper = false,
   type = 'button',
+  disabled = false,
 }: ButtonProps) => {
   const baseStyles =
     'font-medium rounded-md transition-colors text-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2';
@@ -42,6 +44,10 @@ const Button = ({
       'text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 focus-visible:ring-blue-500',
     ghost: 'text-gray-400 bg-transparent hover:bg-gray-50 border-none focus-visible:ring-gray-300',
   };
+
+  const disabledStyles = disabled
+    ? 'bg-gray-400 text-gray-200 cursor-not-allowed hover:bg-gray-400'
+    : '';
 
   const sizeStyles = {
     sm: 'px-3 py-2 text-sm',
@@ -59,9 +65,10 @@ const Button = ({
     <button
       type={type}
       onClick={onClick}
+      disabled={disabled}
       className={twMerge(
         baseStyles,
-        variantStyles[variant],
+        disabled ? disabledStyles : variantStyles[variant],
         sizeStyles[size],
         fullWidth && !noWrapper ? 'w-full' : '',
         icon ? 'flex items-center gap-2' : '',

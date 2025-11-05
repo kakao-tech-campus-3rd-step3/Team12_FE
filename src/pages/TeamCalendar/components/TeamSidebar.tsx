@@ -1,10 +1,10 @@
-import RecommendTimes from '@/pages/TeamCalendar/components/RecommendTimes';
-import { useState } from 'react';
-import { Calendar, ChevronLeft, ChevronRight, Clock, ShieldHalf } from 'lucide-react';
 import { useDeleteTeamMember } from '@/hooks/team';
+import RecommendTimes from '@/pages/TeamCalendar/components/RecommendTimes';
 import TeamInfo from '@/pages/TeamCalendar/components/TeamInfo';
 import TeamMembers from '@/pages/TeamCalendar/components/TeamMembers';
 import UpcomingTeamSchedule from '@/pages/TeamCalendar/components/TeamSchedule';
+import { Calendar, ChevronLeft, ChevronRight, Clock, ShieldHalf } from 'lucide-react';
+import { useState } from 'react';
 
 interface TeamSidebarProps {
   onViewAvailability?: () => void;
@@ -61,7 +61,7 @@ const TeamSidebar = ({ onViewAvailability, teamId }: TeamSidebarProps) => {
       case 'upcomingSchedule':
         return <UpcomingTeamSchedule />;
       case 'recommendTimes':
-        return <RecommendTimes onViewAvailability={onViewAvailability} />;
+        return <RecommendTimes onViewAvailability={onViewAvailability} teamId={teamId} />;
       default:
         return null;
     }
@@ -69,11 +69,11 @@ const TeamSidebar = ({ onViewAvailability, teamId }: TeamSidebarProps) => {
 
   return (
     <div className="flex h-full">
-      <div className="w-16 bg-white border-r border-gray-200 flex flex-col items-center py-4 gap-2 shadow-sm">
+      <div className="flex flex-col gap-2 items-center py-4 w-16 bg-white border-r border-gray-200 shadow-sm">
         <button
           onClick={handleToggle}
           className={`w-12 h-12 flex items-center justify-center rounded-lg transition-all duration-200 mb-2
-            ${isSidebarOpen ? 'bg-blue-50 text-blue-600 cursor-pointer' : 'bg-gray-50 text-gray-600 hover:bg-gray-100 cursor-pointer'}`}
+            ${isSidebarOpen ? 'text-blue-600 bg-blue-50 cursor-pointer' : 'text-gray-600 bg-gray-50 cursor-pointer hover:bg-gray-100'}`}
           title={isSidebarOpen ? '닫기' : '열기'}
         >
           {isSidebarOpen ? (
@@ -83,7 +83,7 @@ const TeamSidebar = ({ onViewAvailability, teamId }: TeamSidebarProps) => {
           )}
         </button>
 
-        <div className="w-8 bg-gray-200 my-1" />
+        <div className="my-1 w-8 bg-gray-200" />
 
         {/* 탭 아이콘 */}
         {tabs.map((tab) => {
@@ -97,8 +97,8 @@ const TeamSidebar = ({ onViewAvailability, teamId }: TeamSidebarProps) => {
               className={`w-12 h-12 flex items-center justify-center rounded-lg transition-all duration-200
                 ${
                   isActive
-                    ? 'bg-blue-600 text-white cursor-pointer'
-                    : 'bg-gray-100 text-gray-700 hover:bg-blue-50 hover:text-blue-600 cursor-pointer'
+                    ? 'text-white bg-blue-600 cursor-pointer'
+                    : 'text-gray-700 bg-gray-100 cursor-pointer hover:bg-blue-50 hover:text-blue-600'
                 }`}
               title={tab.label}
             >
@@ -113,7 +113,7 @@ const TeamSidebar = ({ onViewAvailability, teamId }: TeamSidebarProps) => {
         className={`bg-white border-r border-gray-200 transition-all duration-300 ease-in-out overflow-hidden
           ${isSidebarOpen ? 'w-95' : 'w-0'}`}
       >
-        <div className="h-full overflow-y-auto p-5">
+        <div className="overflow-y-auto p-5 h-full">
           {isSidebarOpen && activeSidebarTab && (
             <div className="transition-opacity duration-300">{renderContent()}</div>
           )}
