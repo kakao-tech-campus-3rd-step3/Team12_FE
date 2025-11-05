@@ -144,6 +144,9 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
             first_start_time: eventData.start_time,
             first_end_time: eventData.end_time,
             rrule: rrule,
+            ...(formData.event_participants !== undefined
+              ? { event_participants: formData.event_participants }
+              : {}),
           });
           await getEvents({ teamId, mode: 'team' });
           await getTodayEvents();
@@ -155,7 +158,9 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
               description: eventData.description,
               start_time: eventData.start_time,
               end_time: eventData.end_time,
-              is_private: eventData.is_private,
+              ...(formData.event_participants !== undefined
+                ? { event_participants: formData.event_participants }
+                : {}),
             },
             { teamId, mode: 'team' },
           );
@@ -171,7 +176,6 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
           description: eventData.description,
           first_start_time: eventData.start_time,
           first_end_time: eventData.end_time,
-          is_private: eventData.is_private,
           rrule: rrule,
         });
         await getEvents({ mode: 'personal' });
@@ -183,7 +187,6 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
           description: eventData.description,
           start_time: eventData.start_time,
           end_time: eventData.end_time,
-          is_private: eventData.is_private,
         });
         await addEvent(eventData, { mode: 'personal' });
         await getTodayEvents();
@@ -194,8 +197,6 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
       if (eventData.title !== selectedEvent.title) modifyData.title = eventData.title;
       if (eventData.description !== selectedEvent.description)
         modifyData.description = eventData.description;
-      if (eventData.is_private !== selectedEvent.is_private)
-        modifyData.is_private = eventData.is_private;
       if (
         eventData.start_time !== selectedEvent.start_time ||
         eventData.end_time !== selectedEvent.end_time
@@ -267,6 +268,9 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
       await personalCalendarAPI.modifyRecurringOneEvent(eventId, {
         original_start_time: eventData.original_start_time,
         title: eventData.title ?? '',
+        ...(eventData.description && { description: eventData.description }),
+        ...(eventData.start_time && { start_time: eventData.start_time }),
+        ...(eventData.end_time && { end_time: eventData.end_time }),
       });
       await new Promise((resolve) => setTimeout(resolve, 300));
       await getEvents({ mode: 'personal' });
@@ -334,7 +338,6 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
                       description: '',
                       start_time: `${today}T09:00:00`,
                       end_time: `${today}T10:00:00`,
-                      is_private: false,
                     });
                   },
                 },
@@ -461,6 +464,7 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
         modalType={modalType}
         selectedEvent={selectedEvent}
         selectedDate={selectedDate}
+        teamId={teamId} // teamId 전달 (mode === 'team'일 때만 값이 있음)
         onSave={handleSaveEvent}
         onEditRecurringOne={handleEditRecurringOne}
         onEditRecurringAll={handleEditRecurringAll}
