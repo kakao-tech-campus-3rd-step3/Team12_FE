@@ -37,6 +37,12 @@ const TodaySchedule = () => {
             </div>
           </div>
         ))}
+
+        {todayEvents?.length === 0 && (
+          <div className="flex justify-center items-center h-full">
+            <p className="text-sm text-gray-500">오늘 일정이 없습니다.</p>
+          </div>
+        )}
       </div>
     </div>
   );
