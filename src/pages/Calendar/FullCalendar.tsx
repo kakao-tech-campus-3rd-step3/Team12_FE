@@ -141,7 +141,6 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
             description: eventData.description,
             first_start_time: eventData.start_time,
             first_end_time: eventData.end_time,
-            is_private: eventData.is_private,
             rrule: rrule,
           });
           await getEvents({ teamId, mode: 'team' });
