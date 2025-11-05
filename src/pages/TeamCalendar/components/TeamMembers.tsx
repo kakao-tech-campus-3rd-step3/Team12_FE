@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import { ChevronDown, ChevronUp, Settings, LogOut, Crown, Check } from 'lucide-react';
 import { useTeamMembers } from '@/hooks/team';
 import { useAuthStore } from '@/store/useAuthStore';
+import { Check, ChevronDown, ChevronUp, Crown, LogOut, Settings } from 'lucide-react';
+import { useState } from 'react';
 
 interface TeamMembersProps {
   teamId: number;
@@ -16,8 +16,8 @@ const TeamMembers: React.FC<TeamMembersProps> = ({ teamId, onDeleteMember }) => 
   const { data, isError } = useTeamMembers({ teamId });
   const { user } = useAuthStore();
 
-  const LAST_NAME = (name: string) => name[0];
-  const FULL_NAME = (name: string) => name;
+  const getLastName = (name: string) => name[0];
+  const getFullName = (name: string) => name;
 
   const getRoleText = (role: 'LEADER' | 'MEMBER') => {
     return role === 'LEADER' ? '리더' : '멤버';
@@ -59,7 +59,7 @@ const TeamMembers: React.FC<TeamMembersProps> = ({ teamId, onDeleteMember }) => 
           <button
             className={`transition-all duration-300 p-2 rounded-full relative ${
               isEditMode
-                ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg scale-105'
+                ? 'text-white bg-blue-600 shadow-lg scale-105 hover:bg-blue-700'
                 : 'text-gray-400 hover:text-blue-600 hover:bg-blue-50'
             }`}
             onClick={() => setIsEditMode(!isEditMode)}
@@ -78,14 +78,14 @@ const TeamMembers: React.FC<TeamMembersProps> = ({ teamId, onDeleteMember }) => 
         <div className="mt-4">
           {/* 에러 */}
           {isError && (
-            <div className="text-center py-4 text-red-500">팀원을 불러오는데 실패했습니다.</div>
+            <div className="py-4 text-center text-red-500">팀원을 불러오는데 실패했습니다.</div>
           )}
 
           {/* 데이터 없음 */}
           {members.length === 0 && (
-            <div className="text-center py-4 text-gray-500">팀원이 없습니다.</div>
+            <div className="py-4 text-center text-gray-500">팀원이 없습니다.</div>
           )}
-          <div className="mt-4 max-h-60 overflow-y-auto space-y-2">
+          <div className="overflow-y-auto mt-4 space-y-2 max-h-60">
             {members.map((member) => {
               const isCurrentUserMember = member.name === user?.name;
               const canDelete = isEditMode && !isCurrentUserMember && member.role !== 'LEADER';
@@ -95,7 +95,7 @@ const TeamMembers: React.FC<TeamMembersProps> = ({ teamId, onDeleteMember }) => 
                 <div
                   key={member.id}
                   className={`
-                    group flex items-center justify-between py-2.5 px-3 rounded-xl 
+                    group flex items-center justify-between py-2.5 px-3 rounded-xl
                     transition-all duration-200 relative
                     border border-transparent
                     ${canDelete ? 'bg-gray-50' : ''}
@@ -104,13 +104,9 @@ const TeamMembers: React.FC<TeamMembersProps> = ({ teamId, onDeleteMember }) => 
                   <div className="flex items-center space-x-3">
                     <div className="relative">
                       <div
-                        className={`
-                        w-8 h-8 flex items-center justify-center rounded-full 
-                        text-sm font-semibold shadow-sm transition-all
-                        bg-gray-200 text-gray-700
-                      `}
+                        className={`flex justify-center items-center w-8 h-8 text-sm font-semibold text-gray-700 bg-gray-200 rounded-full shadow-sm transition-all`}
                       >
-                        {LAST_NAME(member.name)}
+                        {getLastName(member.name)}
                       </div>
                       {/* 본인 표시 */}
                       {isCurrentUserMember && (
@@ -120,9 +116,9 @@ const TeamMembers: React.FC<TeamMembersProps> = ({ teamId, onDeleteMember }) => 
                     <div>
                       <div className="flex items-center gap-1.5">
                         <div className="text-sm font-medium text-gray-800">
-                          {FULL_NAME(member.name)}
+                          {getFullName(member.name)}
                           {isCurrentUserMember && (
-                            <span className="ml-1 text-xs text-blue-600 font-semibold">[나]</span>
+                            <span className="ml-1 text-xs font-semibold text-blue-600">[나]</span>
                           )}
                         </div>
                         {member.role === 'LEADER' && (
@@ -143,12 +139,7 @@ const TeamMembers: React.FC<TeamMembersProps> = ({ teamId, onDeleteMember }) => 
                     <button
                       onClick={() => handleDeleteTeamMember(member.id, member.name)}
                       disabled={isDeleting}
-                      className={`
-                        flex gap-2 p-2 rounded-lg transition-all duration-200
-                        text-red-500 text-xs border border-none
-                        hover:bg-red-100 hover:border-transparent hover:cursor-pointer
-                        disabled:opacity-50 disabled:cursor-not-allowed
-                      `}
+                      className={`flex gap-2 p-2 text-xs text-red-500 rounded-lg border border-none transition-all duration-200  hover:bg-red-100 hover:border-transparent hover:cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed`}
                     >
                       <LogOut className="mt-0.5 w-3 h-3 " />
                       팀원 삭제
@@ -160,7 +151,7 @@ const TeamMembers: React.FC<TeamMembersProps> = ({ teamId, onDeleteMember }) => 
           </div>
 
           {members.length > 5 && (
-            <p className="text-xs text-center text-gray-400 mt-2">스크롤하여 팀원 더보기</p>
+            <p className="mt-2 text-xs text-center text-gray-400">스크롤하여 팀원 더보기</p>
           )}
         </div>
       )}

@@ -98,7 +98,7 @@ export const useDeleteTeam = () => {
 // ✅ 추가된 훅들 (모두 유지)
 export const useGetMyTeam = (teamId: number) => {
   const { data, isLoading, error } = useQuery<GetMyTeamInfoResponse>({
-    queryKey: ['team', teamId],
+    queryKey: queryKeys.team(teamId),
     queryFn: () => teamAPI.getMyTeam(teamId),
   });
   return {
@@ -126,7 +126,7 @@ export const useGetTeamAvailability = (teamId: number) => {
 
 export const useTeamUpcomingSchedule = (teamId: number | null) => {
   const { data, isLoading, error } = useQuery({
-    queryKey: ['teamUpcomingSchedule', teamId],
+    queryKey: queryKeys.teamUpcomingSchedule(teamId!),
     queryFn: () => teamAPI.getTeamUpcomingSchedule(teamId!),
     enabled: !!teamId,
   });
@@ -139,7 +139,7 @@ export const useTeamUpcomingSchedule = (teamId: number | null) => {
 
 export const useTeamTodaySchedule = (teamId: number | null) => {
   const { data, isLoading, error } = useQuery({
-    queryKey: ['teamTodaySchedule', teamId],
+    queryKey: queryKeys.teamTodaySchedule(teamId!),
     queryFn: () => teamAPI.getTeamTodaySchedule(teamId!),
     enabled: !!teamId,
   });
