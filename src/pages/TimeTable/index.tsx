@@ -7,6 +7,9 @@ import ImageUploadTab from '@/pages/TimeTable/components/ImageUploadTab';
 import { RouterPath } from '@/routes/path';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import TimetableEdit from '@/pages/TimeTable/components/TimetableEdit';
+import { everytimeAPI } from '@/apis';
+import type { Subject } from '@/apis/types/timetable';
 
 const TimeTablePage = () => {
   const navigate = useNavigate();
@@ -15,6 +18,73 @@ const TimeTablePage = () => {
   const [startDate, setStartDate] = useState<Date>(new Date('2025-03-01'));
   const [endDate, setEndDate] = useState<Date>(new Date('2025-12-21'));
   const [everytimeTable, setEverytimeTable] = useState<string>('');
+
+  //시간표 수정
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [editedSubjects, setEditedSubjects] = useState<Subject[]>([]);
+  const [isSaving, setIsSaving] = useState(false);
+
+  // 현재 시간표 데이터 가져오기
+  const getCurrentSubjects = (): Subject[] => {
+    if (activeTab === 'image' && parsedTimetable) {
+      return parsedTimetable.subjects;
+    }
+    if (activeTab === 'link' && timetableDetail) {
+      return timetableDetail.subjects;
+    }
+    return [];
+  };
+
+  // 수정 모드 토글
+  const handleToggleEdit = () => {
+    if (!isEditMode) {
+      setEditedSubjects([...getCurrentSubjects()]);
+    }
+    setIsEditMode(!isEditMode);
+  };
+
+  // 저장
+  const handleSave = async () => {
+    const currentSubjects = isEditMode ? editedSubjects : getCurrentSubjects();
+
+    if (currentSubjects.length === 0) {
+      alert('저장할 시간표가 없습니다.');
+      return;
+    }
+
+    setIsSaving(true);
+    try {
+      const timetable =
+        activeTab === 'image' && parsedTimetable
+          ? parsedTimetable
+          : activeTab === 'link' && timetableDetail
+            ? timetableDetail
+            : null;
+
+      if (!timetable) {
+        alert('시간표 정보가 없습니다.');
+        return;
+      }
+      await everytimeAPI.saveLectures({
+        startDate: startDate.toISOString().split('T')[0],
+        endDate: endDate.toISOString().split('T')[0],
+        timetable: {
+          year: timetable.year,
+          semester: timetable.semester,
+          subjects: currentSubjects,
+        },
+      });
+
+      alert('시간표가 저장되었습니다.');
+      localStorage.setItem('timetableLinked', 'true');
+      navigate(RouterPath.HOME.DEFAULT);
+    } catch (error) {
+      console.error('시간표 저장 실패:', error);
+      alert('시간표 저장에 실패했습니다.');
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   // 시간표 데이터 hook
   const {
@@ -131,6 +201,24 @@ const TimeTablePage = () => {
             timetableDetail={timetableDetail}
           />
         )}
+
+        {getCurrentSubjects().length > 0 && (
+          <div className="mt-4">
+            <Button
+              onClick={handleToggleEdit}
+              text={isEditMode ? '수정 취소' : '수정'}
+              variant={isEditMode ? 'outline' : 'primary'}
+              className="w-full"
+            />
+          </div>
+        )}
+
+        {isEditMode && (
+          <div className="mt-4 p-4 border border-gray-300 rounded-lg bg-white">
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">시간표 수정</h3>
+            <TimetableEdit subjects={editedSubjects} onSubjectsChange={setEditedSubjects} />
+          </div>
+        )}
         {/* 날짜 입력 필드 */}
         <div className="mt-6 space-y-3">
           <div className="flex flex-row space-x-2">
@@ -157,7 +245,12 @@ const TimeTablePage = () => {
             />
           </div>
         </div>
-        <Button onClick={handleSubmit} text="등록하기" className="flex justify-center w-full" />
+        <Button
+          onClick={handleSave}
+          text={isSaving ? '등록 중' : '등록하기'}
+          className="flex justify-center w-full"
+          disabled={isSaving || getCurrentSubjects().length === 0}
+        />
       </div>
     </>
   );
