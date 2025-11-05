@@ -1,6 +1,6 @@
 import { FormInput } from '@/components/atoms/FormInput';
 import type { TimetableResponse, TimetableDetailResponse } from '@/apis';
-import { validateTimetableData, getDayOfWeek, formatTime } from '@/utils/timetableUtils';
+import { validateTimetableData } from '@/utils/timetableUtils';
 import TimetableGrid from '@/pages/TimeTable/components/TimatableGrid';
 
 interface EverytimeLinkTabProps {
@@ -76,37 +76,6 @@ const EverytimeLinkTab: React.FC<EverytimeLinkTabProps> = ({
             }
             return <TimetableGrid subjects={timetableDetail.subjects} />;
           })()}
-        </div>
-      )}
-
-      {/* 시간표 상세 정보 */}
-      {timetableDetail && (
-        <div className="mt-4">
-          <label className="block mb-2 text-sm font-bold text-gray-700">
-            시간표 정보
-            {timetableDetail.year &&
-              timetableDetail.semester &&
-              ` (${timetableDetail.year}년 ${timetableDetail.semester}학기)`}
-          </label>
-          <div className="overflow-y-auto border border-gray-200 rounded-md p-3 bg-gray-50">
-            {(() => {
-              const validation = validateTimetableData(timetableDetail.subjects);
-              if (!validation.isValid) {
-                return <div className="text-center text-red-500 py-4">{validation.message}</div>;
-              }
-              return timetableDetail.subjects.map((subject, index) => (
-                <div key={index} className="mb-3 last:mb-0">
-                  <div className="font-semibold text-gray-800 mb-1">{subject.name}</div>
-                  {subject.times.map((time, timeIndex) => (
-                    <div key={timeIndex} className="ml-2 text-sm text-gray-600">
-                      {getDayOfWeek(time.dayOfWeek)} {formatTime(time.startTime)} -{' '}
-                      {formatTime(time.endTime)}
-                    </div>
-                  ))}
-                </div>
-              ));
-            })()}
-          </div>
         </div>
       )}
     </div>

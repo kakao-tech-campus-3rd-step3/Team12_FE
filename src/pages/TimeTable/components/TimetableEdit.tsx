@@ -192,7 +192,7 @@ const TimetableEditForm: React.FC<TimetableEditFormProps> = ({ subjects, onSubje
                         variant="primary"
                         size="md"
                         noWrapper={true}
-                        className="py-2 mb-1.5 bg-red-500 hover:bg-red-600 w-full"
+                        className="py-2 mb-1.5 bg-gray-400 hover:bg-gray-500 w-full"
                       />
                     </div>
                   )}

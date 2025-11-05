@@ -22,6 +22,7 @@ const TimeTablePage = () => {
   //시간표 수정
   const [isEditMode, setIsEditMode] = useState(false);
   const [editedSubjects, setEditedSubjects] = useState<Subject[]>([]);
+  const [originalSubjects, setOriginalSubjects] = useState<Subject[]>([]);
   const [isSaving, setIsSaving] = useState(false);
 
   // 현재 시간표 데이터 가져오기
@@ -38,9 +39,30 @@ const TimeTablePage = () => {
   // 수정 모드 토글
   const handleToggleEdit = () => {
     if (!isEditMode) {
+      const currentSubjects = getCurrentSubjects();
       setEditedSubjects([...getCurrentSubjects()]);
+      setOriginalSubjects([...currentSubjects]);
+    } else {
+      //수정 취소 시 원본으로 되돌리기
+      setEditedSubjects([...originalSubjects]);
     }
     setIsEditMode(!isEditMode);
+  };
+
+  const handleTabChange = (tab: 'image' | 'link') => {
+    if (isEditMode) {
+      const hasChanges = JSON.stringify(editedSubjects) !== JSON.stringify(getCurrentSubjects());
+      if (hasChanges) {
+        const confirm = window.confirm(
+          '수정 중인 내용이 있습니다. 탭을 전환하면 수정 내용이 사라집니다. 계속하시겠습니까?',
+        );
+        if (!confirm) return;
+      }
+      setIsEditMode(false);
+      setEditedSubjects([]);
+      setOriginalSubjects([]);
+    }
+    setActiveTab(tab);
   };
 
   // 저장
@@ -124,42 +146,13 @@ const TimeTablePage = () => {
     }
   };
 
-  //데이터 확인용 콘솔
-  const handleSubmit = () => {
-    localStorage.setItem('timetableLinked', 'true');
-    if (selectedTimetable) {
-      console.log('선택된 시간표:', selectedTimetable);
-      console.log('시간표 상세 정보:', timetableDetail);
-      console.log('시간표 등록:', {
-        selectedImage,
-        startDate,
-        endDate,
-        timetableInfo: selectedTimetable,
-        timetableDetail,
-        everytimeUrl: everytimeTable,
-      });
-      navigate(RouterPath.HOME.DEFAULT);
-    } else if (parsedTimetable) {
-      console.log('파싱된 시간표:', parsedTimetable);
-      console.log('시간표 등록:', {
-        selectedImage,
-        startDate,
-        endDate,
-        parsedTimetable,
-      });
-    } else {
-      console.log('시간표 등록:', { selectedImage, startDate, endDate });
-      navigate(RouterPath.HOME.DEFAULT);
-    }
-  };
-
   return (
     <>
       <div className="p-3 m-1 mx-auto max-w-4xl rounded-lg border-gray-200 /border">
         {/* 탭 버튼 */}
         <div className="flex mb-6 border-b border-gray-200">
           <button
-            onClick={() => setActiveTab('image')}
+            onClick={() => handleTabChange('image')}
             className={`px-6 py-3 font-medium transition-colors ${
               activeTab === 'image'
                 ? 'border-b-2 text-blue-600'
@@ -169,7 +162,7 @@ const TimeTablePage = () => {
             이미지로 등록
           </button>
           <button
-            onClick={() => setActiveTab('link')}
+            onClick={() => handleTabChange('link')}
             className={`px-6 py-3 font-medium transition-colors ${
               activeTab === 'link'
                 ? 'border-b-2 text-blue-600'
