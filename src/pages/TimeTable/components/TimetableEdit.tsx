@@ -91,7 +91,7 @@ const TimetableEditForm: React.FC<TimetableEditFormProps> = ({ subjects, onSubje
       {subjects.map((subject, subjectIndex) => (
         <div key={subjectIndex} className="p-4 border border-gray-200 rounded-lg">
           {/* 과목 기본 정보 */}
-          <div className="flex flex-col md:flex-row gap-2 lg:items-end">
+          <div className="flex flex-col md:flex-row gap-2 md:items-end lg:items-end">
             <FormInput
               id={`subject-name-${subjectIndex}`}
               label="과목명"
