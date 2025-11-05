@@ -131,16 +131,20 @@
 
   /* 이벤트 스타일 */
   .fc-event {
-    @apply !rounded-md !border-0 shadow-sm transition-all duration-200 !bg-blue-500 !text-white !min-h-[30px] !overflow-visible;
+    @apply !rounded-xl !border-0 shadow-sm transition-all duration-200 !bg-blue-500 !text-white !min-h-[30px] !overflow-hidden;
   }
 
   .fc-event:hover {
     @apply transform !z-10;
   }
 
+  /* 강의 이벤트 스타일 */
+  .fc-event.lecture-event {
+    @apply !bg-gray-500 !text-white !overflow-hidden;
+  }
   /* 일반 단일 날짜 이벤트 */
   .fc-event.fc-daygrid-event {
-    @apply !rounded-md !border-none !min-h-[20px];
+    @apply !rounded-xl !border-none !mb-1 !min-h-[20px] !overflow-hidden;
   }
 
   /* 여러 날에 걸친 이벤트 - 시작 부분 */
