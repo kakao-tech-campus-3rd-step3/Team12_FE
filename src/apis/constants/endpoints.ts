@@ -17,6 +17,7 @@ export const AUTH_ENDPOINTS = {
 } as const;
 
 export const PERSONAL_CALENDAR_ENDPOINTS = {
+  GET_LECTURES: '/api/lectures',
   GET_EVENTS: '/api/events',
   GET_TODAY_EVENTS: '/api/events/today',
 
@@ -34,7 +35,7 @@ export const PERSONAL_CALENDAR_ENDPOINTS = {
 export const TEAM_CALENDAR_ENDPOINTS = {
   GET_EVENTS: (teamId: number) => `/api/events/team/${teamId}`,
   ADD_EVENT: '/api/events/team/add',
-  MODIFY_EVENT: '/api/events/team/modify',
+  MODIFY_EVENT: (eventId: number) => `/api/events/team/modify/${eventId}`,
   DELETE_EVENT: (eventId: number) => `/api/events/team/${eventId}`,
   ADD_RECURRING_EVENT: (teamId: number) => `/api/events/team/recurring/add/${teamId}`,
   MODIFY_RECURRING_ALL_EVENT: (eventId: number) => `/api/events/team/recurring/modify/${eventId}`,
@@ -78,5 +79,4 @@ export const TEAM_ENDPOINTS = {
     required_time: string,
   ) =>
     `/api/teams/${teamId}/when-to-meet/recommend?N=${N}&start_time=${start_time}&end_time=${end_time}&required_time=${required_time}`,
-
 };

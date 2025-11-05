@@ -2,6 +2,7 @@ import { personalCalendarAPI, teamCalendarAPI } from '@/apis';
 import { useEvents, useModal } from '@/hooks';
 import type { FormData } from '@/hooks/calendar/useFormData';
 import DateModal from '@/pages/Calendar/components/DateModal';
+import { useClassStore } from '@/store/calendar/useClassStore';
 import { useTeamStore } from '@/store/team/useTeamStore';
 import type { CalendarEvent, modifyCalendarEventRequest } from '@/types/calendar';
 import { parseEventId } from '@/utils/eventUtils';
@@ -37,6 +38,7 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
     handleEventDrop,
     handleEventResize,
   } = useEvents(mode, teamId);
+  const { lectureNames } = useClassStore();
 
   //초기 로딩 시 팀/개인 분기해서 캘린더 가져오기
   useEffect(() => {
@@ -142,6 +144,9 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
             first_start_time: eventData.start_time,
             first_end_time: eventData.end_time,
             rrule: rrule,
+            ...(formData.event_participants !== undefined
+              ? { event_participants: formData.event_participants }
+              : {}),
           });
           await getEvents({ teamId, mode: 'team' });
           await getTodayEvents();
@@ -153,7 +158,9 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
               description: eventData.description,
               start_time: eventData.start_time,
               end_time: eventData.end_time,
-              is_private: eventData.is_private,
+              ...(formData.event_participants !== undefined
+                ? { event_participants: formData.event_participants }
+                : {}),
             },
             { teamId, mode: 'team' },
           );
@@ -169,13 +176,18 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
           description: eventData.description,
           first_start_time: eventData.start_time,
           first_end_time: eventData.end_time,
-          is_private: eventData.is_private,
           rrule: rrule,
         });
         await getEvents({ mode: 'personal' });
         await getTodayEvents();
       } else {
         // 일반 일정 추가
+        await personalCalendarAPI.addEvent({
+          title: eventData.title,
+          description: eventData.description,
+          start_time: eventData.start_time,
+          end_time: eventData.end_time,
+        });
         await addEvent(eventData, { mode: 'personal' });
         await getTodayEvents();
       }
@@ -185,8 +197,6 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
       if (eventData.title !== selectedEvent.title) modifyData.title = eventData.title;
       if (eventData.description !== selectedEvent.description)
         modifyData.description = eventData.description;
-      if (eventData.is_private !== selectedEvent.is_private)
-        modifyData.is_private = eventData.is_private;
       if (
         eventData.start_time !== selectedEvent.start_time ||
         eventData.end_time !== selectedEvent.end_time
@@ -258,6 +268,9 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
       await personalCalendarAPI.modifyRecurringOneEvent(eventId, {
         original_start_time: eventData.original_start_time,
         title: eventData.title ?? '',
+        ...(eventData.description && { description: eventData.description }),
+        ...(eventData.start_time && { start_time: eventData.start_time }),
+        ...(eventData.end_time && { end_time: eventData.end_time }),
       });
       await new Promise((resolve) => setTimeout(resolve, 300));
       await getEvents({ mode: 'personal' });
@@ -286,6 +299,10 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
         await getTodayEvents();
       }
     }
+  };
+
+  const checkEventTitle = (title: string): boolean => {
+    return lectureNames.some((name) => name.toLowerCase() === title.toLowerCase());
   };
 
   return (
@@ -321,7 +338,6 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
                       description: '',
                       start_time: `${today}T09:00:00`,
                       end_time: `${today}T10:00:00`,
-                      is_private: false,
                     });
                   },
                 },
@@ -361,6 +377,10 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
               selectable // 날짜 선택 가능 (새 일정 추가)
               editable // 이벤트 편집 가능 (드래그, 리사이즈)
               events={events ? formatEventsForCalendar(events) : []}
+              eventClassNames={(arg) => {
+                // 강의 이벤트인지 체크해서 다른 클래스 적용
+                return checkEventTitle(arg.event.title) ? ['lecture-event'] : [];
+              }}
               dayMaxEvents={false} // 모든 이벤트 표시 (끊김 방지)
               eventDisplay="block" // 이벤트를 블록 형태로 표시
               displayEventTime={true} // 이벤트 시간 표시
@@ -444,6 +464,7 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
         modalType={modalType}
         selectedEvent={selectedEvent}
         selectedDate={selectedDate}
+        teamId={teamId} // teamId 전달 (mode === 'team'일 때만 값이 있음)
         onSave={handleSaveEvent}
         onEditRecurringOne={handleEditRecurringOne}
         onEditRecurringAll={handleEditRecurringAll}

@@ -9,7 +9,6 @@ import { useEffect, useState } from 'react';
 export interface FormData {
   title: string;
   description: string;
-  private: boolean;
   allDay: boolean;
   repeat: RepeatType;
   startTime?: string;
@@ -18,6 +17,7 @@ export interface FormData {
   repeatEndDate?: string;
   repeatCount: number;
   repeatWeekDays?: string[];
+  event_participants?: number[];
 }
 
 interface UseFormDataProps {
@@ -36,7 +36,6 @@ const useFormData = ({ isOpen, modalType, selectedEvent, selectedDate, initialSt
     description: '',
     startTime: '',
     endTime: '',
-    private: false,
     allDay: false,
     repeat: 'none',
     repeatEndType: undefined,
@@ -48,13 +47,17 @@ const useFormData = ({ isOpen, modalType, selectedEvent, selectedDate, initialSt
   // 모달이 열릴 때마다 폼 초기화
   useEffect(() => {
     if (isOpen) {
-      if (modalType === 'edit' && selectedEvent) {
+      if (
+        (modalType === 'edit' ||
+          modalType === 'editRecurringOne' ||
+          modalType === 'editRecurringAll') &&
+        selectedEvent
+      ) {
         setFormData({
           title: selectedEvent.title,
           description: selectedEvent.description,
           startTime: selectedEvent.start_time,
           endTime: selectedEvent.end_time,
-          private: selectedEvent.is_private ?? false,
           allDay: false,
           repeat: 'none',
           repeatEndType: undefined,
@@ -68,9 +71,8 @@ const useFormData = ({ isOpen, modalType, selectedEvent, selectedDate, initialSt
         setFormData({
           title: '',
           description: '',
-          startTime: initialStartTime || selectedDate,
-          endTime: initialEndTime || selectedDate,
-          private: false,
+          startTime: selectedDate,
+          endTime: selectedDate,
           allDay: false,
           repeat: 'none',
           repeatEndType: undefined,
@@ -84,7 +86,6 @@ const useFormData = ({ isOpen, modalType, selectedEvent, selectedDate, initialSt
           description: '',
           startTime: toDateOnly(new Date()),
           endTime: toDateOnly(new Date()),
-          private: false,
           allDay: false,
           repeat: 'none',
           repeatEndType: undefined,

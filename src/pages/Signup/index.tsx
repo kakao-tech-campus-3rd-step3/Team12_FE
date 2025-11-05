@@ -1,4 +1,4 @@
-import { authAPI } from '@/apis';
+import { authAPI } from '@/apis/services/auth';
 import { AuthInput } from '@/components/atoms/AuthInput';
 import Button from '@/components/atoms/Button';
 import Logo from '@/components/atoms/Logo';

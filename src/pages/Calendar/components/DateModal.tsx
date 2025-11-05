@@ -21,6 +21,7 @@ interface DateModalProps {
   modalType: ModalType;
   selectedEvent?: CalendarEvent;
   selectedDate?: string;
+  teamId?: number; // teamId 추가
   initialStartTime?: string;
   initialEndTime?: string;
   onSave: (event: Omit<CalendarEvent, 'event_id'>, formData: FormData) => void;
@@ -44,6 +45,7 @@ const DateModal: React.FC<DateModalProps> = ({
   modalType,
   selectedEvent,
   selectedDate,
+  teamId, // 추가
   initialStartTime,
   initialEndTime,
   onSave,
@@ -122,13 +124,17 @@ const DateModal: React.FC<DateModalProps> = ({
         title: formData.title,
         description: formData.description,
       };
-      if (formData.startTime && formData.endTime) {
-        const startTimeWithTime = formData.startTime.includes('T')
-          ? formData.startTime
-          : `${formData.startTime}T00:00:00`;
-        const endTimeWithTime = formData.endTime.includes('T')
-          ? formData.endTime
-          : `${formData.endTime}T23:59:00`;
+      // start_time과 end_time 중 하나라도 변경되었는지 확인
+      const isStartTimeChanged =
+        formData.startTime && formData.startTime !== selectedEvent.start_time;
+      const isEndTimeChanged = formData.endTime && formData.endTime !== selectedEvent.end_time;
+
+      if (isStartTimeChanged || isEndTimeChanged) {
+        const startTime = formData.startTime || selectedEvent.start_time;
+        const endTime = formData.endTime || selectedEvent.end_time;
+
+        const startTimeWithTime = startTime.includes('T') ? startTime : `${startTime}T00:00:00`;
+        const endTimeWithTime = endTime.includes('T') ? endTime : `${endTime}T23:59:00`;
 
         eventData.start_time = startTimeWithTime;
         eventData.end_time = endTimeWithTime;
@@ -141,13 +147,17 @@ const DateModal: React.FC<DateModalProps> = ({
         title: formData.title,
         description: formData.description,
       };
-      if (formData.startTime && formData.endTime) {
-        const startTimeWithTime = formData.startTime.includes('T')
-          ? formData.startTime
-          : `${formData.startTime}T00:00:00`;
-        const endTimeWithTime = formData.endTime.includes('T')
-          ? formData.endTime
-          : `${formData.endTime}T23:59:00`;
+      const isStartTimeChanged =
+        formData.startTime && formData.startTime !== selectedEvent.start_time;
+      const isEndTimeChanged = formData.endTime && formData.endTime !== selectedEvent.end_time;
+
+      if (isStartTimeChanged || isEndTimeChanged) {
+        // 변경된 경우 둘 다 보내야 하므로, 변경되지 않은 것은 원래 값 사용
+        const startTime = formData.startTime || selectedEvent.start_time;
+        const endTime = formData.endTime || selectedEvent.end_time;
+
+        const startTimeWithTime = startTime.includes('T') ? startTime : `${startTime}T00:00:00`;
+        const endTimeWithTime = endTime.includes('T') ? endTime : `${endTime}T23:59:00`;
 
         eventData.start_time = startTimeWithTime;
         eventData.end_time = endTimeWithTime;
@@ -303,11 +313,16 @@ const DateModal: React.FC<DateModalProps> = ({
           </div>
         </div>
       ) : (
-        <form onSubmit={handleFormSubmit} className="p-6">
+        <form onSubmit={handleFormSubmit} className="p-1">
           <div className="flex flex-col space-y-2 md:flex-row md:w-full">
             {/** 일정 제목, 비공개 여부, 시간 추가 (모달 우측) */}
             <div className="mt-4">
-              <MetaFields formData={formData} range={range} updateFormData={updateFormData} />
+              <MetaFields
+                formData={formData}
+                range={range}
+                updateFormData={updateFormData}
+                teamId={teamId} // teamId 전달
+              />
               <RepeatSettings formData={formData} updateFormData={updateFormData} />
             </div>
             {/** 기간 선택 (모달 좌측) */}

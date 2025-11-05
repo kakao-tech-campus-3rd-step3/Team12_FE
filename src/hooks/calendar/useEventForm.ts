@@ -34,16 +34,13 @@ const useEventForm = ({ onSave, onClose }: UseEventFormProps) => {
       description: formData.description || '',
       start_time: startTime,
       end_time: endTime,
-      is_private: formData.private,
     };
 
     onSave(eventData, formData);
     onClose();
   };
 
-  const validateForm = (
-    formData: Pick<FormData, 'title' | 'startTime' | 'endTime' | 'private'>,
-  ) => {
+  const validateForm = (formData: Pick<FormData, 'title' | 'startTime' | 'endTime'>) => {
     if (!formData.title?.trim()) {
       setError('title');
       return false;

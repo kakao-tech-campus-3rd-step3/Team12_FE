@@ -155,7 +155,7 @@ export const useCalendarStore = create<CalendarState>((set) => ({
 
       // API 호출
       if (mode === 'team') {
-        await teamCalendarAPI.modifyTeamEvent({
+        await teamCalendarAPI.modifyTeamEvent(eventId, {
           event_id: eventId,
           ...updates,
         });

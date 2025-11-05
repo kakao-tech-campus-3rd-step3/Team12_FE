@@ -16,7 +16,6 @@ export type CalendarEvent = {
   description: string;
   start_time: string; // ISO string e.g. 2025-09-18T10:00:00
   end_time: string; // ISO string e.g. 2025-09-18T11:00:00
-  is_private: boolean;
   is_recurring?: boolean;
 };
 
@@ -31,7 +30,6 @@ export type BaseCalendarEventResponse = {
   description: string;
   start_time: string;
   end_time: string;
-  is_private: boolean;
 };
 
 export type CalendarEventResponse = BaseCalendarEventResponse & {
@@ -44,7 +42,6 @@ export type addCalendarEventRequest = {
   description: string;
   start_time: string;
   end_time: string;
-  is_private: boolean;
 };
 export type addCalendarEventResponse = BaseCalendarEventResponse;
 
@@ -53,7 +50,6 @@ export type addCalendarRecurringEventRequest = {
   description: string;
   first_start_time: string;
   first_end_time: string;
-  is_private: boolean;
   rrule: string;
 };
 export type addCalendarRecurringEventResponse = BaseCalendarEventResponse;
@@ -63,7 +59,6 @@ export type modifyCalendarEventRequest = {
   description?: string;
   start_time?: string;
   end_time?: string;
-  is_private?: boolean;
 };
 export type modifyCalendarEventResponse = CalendarEventResponse;
 
