@@ -1,3 +1,4 @@
+import { authAPI } from '@/apis/services/auth';
 import { AuthInput } from '@/components/atoms/AuthInput';
 import Button from '@/components/atoms/Button';
 import Logo from '@/components/atoms/Logo';
@@ -27,8 +28,11 @@ const signupSchema = z
 type SignupFormData = z.infer<typeof signupSchema>;
 
 const Signup = () => {
-  const [showVerification, setShowVerification] = useState(false);
-  const [verificationCode, setVerificationCode] = useState('');
+  const [showVerification, setShowVerification] = useState(false); //인증 코드 입력 필드 표시
+  const [verificationCode, setVerificationCode] = useState(''); //인증코드 저장
+  const [isEmailVerified, setIsEmailVerified] = useState(false); //이메일 인증 완료 여부 저장
+  const [isSendingCode, setIsSendingCode] = useState(false); // 인증 코드 발송 중 상태관리
+  const [isVerifyingCode, setIsVerifyingCode] = useState(false); //인증 코드 검증 중 상태관리
   const [backendError, setBackendError] = useState<string | null>(null);
   const navigate = useNavigate();
   const { signup } = useAuthStore();
@@ -36,11 +40,56 @@ const Signup = () => {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<SignupFormData>({
     resolver: zodResolver(signupSchema),
     mode: 'onBlur',
   });
+
+  const userEmail = watch('email');
+
+  const handleSendVerificationCode = async () => {
+    if (!userEmail || errors.email) {
+      toast.error('유효한 이메일을 입력해주세요.');
+      return;
+    }
+
+    setIsSendingCode(true);
+    try {
+      const response = await authAPI.sendEmailVerification(userEmail);
+      toast.success('인증 코드가 발송되었습니다.\n이메일을 확인해주세요.');
+      setShowVerification(true);
+      console.log('만료 시간:', response.data.expires_at);
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const message = error.response?.data?.message || '인증 코드 발송에 실패했습니다.';
+        toast.error(message);
+      }
+    } finally {
+      setIsSendingCode(false);
+    }
+  };
+
+  const handleVerificationCode = async () => {
+    if (!verificationCode) {
+      toast.error('인증 코드를 입력해주세요.');
+      return;
+    }
+    setIsVerifyingCode(true);
+    try {
+      await authAPI.verifyEmailVerification(userEmail, verificationCode);
+      toast.success('이메일 인증이 완료되었습니다');
+      setIsEmailVerified(true);
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const message = error.response?.data?.message || '인증 코드가 올바르지 않습니다.';
+        toast.error(message);
+      }
+    } finally {
+      setIsVerifyingCode(false);
+    }
+  };
 
   const onSubmit = async (data: SignupFormData) => {
     setBackendError(null);
@@ -88,13 +137,14 @@ const Signup = () => {
               />
               <Button
                 type="button"
-                onClick={() => setShowVerification(true)}
+                onClick={handleSendVerificationCode}
+                disabled={isSendingCode || !userEmail || !!errors.email || isEmailVerified}
                 variant="primary"
                 size="md"
                 noWrapper={true}
-                className="px-4"
+                className="px-4 cursor-pointer"
               >
-                인증코드
+                {isSendingCode ? '발송중...' : isEmailVerified ? '인증완료' : '인증코드'}
               </Button>
             </div>
             {showVerification && (
@@ -111,8 +161,16 @@ const Signup = () => {
                     />
                   </div>
                 </div>
-                <Button type="button" variant="primary" size="md" noWrapper={true} className="px-4">
-                  인증하기
+                <Button
+                  type="button"
+                  onClick={handleVerificationCode}
+                  disabled={isVerifyingCode || !verificationCode || isEmailVerified}
+                  variant="primary"
+                  size="md"
+                  noWrapper={true}
+                  className="px-4 cursor-pointer"
+                >
+                  {isVerifyingCode ? '확인중...' : isEmailVerified ? '인증완료' : '인증하기'}
                 </Button>
               </div>
             )}
@@ -146,6 +204,7 @@ const Signup = () => {
             size="md"
             noWrapper={true}
             fullWidth={true}
+            disabled={!isEmailVerified}
           >
             회원가입 하기
           </Button>

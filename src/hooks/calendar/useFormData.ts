@@ -25,9 +25,11 @@ interface UseFormDataProps {
   modalType: ModalType;
   selectedEvent?: CalendarEvent;
   selectedDate?: string;
+  initialStartTime?: string;
+  initialEndTime?: string;
 }
 
-const useFormData = ({ isOpen, modalType, selectedEvent, selectedDate }: UseFormDataProps) => {
+const useFormData = ({ isOpen, modalType, selectedEvent, selectedDate, initialStartTime, initialEndTime }: UseFormDataProps) => {
   const [showTime, setShowTime] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     title: '',
@@ -65,7 +67,7 @@ const useFormData = ({ isOpen, modalType, selectedEvent, selectedDate }: UseForm
           // startTime: new Date(selectedEvent.start_time).toTimeString().slice(0, 5),
           // endTime: new Date(selectedEvent.end_time).toTimeString().slice(0, 5),
         });
-      } else if (modalType === 'add' && selectedDate) {
+      } else if (modalType === 'add' && (initialStartTime || selectedDate)) {
         setFormData({
           title: '',
           description: '',
@@ -93,7 +95,7 @@ const useFormData = ({ isOpen, modalType, selectedEvent, selectedDate }: UseForm
         });
       }
     }
-  }, [isOpen, modalType, selectedEvent?.event_id, selectedDate]);
+  }, [isOpen, modalType, selectedEvent?.event_id, selectedDate, initialStartTime, initialEndTime]);
 
   const updateFormData = (updates: Partial<FormData>) => {
     setFormData((prev) => ({ ...prev, ...updates }));

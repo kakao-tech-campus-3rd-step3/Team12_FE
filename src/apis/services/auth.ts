@@ -5,6 +5,8 @@ import type {
   LoginRequest,
   LoginResponse,
   RefreshTokenResponse,
+  EmailSendResponse,
+  VerifyCodeResponse,
 } from '@/apis/types/auth';
 
 export const authAPI = {
@@ -48,6 +50,18 @@ export const authAPI = {
         });
         throw error;
       });
+  },
+
+  //이메일 인증코드 발송
+  sendEmailVerification: (email: string) => {
+    return apiClient.post<EmailSendResponse>(AUTH_ENDPOINTS.SEND_VERIFICATION_CODE, { email });
+  },
+  //이메일 인증코드 검증
+  verifyEmailVerification: (email: string, code: string) => {
+    return apiClient.post<VerifyCodeResponse>(AUTH_ENDPOINTS.VERITY_VERIFICATION_CODE, {
+      email,
+      code,
+    });
   },
 
   //리프레시 토큰 발급
