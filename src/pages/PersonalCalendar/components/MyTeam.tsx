@@ -1,6 +1,6 @@
 import type { TeamData } from '@/apis/types/team';
 import Button from '@/components/atoms/Button';
-import { Settings } from 'lucide-react';
+import { Settings, ChevronRight, Users } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const MyTeam = ({
@@ -20,33 +20,37 @@ const MyTeam = ({
   return (
     <div className="px-3 mb-8">
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-lg font-semibold text-gray-800">내 팀 ({teams.length})</h3>
+        <h3 className="text-lg font-semibold text-gray-800">내 팀 목록 ({teams.length})</h3>
         <Button
           wrapperClassName="m-0 p-0 w-fit rounded-md h-fit bg-transparent"
           noWrapper
-          className="p-2 text-gray-400 bg-transparent rounded-full transition-colors duration-200 hover:bg-blue-50 hover:text-blue-600"
+          className="p-2 text-gray-400 bg-transparent rounded-full transition-colors duration-200 cursor-pointer hover:bg-blue-50 hover:text-blue-600"
           onClick={() => setIsSetting(true)}
         >
           <Settings className="w-4 h-4" />
         </Button>
       </div>
-      <div className="">
+      <div className="space-y-3">
         {teams.map((team, index) => (
-          <div key={index} className="flex justify-between items-center p-2 pl-0 rounded-lg">
-            <div className="flex items-center">
-              <div className={`mr-2 w-3 h-3 rounded-full`} />
-              <div>
-                <p className="text-xs font-medium text-gray-800">{team.team_name}</p>
-                <p className="text-xs text-gray-500">{team.member_count}명</p>
+          <div
+            key={index}
+            onClick={() => navigate(`/team-calendar/${team.id}`)}
+            className="flex justify-between items-center p-3 bg-white rounded-lg border border-gray-200 hover:shadow-md hover:bg-blue-50/50 hover:border-blue-300 cursor-pointer transition-all duration-200 group"
+          >
+            <div className="flex items-center gap-3 flex-1">
+              <div className="flex-1">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-medium text-gray-800 group-hover:text-blue-700 transition-colors">
+                    {team.team_name}
+                  </span>
+                </div>
+                <div className="flex items-center gap-1.5 mt-0.5">
+                  <Users className="w-3.5 h-3.5 text-gray-500" />
+                  <p className="text-xs text-gray-500">{team.member_count}명</p>
+                </div>
               </div>
             </div>
-            <Button
-              wrapperClassName="m-0 p-0 w-fit rounded-md h-fit"
-              className="p-1 text-xs bg-blue-200 text-mainBlue hover:bg-blue-300"
-              onClick={() => navigate(`/team-calendar/${team.id}`)}
-            >
-              이동
-            </Button>
+            <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-blue-600 group-hover:translate-x-0.5 transition-all" />
           </div>
         ))}
       </div>

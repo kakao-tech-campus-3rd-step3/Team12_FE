@@ -1,8 +1,8 @@
 import { useParams } from 'react-router-dom';
-import { useTeamUpcomingSchedule } from '@/hooks/team';
+import { useTeamTodaySchedule } from '@/hooks/team';
 import { useTeamStore } from '@/store/team';
 import type { TeamSchedule } from '@/apis';
-import { UpcomingTeamScheduleItem } from '@/pages/TeamCalendar/components/UpcomingTeamScheduleItem';
+import { TeamTodayScheduleItem } from '@/pages/TeamCalendar/components/TeamTodaySchedule';
 
 // 시작 시간 기준 오름차순 정렬
 const sortByStartTime = (schedules: TeamSchedule[]) => {
@@ -11,12 +11,12 @@ const sortByStartTime = (schedules: TeamSchedule[]) => {
   );
 };
 
-export const UpcomingTeamScheduleList = () => {
+export const TeamTodayScheduleList = () => {
   const { currentTeam } = useTeamStore();
   const { id: urlTeamId } = useParams<{ id: string }>();
   const teamId = currentTeam?.id ?? (urlTeamId ? Number(urlTeamId) : null);
 
-  const { schedules, isLoading, error } = useTeamUpcomingSchedule(teamId);
+  const { schedules, isLoading, error } = useTeamTodaySchedule(teamId);
 
   if (isLoading) {
     return <div className="text-center text-sm text-gray-500">로딩 중...</div>;
@@ -27,7 +27,7 @@ export const UpcomingTeamScheduleList = () => {
   }
 
   if (schedules.length === 0) {
-    return <div className="text-center text-sm text-gray-500">예정된 일정이 없습니다.</div>;
+    return <div className="text-center text-sm text-gray-500">오늘 일정이 없습니다.</div>;
   }
 
   const sortedSchedules = sortByStartTime(schedules);
@@ -35,7 +35,7 @@ export const UpcomingTeamScheduleList = () => {
   return (
     <div className="space-y-2">
       {sortedSchedules.map((schedule) => (
-        <UpcomingTeamScheduleItem key={schedule.event_id} schedule={schedule} />
+        <TeamTodayScheduleItem key={schedule.event_id} schedule={schedule} />
       ))}
     </div>
   );

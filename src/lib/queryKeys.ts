@@ -1,5 +1,11 @@
 export const queryKeys = {
   teams: ['teams'] as const,
+  team: (teamId: number) => ['team', teamId] as const,
+  teamAvailability: ['teamAvailability'] as const,
+  teamRecommendTimes: ['teamRecommendTimes'] as const,
+  teamUpcomingSchedule: (teamId: number) => ['teamUpcomingSchedule', teamId] as const,
+  teamTodaySchedule: (teamId: number) => ['teamTodaySchedule', teamId] as const,
+  lectures: ['lectures'] as const,
   events: ['events'] as const,
   auth: ['auth'] as const,
 

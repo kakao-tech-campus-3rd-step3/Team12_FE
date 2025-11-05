@@ -1,22 +1,40 @@
 import { personalCalendarAPI, teamCalendarAPI } from '@/apis';
+import type { addCalendarEventRequest, modifyCalendarEventRequest } from '@/types/calendar';
 import { type CalendarEvent } from '@/types/calendar';
 import { create } from 'zustand';
 
 interface CalendarState {
   events: CalendarEvent[] | null;
+  todayEvents: CalendarEvent[] | null;
+  upcomingEvents: CalendarEvent[] | null;
   isAuthenticated: boolean;
   getEvents: (teamOrPersonalOption?: {
     teamId?: number;
     mode?: 'team' | 'personal';
   }) => Promise<CalendarEvent[] | null>;
-  addEvent: (event: Omit<CalendarEvent, 'event_id'>) => void;
-  removeEvent: (eventId: number) => void;
-  updateEvent: (eventId: number, updates: Partial<CalendarEvent>) => void;
+
+  getTodayEvents: () => Promise<CalendarEvent[] | null>;
+  addEvent: (
+    event: addCalendarEventRequest,
+    teamOrPersonalOption?: { teamId?: number; mode?: 'personal' | 'team' },
+  ) => Promise<void>;
+  removeEvent: (
+    eventId: number,
+    teamOrPersonalOption?: { teamId?: number; mode?: 'personal' | 'team' },
+  ) => Promise<void>;
+  updateEvent: (
+    eventId: number,
+    updates: modifyCalendarEventRequest,
+    teamOrPersonalOption?: { teamId?: number; mode?: 'personal' | 'team' },
+  ) => Promise<void>;
+  getUpcomingEvents: () => Promise<CalendarEvent[] | null>;
 }
 
 export const useCalendarStore = create<CalendarState>((set) => ({
   // Test Data
   events: [],
+  todayEvents: [],
+  upcomingEvents: [],
   isAuthenticated: false,
   getEvents: async (teamOrPersonalOption) => {
     try {
@@ -63,14 +81,114 @@ export const useCalendarStore = create<CalendarState>((set) => ({
       return null;
     }
   },
-  addEvent: (event) =>
-    set((state) => ({
-      events: [...(state.events || []), { ...event, event_id: Date.now() }],
-    })),
-  removeEvent: (eventId) =>
-    set((state) => ({ events: state.events?.filter((event) => event.event_id !== eventId) || [] })),
-  updateEvent: (eventId, updates) =>
-    set((state) => ({
-      events: state.events?.map((e) => (e.event_id === eventId ? { ...e, ...updates } : e)) || [],
-    })),
+  getTodayEvents: async (): Promise<CalendarEvent[] | null> => {
+    try {
+      const response = await personalCalendarAPI.getTodayEvents();
+      const fetchedEvents = response.data ?? null;
+      if (fetchedEvents) {
+        set({ todayEvents: fetchedEvents });
+      } else {
+        set({ todayEvents: [] });
+      }
+      return fetchedEvents;
+    } catch (error) {
+      console.error('Failed to fetch today events', error);
+      return null;
+    }
+  },
+  addEvent: async (event, teamOrPersonalOption) => {
+    try {
+      const mode = teamOrPersonalOption?.mode ?? 'personal';
+
+      // API 호출
+      if (mode === 'team') {
+        const teamId = teamOrPersonalOption?.teamId;
+        if (!teamId) {
+          throw new Error('팀 ID가 필요합니다');
+        }
+        await teamCalendarAPI.addTeamEvent({
+          ...event,
+          team_id: teamId,
+        } as any);
+      } else {
+        await personalCalendarAPI.addEvent(event);
+      }
+
+      // 전체 일정 다시 가져오기
+      await useCalendarStore.getState().getEvents(teamOrPersonalOption);
+
+      // 오늘 일정 갱신
+      const todayResponse = await personalCalendarAPI.getTodayEvents();
+      set({ todayEvents: todayResponse.data ?? [] });
+    } catch (error) {
+      console.error('Failed to add event', error);
+      throw error;
+    }
+  },
+  removeEvent: async (eventId, teamOrPersonalOption) => {
+    try {
+      const mode = teamOrPersonalOption?.mode ?? 'personal';
+
+      // API 호출
+      if (mode === 'team') {
+        await teamCalendarAPI.deleteTeamEvent(eventId);
+      } else {
+        await personalCalendarAPI.deleteEvent(eventId);
+      }
+
+      // 전체 일정 다시 가져오기
+      await useCalendarStore.getState().getEvents(teamOrPersonalOption);
+
+      // 오늘 일정 갱신
+      const todayResponse = await personalCalendarAPI.getTodayEvents();
+      set({ todayEvents: todayResponse.data ?? [] });
+    } catch (error) {
+      console.error('Failed to remove event', error);
+      throw error;
+    }
+  },
+  updateEvent: async (eventId, updates, teamOrPersonalOption) => {
+    try {
+      const mode = teamOrPersonalOption?.mode ?? 'personal';
+
+      console.log('updateEvent called with:', { updates, mode, teamOrPersonalOption });
+
+      // API 호출
+      if (mode === 'team') {
+        await teamCalendarAPI.modifyTeamEvent({
+          event_id: eventId,
+          ...updates,
+        });
+      } else {
+        await personalCalendarAPI.modifyEvent(eventId, updates);
+      }
+
+      // 전체 일정 다시 가져오기
+      await useCalendarStore.getState().getEvents(teamOrPersonalOption);
+
+      // 오늘 일정 갱신
+      const todayResponse = await personalCalendarAPI.getTodayEvents();
+      set({ todayEvents: todayResponse.data ?? [] });
+    } catch (error: any) {
+      console.error('Failed to update event', error);
+      console.error('Error details:', {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+        updates,
+      });
+      throw error;
+    }
+  },
+  getUpcomingEvents: async (): Promise<CalendarEvent[] | null> => {
+    try {
+      const response = await personalCalendarAPI.getUpcomingEvents();
+      set({ upcomingEvents: response.data });
+      return response.data;
+    } catch (error) {
+      console.error('Failed to fetch upcoming events:', error);
+      set({ upcomingEvents: [] });
+      return null;
+    }
+  },
 }));

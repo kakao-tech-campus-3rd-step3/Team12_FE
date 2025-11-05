@@ -4,10 +4,13 @@ import { useMemo, useState } from 'react';
 import { teamAPI } from '@/apis';
 import Button from '@/components/atoms/Button';
 import Pagination from '@/components/molecules/Pagination';
+import { queryKeys } from '@/lib/queryKeys';
 import CreateTeam from '@/pages/PersonalCalendar/components/CreateTeam';
 import JoinTeam from '@/pages/PersonalCalendar/components/JoinTeam';
 import TeamListCard from '@/pages/PersonalCalendar/components/TeamListCard';
 import { useTeamStore } from '@/store/team';
+import { useQueryClient } from '@tanstack/react-query';
+import { toast } from 'react-toastify';
 
 interface TeamListModalProps {
   isOpen: boolean;
@@ -21,7 +24,8 @@ const TeamListModal = ({ isOpen, onClose, leaveTeam, deleteTeam }: TeamListModal
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3;
 
-  const { teams, refreshTeams } = useTeamStore();
+  const { teams } = useTeamStore();
+  const queryClient = useQueryClient();
   const paginationData = useMemo(() => {
     const totalItems = teams.length;
     const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -49,10 +53,10 @@ const TeamListModal = ({ isOpen, onClose, leaveTeam, deleteTeam }: TeamListModal
         team_description: teamData.description,
       });
 
-      // 팀 목록을 새로고침하여 최신 데이터를 가져옴
-      await refreshTeams();
+      // React Query 캐시를 무효화하여 최신 데이터를 가져옴
+      await queryClient.invalidateQueries({ queryKey: queryKeys.teams });
 
-      alert(`"${teamData.name}" 팀이 생성되었습니다!`);
+      toast.success(`"${teamData.name}" 팀이 생성되었습니다!`);
       setCurrentView('list');
     } catch {}
   };
@@ -63,10 +67,10 @@ const TeamListModal = ({ isOpen, onClose, leaveTeam, deleteTeam }: TeamListModal
         invite_code: inviteCode,
       });
 
-      // 팀 목록을 새로고침하여 최신 데이터를 가져옴
-      await refreshTeams();
+      // React Query 캐시를 무효화하여 최신 데이터를 가져옴
+      await queryClient.invalidateQueries({ queryKey: queryKeys.teams });
 
-      alert('팀 가입 성공');
+      toast.success('팀 가입 성공');
       setCurrentView('list');
     } catch {}
   };

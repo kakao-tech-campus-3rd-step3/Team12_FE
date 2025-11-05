@@ -21,9 +21,24 @@ export type CalendarEvent = {
 };
 
 export type getCalendarEventsResponse = {
-  events: CalendarEvent[];
+  data: CalendarEvent[];
 };
 
+// 공통 베이스 Response 타입
+export type BaseCalendarEventResponse = {
+  event_id: number;
+  title: string;
+  description: string;
+  start_time: string;
+  end_time: string;
+  is_private: boolean;
+};
+
+export type CalendarEventResponse = BaseCalendarEventResponse & {
+  is_recurring?: boolean;
+};
+
+// Request 타입
 export type addCalendarEventRequest = {
   title: string;
   description: string;
@@ -31,34 +46,44 @@ export type addCalendarEventRequest = {
   end_time: string;
   is_private: boolean;
 };
-export type addCalendarEventResponse = {
-  event_id: number;
+export type addCalendarEventResponse = BaseCalendarEventResponse;
+
+export type addCalendarRecurringEventRequest = {
   title: string;
   description: string;
-  start_time: string;
-  end_time: string;
+  first_start_time: string;
+  first_end_time: string;
   is_private: boolean;
+  rrule: string;
 };
+export type addCalendarRecurringEventResponse = BaseCalendarEventResponse;
 
 export type modifyCalendarEventRequest = {
-  event_id: number;
   title?: string;
   description?: string;
   start_time?: string;
   end_time?: string;
   is_private?: boolean;
 };
+export type modifyCalendarEventResponse = CalendarEventResponse;
 
-export type modifyCalendarEventResponse = {
-  event_id: number;
+export type modifyCalendarRecurringAllEventRequest = {
   title: string;
-  description: string;
   start_time: string;
   end_time: string;
-  is_private: boolean;
-  is_recurring?: boolean;
 };
+export type modifyCalendarRecurringAllEventResponse = CalendarEventResponse;
+
+export type modifyCalendarRecurringOneEventRequest = {
+  original_start_time: string;
+  title: string;
+};
+export type modifyCalendarRecurringOneEventResponse = CalendarEventResponse;
 
 export type deleteCalendarEventResponse = {
   event_id: number;
+};
+
+export type deleteCalendarRecurringOneEventRequest = {
+  original_start_time: string;
 };
