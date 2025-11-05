@@ -315,7 +315,7 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
               initialView={currentView}
               headerToolbar={{
                 left: 'prev title next',
-                right: 'today dayGridMonth,timeGridWeek,timeGridDay',
+                right: 'today dayGridMonth,timeGridWeek',
               }}
               // 모바일에서 더 작은 헤더 높이
               height="auto"
@@ -347,7 +347,7 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
                   },
                 },
                 dayGridMonth: {
-                  text: '월간',
+                  text: '월',
                   click: () => {
                     const calendarApi = calendarRef.current?.getApi();
                     if (!calendarApi) return;
@@ -357,23 +357,13 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
                   },
                 },
                 timeGridWeek: {
-                  text: '주간',
+                  text: '주',
                   click: () => {
                     const calendarApi = calendarRef.current?.getApi();
                     if (!calendarApi) return;
                     const currentDate = formatLocalDate(calendarApi.getDate());
                     calendarApi.changeView('timeGridWeek');
                     updateURL(currentDate, 'timeGridWeek');
-                  },
-                },
-                timeGridDay: {
-                  text: '일간',
-                  click: () => {
-                    const calendarApi = calendarRef.current?.getApi();
-                    if (!calendarApi) return;
-                    const currentDate = formatLocalDate(calendarApi.getDate());
-                    calendarApi.changeView('timeGridDay');
-                    updateURL(currentDate, 'timeGridDay');
                   },
                 },
               }}

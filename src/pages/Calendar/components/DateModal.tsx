@@ -1,19 +1,19 @@
-import { useEffect, useState } from 'react';
-import type { DateRange } from 'react-day-picker';
+import type {
+  modifyTeamCalendarRecurringAllEventsRequest,
+  modifyTeamCalendarRecurringOneEventRequest,
+} from '@/apis/types/calendar';
 import Button from '@/components/atoms/Button';
 import ModalHeader from '@/components/atoms/ModalHeader';
 import Modal from '@/components/molecules/Modal';
+import { useEventForm, useFormData } from '@/hooks';
+import type { FormData } from '@/hooks/calendar/useFormData';
 import MetaFields from '@/pages/Calendar/components/MetaFields';
 import RepeatSettings from '@/pages/Calendar/components/RepeatSettings';
 import SelectDuration from '@/pages/Calendar/components/SelectDuration';
 import TimeFields from '@/pages/Calendar/components/TimeFields';
-import { useEventForm, useFormData } from '@/hooks';
-import type { FormData } from '@/hooks/calendar/useFormData';
 import type { CalendarEvent, ModalType } from '@/types/calendar';
-import type {
-  modifyTeamCalendarRecurringOneEventRequest,
-  modifyTeamCalendarRecurringAllEventsRequest,
-} from '@/apis/types/calendar';
+import { useEffect, useState } from 'react';
+import type { DateRange } from 'react-day-picker';
 
 interface DateModalProps {
   isOpen: boolean;
@@ -22,6 +22,8 @@ interface DateModalProps {
   selectedEvent?: CalendarEvent;
   selectedDate?: string;
   teamId?: number; // teamId 추가
+  initialStartTime?: string;
+  initialEndTime?: string;
   onSave: (event: Omit<CalendarEvent, 'event_id'>, formData: FormData) => void;
   onEditRecurringOne?: (
     eventId: number,
@@ -44,6 +46,8 @@ const DateModal: React.FC<DateModalProps> = ({
   selectedEvent,
   selectedDate,
   teamId, // 추가
+  initialStartTime,
+  initialEndTime,
   onSave,
   onEditRecurringOne,
   onEditRecurringAll,
@@ -65,15 +69,24 @@ const DateModal: React.FC<DateModalProps> = ({
       const endDate = new Date(selectedEvent.end_time);
       setRange({ from: startDate, to: endDate });
     } else if (isOpen && modalType === 'add') {
-      setRange(undefined);
+      // 초기 시간이 제공된 경우 날짜 range 설정
+      if (initialStartTime && initialEndTime) {
+        const startDate = new Date(initialStartTime);
+        const endDate = new Date(initialEndTime);
+        setRange({ from: startDate, to: endDate });
+      } else {
+        setRange(undefined);
+      }
     }
-  }, [isOpen, modalType, selectedEvent]);
+  }, [isOpen, modalType, selectedEvent, initialStartTime, initialEndTime]);
 
   const { formData, updateFormData } = useFormData({
     isOpen,
     modalType,
     selectedEvent,
     selectedDate,
+    initialStartTime,
+    initialEndTime,
   });
 
   const { handleSubmit } = useEventForm({
@@ -304,9 +317,9 @@ const DateModal: React.FC<DateModalProps> = ({
           <div className="flex flex-col space-y-2 md:flex-row md:w-full">
             {/** 일정 제목, 비공개 여부, 시간 추가 (모달 우측) */}
             <div className="mt-4">
-              <MetaFields 
-                formData={formData} 
-                range={range} 
+              <MetaFields
+                formData={formData}
+                range={range}
                 updateFormData={updateFormData}
                 teamId={teamId} // teamId 전달
               />

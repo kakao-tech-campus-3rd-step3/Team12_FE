@@ -45,35 +45,35 @@
   }
   /* 버튼 스타일 */
   .fc-button {
-    @apply rounded-lg px-4 py-2 font-medium transition-all duration-200 shadow-sm !bg-blue-200 !border-blue-200 !text-white;
+    @apply rounded-lg px-3 py-2 font-medium transition-all duration-200 !bg-white !text-gray-400 !shadow-none !border-1 !border-gray-200;
   }
 
   .fc-button:hover {
-    @apply shadow-md transform -translate-y-0.5 !bg-blue-600 !border-blue-600;
+    /* @apply !bg-blue-600 !border-blue-600; */
   }
 
   .fc-button:active {
-    @apply !bg-blue-700 !border-blue-700;
+    /* @apply !bg-blue-700 !border-blue-700; */
   }
 
   /* 네비게이션 버튼 스타일 */
   .fc-prev-button,
   .fc-next-button {
-    @apply rounded-lg px-3 py-2 font-medium transition-all duration-200 !bg-gray-50 !text-gray-400;
+    @apply rounded-lg px-3 py-2 font-medium transition-all duration-200 !bg-white !text-gray-400 !shadow-none !border-1 !border-gray-200;
   }
 
   .fc-prev-button:hover,
   .fc-next-button:hover {
-    @apply shadow-md !bg-gray-200 !border-gray-200;
+    @apply cursor-pointer rounded-lg px-3 py-2 font-medium transition-all duration-200 !bg-white !text-gray-400 !shadow-none !border-1 !border-gray-200;
   }
 
   /* 오늘 버튼 스타일 */
   .fc-today-button {
-    @apply rounded-lg px-4 py-2 font-medium transition-all duration-200 shadow-sm !bg-mainGreen !text-white hover:bg-mainGreen hover:border-mainGreen;
+    @apply rounded-lg px-3 py-2 font-medium transition-all duration-200 !bg-white !text-gray-400 !shadow-none !border-1 !border-gray-200;
   }
 
   .fc-today-button:hover {
-    @apply shadow-md transform -translate-y-0.5 !bg-mainGreen/100 !border-mainGreen/80;
+    @apply rounded-lg px-3 py-2 font-medium transition-all duration-200 !bg-white !text-gray-400 !shadow-none !border-1 !border-gray-200 cursor-pointer;
   }
 
   /* 뷰 버튼 그룹 스타일 */
@@ -82,12 +82,12 @@
   }
 
   .fc-button-group .fc-button {
-    @apply border-0 shadow-none !bg-gray-100 !text-gray-600 hover:!bg-gray-100;
+    @apply border-0 shadow-none !bg-gray-50 !text-gray-600;
   }
 
-  .fc-button-group .fc-button-active {
+  /* .fc-button-group .fc-button-active {
     @apply !bg-mainBlue !text-white hover:!bg-mainBlue;
-  }
+  } */
 
   .fc-dayGridMonth-button,
   .fc-timeGridWeek-button,
@@ -95,7 +95,7 @@
   .fc-month-button,
   .fc-week-button,
   .fc-day-button {
-    @apply !rounded-lg !border-0 !shadow-none !bg-gray-100 !text-gray-600 hover:!bg-gray-200 !mx-1 !px-4 !py-2 transition-all duration-200 hover:shadow-md;
+    @apply rounded-lg px-3 py-2 font-medium transition-all duration-200 !bg-white !text-gray-400 !shadow-none !border-1 !border-gray-200;
   }
 
   .fc-dayGridMonth-button.fc-button-active,
@@ -104,7 +104,7 @@
   .fc-month-button.fc-button-active,
   .fc-week-button.fc-button-active,
   .fc-day-button.fc-button-active {
-    @apply !bg-mainBlue !text-white hover:!bg-mainBlue/80 shadow-md;
+    @apply rounded-lg px-3 py-2 font-medium transition-all duration-200 !shadow-none !border-1 !border-gray-200  !bg-white  !text-mainBlue;
   }
 
   /* 요일 헤더 스타일 */
@@ -131,26 +131,26 @@
 
   /* 이벤트 스타일 */
   .fc-event {
-    @apply !rounded-xl !border-0 shadow-sm transition-all duration-200 !bg-blue-500 !text-white !min-h-[30px] !overflow-visible;
+    @apply !rounded-md !border-0 shadow-sm transition-all duration-200 !bg-blue-500 !text-white !min-h-[30px] !overflow-visible;
   }
 
   .fc-event:hover {
-    @apply shadow-md transform !z-10;
+    @apply transform !z-10;
   }
 
   /* 일반 단일 날짜 이벤트 */
   .fc-event.fc-daygrid-event {
-    @apply !rounded-xl !border-none !mb-1 !min-h-[20px];
+    @apply !rounded-md !border-none !min-h-[20px];
   }
 
   /* 여러 날에 걸친 이벤트 - 시작 부분 */
   .fc-event.fc-daygrid-event.fc-event-start {
-    @apply !rounded-l-lg !rounded-r-sm !mr-0;
+    @apply !rounded-l-lg !rounded-r-sm !m-0;
   }
 
   /* 여러 날에 걸친 이벤트 - 끝 부분 */
   .fc-event.fc-daygrid-event.fc-event-end {
-    @apply !rounded-r-lg !ml-0;
+    @apply !rounded-r-lg !m-0;
   }
 
   /* 여러 날에 걸친 이벤트 - 중간 부분 */
@@ -160,7 +160,7 @@
 
   /* 이벤트 내용 영역 */
   .fc-event-main {
-    @apply !overflow-visible !min-h-[20px] !flex !items-center;
+    @apply !overflow-visible !min-h-[20px] !flex !items-center !m-0 !p-0;
   }
 
   /* 이벤트 텍스트 스타일 */
@@ -175,11 +175,11 @@
 
   /* 날짜 셀 스타일 */
   .fc-daygrid-day {
-    @apply !rounded-none !m-0 !p-1 !overflow-visible !border-none text-sm;
+    @apply !rounded-none !m-0 !overflow-visible !border-none text-sm;
   }
 
   .fc-daygrid-day-frame {
-    @apply !rounded-xl !overflow-visible !ring-1 !border-none;
+    @apply !rounded-none !overflow-visible !border !border-gray-200;
   }
 
   /* 이벤트 컨테이너 */
@@ -206,23 +206,23 @@
     @apply !bg-blue-100;
   }
 
-  /* 날짜 셀 내부 요소들도 둥글게 */
+  /* 날짜 셀 내부 요소들 */
   .fc-daygrid-day-events {
-    @apply !rounded-lg;
+    @apply !rounded-none;
   }
 
-  /* 날짜 셀 내부 모든 요소들 둥글게 */
+  /* 날짜 셀 내부 모든 요소들 */
   .fc-daygrid-day-top {
-    @apply !rounded-t-lg;
+    @apply !rounded-none;
   }
 
   .fc-daygrid-day-bottom {
-    @apply !rounded-b-lg;
+    @apply !rounded-none;
   }
 
   /* 날짜 숫자 스타일 */
   .fc-daygrid-day-number {
-    @apply rounded-lg px-1 py-0.5 text-gray-900;
+    @apply rounded-none  text-gray-900;
   }
   /* 일요일 날짜 숫자 텍스트 빨간색 */
   .fc-day-sun .fc-daygrid-day-number {
@@ -235,15 +235,15 @@
 
   /* 날짜 셀 내부 텍스트 색상 강제 적용 */
   .fc-daygrid-day {
-    @apply !rounded-none !m-0 !p-1 !overflow-visible !border-none;
+    @apply !rounded-none !m-0 !p-0 !overflow-visible !border-none;
   }
 
   /* 주말 스타일 */
   .fc-day-sun .fc-daygrid-day-frame {
-    @apply bg-red-50 ring-red-200;
+    @apply bg-red-50 !border-red-200;
   }
   .fc-day-sat .fc-daygrid-day-frame {
-    @apply bg-blue-50 ring-blue-300;
+    @apply bg-blue-50 !border-blue-200;
   }
 
   /* 테두리 색상 */
@@ -263,11 +263,11 @@
   }
 
   .fc-daygrid-day.fc-day {
-    @apply !rounded-xl !m-1 !overflow-visible !border-none;
+    @apply !rounded-none  !overflow-visible !border-none;
   }
 
   .fc-daygrid-day-frame.fc-scrollgrid-sync-inner {
-    @apply !rounded-xl !border-none !overflow-visible;
+    @apply !rounded-none !border-none !overflow-visible;
   }
 
   /* 그리드 전체 오버플로우 설정 */
@@ -288,5 +288,120 @@
   /* 여러 날 이벤트의 연결성 강화 */
   .fc-daygrid-event.fc-event-mirror {
     @apply !overflow-visible;
+  }
+
+  /* ========== TimeGrid (주/일 뷰) 스타일 ========== */
+
+  /* all-day 텍스트 숨기기 */
+  .fc-timegrid-axis-cushion {
+    display: none !important;
+  }
+
+  /* 시간 슬롯 가로줄 - border: none을 덮어쓰기 */
+  .fc-timegrid-slot {
+    border-bottom: 1px solid #e5e7eb !important;
+    border-top: none !important;
+  }
+
+  /* 시간 슬롯 - 30분 단위도 같은 두께 */
+  .fc-timegrid-slot-minor {
+    border-bottom: 1px solid #e5e7eb !important;
+    border-top: none !important;
+  }
+
+  /* 시간 슬롯 라벨 프레임 */
+  .fc-timegrid-slot-label-frame {
+    border-top: none !important;
+  }
+
+  /* 시간 라벨 스타일 */
+  .fc-timegrid-slot-label {
+    @apply !text-gray-500 !text-xs;
+    border: none !important;
+    padding: 0 8px !important;
+    vertical-align: top !important;
+  }
+
+  /* 시간 라벨 프레임 정렬 */
+  .fc-timegrid-slot-label-frame {
+    text-align: right !important;
+    padding-right: 8px !important;
+  }
+
+  .fc-timegrid-slot-label-cushion {
+    padding: 0 !important;
+    margin-top: -8px !important;
+  }
+
+  /* 시간 축 (왼쪽 시간 표시 영역) */
+  .fc-timegrid-axis {
+    border-right: 1px solid #e5e7eb !important;
+  }
+
+  /* 날짜별 세로 구분선 */
+  .fc-timegrid-col {
+    border-left: 1px solid #e5e7eb !important;
+  }
+
+  .fc-timegrid-col:first-child {
+    border-left: none !important;
+  }
+
+  /* 현재 시간 표시선 (빨간색) */
+  .fc-timegrid-now-indicator-line {
+    border-top: 2px solid #ef4444 !important;
+  }
+
+  .fc-timegrid-now-indicator-arrow {
+    border-color: #ef4444 !important;
+  }
+
+  .fc-timegrid-col-events {
+    padding: 0 !important;
+    border: none !important;
+  }
+
+  /* TimeGrid 이벤트 스타일 */
+  .fc-timegrid-event {
+    @apply !rounded-md !shadow-sm !w-[100%];
+    /* border-left: 3px solid currentColor !important; */
+    margin: 0 !important;
+  }
+  .fc-event-main-frame {
+    padding: 0 !important;
+  }
+
+  /* TimeGrid 오늘 날짜 배경 */
+  .fc-timegrid-col.fc-day-today {
+    background-color: rgba(59, 130, 246, 0.03) !important;
+  }
+
+  /* 하루 종일 이벤트 영역 스타일 */
+  .fc-timegrid-divider {
+    border-top: 1px solid #e5e7eb !important;
+  }
+
+  /* All-day 영역 스타일 */
+  .fc-timegrid-axis-chunk {
+    border-right: 1px solid #e5e7eb !important;
+  }
+
+  /* 요일 헤더 - timeGrid */
+  .fc-timegrid .fc-col-header-cell {
+    border-bottom: 1px solid #e5e7eb !important;
+  }
+
+  /* TimeGrid body */
+  .fc-timegrid-body {
+    border-top: 1px solid #e5e7eb !important;
+  }
+
+  /* 슬롯 레인 */
+  .fc-timegrid-slot-lane {
+    border-right: 1px solid #e5e7eb !important;
+  }
+
+  .fc-timegrid-slot-lane:last-child {
+    border-right: none !important;
   }
 }
