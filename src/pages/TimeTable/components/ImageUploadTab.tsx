@@ -2,6 +2,7 @@ import React from 'react';
 import ImageInput from '@/pages/TimeTable/components/ImageInput';
 import type { TimetableImageResponse } from '@/apis';
 import { validateTimetableData, getDayOfWeek, formatTime } from '@/utils/timetableUtils';
+import TimetableGrid from '@/pages/TimeTable/components/TimatableGrid';
 
 interface ImageUploadTabProps {
   selectedImage: File | null;
@@ -46,6 +47,24 @@ const ImageUploadTab: React.FC<ImageUploadTabProps> = ({
       {/* 이미지 파싱 에러 */}
       {imageParseError && <div className="mt-2 text-center text-red-600">{imageParseError}</div>}
 
+      {/* 파싱된 시간표 정보 */}
+      {parsedTimetable && (
+        <div className="mt-4">
+          <label className="block mb-2 text-sm font-bold text-gray-700">
+            시간표 정보
+            {parsedTimetable.year &&
+              parsedTimetable.semester &&
+              ` (${parsedTimetable.year} ${parsedTimetable.semester})`}
+          </label>
+          {(() => {
+            const validation = validateTimetableData(parsedTimetable.subjects);
+            if (!validation.isValid) {
+              return <div className="text-center text-red-500 py-4">{validation.message}</div>;
+            }
+            return <TimetableGrid subjects={parsedTimetable.subjects} />;
+          })()}
+        </div>
+      )}
       {/* 파싱된 시간표 정보 */}
       {parsedTimetable && (
         <div className="mt-4">

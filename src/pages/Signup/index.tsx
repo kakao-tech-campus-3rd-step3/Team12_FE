@@ -1,4 +1,5 @@
 import { AuthInput } from '@/components/atoms/AuthInput';
+import { authAPI } from '@/apis';
 import Button from '@/components/atoms/Button';
 import Logo from '@/components/atoms/Logo';
 import { RouterPath } from '@/routes/path';
@@ -10,7 +11,6 @@ import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { toast } from 'react-toastify';
 import { z } from 'zod';
 
 const signupSchema = z
