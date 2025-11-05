@@ -1,11 +1,13 @@
 import { teamCalendarAPI } from '@/apis/services/calendar';
 import type { RecommendTime } from '@/apis/types/team';
 import Button from '@/components/atoms/Button';
+import type { FormData } from '@/hooks/calendar/useFormData';
 import { useTeamRecommendTimes } from '@/hooks/team/useTeam';
+import DateModal from '@/pages/Calendar/components/DateModal';
+import type { CalendarEvent } from '@/types/calendar';
 import { formatDateTimeShort } from '@/utils/dateTimeUtils';
 import { useState } from 'react';
 import type { DateRange } from 'react-day-picker';
-import { toast } from 'react-toastify';
 
 // 추천 시간대 컴포넌트
 interface RecommendedTimeSlotsProps {
@@ -22,7 +24,7 @@ const RecommendedTimeSlots: React.FC<RecommendedTimeSlotsProps> = ({
   const [selectedDuration, setSelectedDuration] = useState(60);
   const [range, setRange] = useState<DateRange | undefined>();
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<RecommendTime | undefined>();
-
+  const [isOpen, setIsOpen] = useState(false);
   const { teamRecommendTimes, isLoading, error } = useTeamRecommendTimes({
     teamId: teamId,
     N: 5,
@@ -37,15 +39,31 @@ const RecommendedTimeSlots: React.FC<RecommendedTimeSlotsProps> = ({
   };
 
   const handleSelectClick = async (timeSlot: RecommendTime) => {
+    setIsOpen(true);
+    setSelectedTimeSlot(timeSlot);
+  };
+
+  const handleAddEvent = async (
+    timeSlot: RecommendTime,
+    event: Omit<CalendarEvent, 'event_id'>,
+    formData: FormData,
+  ) => {
     await teamCalendarAPI.addTeamEvent({
       team_id: teamId,
-      title: timeSlot.week,
-      description: '',
+      title: event.title,
+      description: event.description,
       start_time: timeSlot.start_time,
       end_time: timeSlot.end_time,
     });
-    toast.success('일정이 추가되었습니다.');
+    setIsOpen(false);
     onBack?.();
+  };
+
+  const handleSaveEvent = (event: Omit<CalendarEvent, 'event_id'>, formData: FormData) => {
+    if (!selectedTimeSlot) return;
+    console.log('event', event);
+    console.log('formData', formData);
+    handleAddEvent(selectedTimeSlot, event, formData);
   };
 
   return (
@@ -89,6 +107,16 @@ const RecommendedTimeSlots: React.FC<RecommendedTimeSlotsProps> = ({
           />
         </div>
       </div>
+      <DateModal
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        modalType="add"
+        initialStartTime={selectedTimeSlot?.start_time}
+        initialEndTime={selectedTimeSlot?.end_time}
+        onSave={(event: Omit<CalendarEvent, 'event_id'>, formData: FormData) =>
+          handleSaveEvent(event, formData)
+        }
+      />
     </div>
   );
 };
