@@ -317,9 +317,9 @@ const DateModal: React.FC<DateModalProps> = ({
           <div className="flex flex-col space-y-2 md:flex-row md:w-full">
             {/** 일정 제목, 비공개 여부, 시간 추가 (모달 우측) */}
             <div className="mt-4">
-              <MetaFields 
-                formData={formData} 
-                range={range} 
+              <MetaFields
+                formData={formData}
+                range={range}
                 updateFormData={updateFormData}
                 teamId={teamId} // teamId 전달
               />
