@@ -96,10 +96,6 @@ const TeamListCard = ({ team, leaveTeam, deleteTeam }: TeamListCardProps) => {
                 <Users className="w-4 h-4" />
                 <span>멤버 {team.member_count}명</span>
               </div>
-              <div className="flex items-center space-x-1">
-                <Calendar className="w-4 h-4" />
-                <span>예정된 미팅 0개</span>
-              </div>
             </div>
 
             <div className="flex items-center space-x-2">
