@@ -142,6 +142,7 @@ const TeamListModal = ({ isOpen, onClose, leaveTeam, deleteTeam }: TeamListModal
                       icon={<Plus />}
                       size="sm"
                       noWrapper={true}
+                      className=""
                     />
                     <Button
                       onClick={() => setCurrentView('join')}

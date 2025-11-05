@@ -2,6 +2,7 @@ import type { TeamData } from '@/apis/types/team';
 import Button from '@/components/atoms/Button';
 import { Calendar, LogOut, Settings, Trash, Users } from 'lucide-react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 interface TeamListCardProps {
@@ -16,6 +17,7 @@ const MAX_VISIBLE_MEMBER_NAMES = 2;
 
 const TeamListCard = ({ team, leaveTeam, deleteTeam }: TeamListCardProps) => {
   const [isActionsOpen, setIsActionsOpen] = useState(false);
+  const navigate = useNavigate();
 
   // 설정 버튼 클릭으로 토글
   const handleSettingsClick = () => {
@@ -47,6 +49,14 @@ const TeamListCard = ({ team, leaveTeam, deleteTeam }: TeamListCardProps) => {
     deleteTeam(team.id);
   };
 
+  //팀으로 이동
+  const handleCardClick = () => {
+    if (!checkTeamId(team)) {
+      return;
+    }
+    navigate(`/team-calendar/${team.id}`);
+  };
+
   return (
     <div className="overflow-hidden relative rounded-xl">
       {/* 액션 버튼들 (배경) */}
@@ -56,7 +66,10 @@ const TeamListCard = ({ team, leaveTeam, deleteTeam }: TeamListCardProps) => {
             noWrapper
             variant="ghost"
             className="p-2 font-normal text-red-600 bg-transparent rounded-lg hover:bg-red-100"
-            onClick={handleDeleteTeam}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleDeleteTeam();
+            }}
           >
             <div className="flex flex-col gap-1 items-center">
               <Trash className="w-4 h-4" />
@@ -67,7 +80,10 @@ const TeamListCard = ({ team, leaveTeam, deleteTeam }: TeamListCardProps) => {
             noWrapper
             variant="ghost"
             className="p-2 font-normal text-orange-600 bg-transparent rounded-lg hover:bg-orange-100"
-            onClick={handleLeaveTeam}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleDeleteTeam();
+            }}
           >
             <div className="flex flex-col gap-1 items-center">
               <LogOut className="w-4 h-4" />
@@ -79,7 +95,8 @@ const TeamListCard = ({ team, leaveTeam, deleteTeam }: TeamListCardProps) => {
 
       {/* 메인 카드 */}
       <div
-        className={`relative p-4 bg-white rounded-xl border border-gray-200 shadow-sm transition-transform duration-300 ease-out hover:border-blue-400 group hover:z-10 ${
+        onClick={handleCardClick}
+        className={`relative p-4 bg-white rounded-xl border border-gray-200 shadow-sm transition-transform duration-300 ease-out hover:border-blue-400 group hover:z-10 cursor-pointer ${
           isActionsOpen ? '-translate-x-[60px]' : 'translate-x-0'
         }`}
       >
@@ -134,7 +151,10 @@ const TeamListCard = ({ team, leaveTeam, deleteTeam }: TeamListCardProps) => {
               noWrapper
               variant="ghost"
               className="p-2 font-normal text-gray-400 bg-transparent rounded-full hover:bg-blue-50 hover:text-blue-600"
-              onClick={handleSettingsClick}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleSettingsClick();
+              }}
             >
               <Settings className="w-4 h-4" />
             </Button>
