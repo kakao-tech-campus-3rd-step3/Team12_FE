@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import TimetableEdit from '@/pages/TimeTable/components/TimetableEdit';
 import { everytimeAPI } from '@/apis';
 import type { Subject } from '@/apis/types/timetable';
+import ConfirmModal from '@/components/atoms/ConfirmModal';
 
 const TimeTablePage = () => {
   const navigate = useNavigate();
@@ -24,6 +25,10 @@ const TimeTablePage = () => {
   const [editedSubjects, setEditedSubjects] = useState<Subject[]>([]);
   const [originalSubjects, setOriginalSubjects] = useState<Subject[]>([]);
   const [isSaving, setIsSaving] = useState(false);
+
+  //모달
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [pendingTab, setPendingTab] = useState<'image' | 'link' | null>(null);
 
   // 현재 시간표 데이터 가져오기
   const getCurrentSubjects = (): Subject[] => {
@@ -51,18 +56,36 @@ const TimeTablePage = () => {
 
   const handleTabChange = (tab: 'image' | 'link') => {
     if (isEditMode) {
-      const hasChanges = JSON.stringify(editedSubjects) !== JSON.stringify(getCurrentSubjects());
+      const hasChanges = JSON.stringify(editedSubjects) !== JSON.stringify(originalSubjects);
       if (hasChanges) {
-        const confirm = window.confirm(
-          '수정 중인 내용이 있습니다. 탭을 전환하면 수정 내용이 사라집니다. 계속하시겠습니까?',
-        );
-        if (!confirm) return;
+        setPendingTab(tab);
+        setIsConfirmModalOpen(true);
+        return;
       }
+      // 변경사항이 없으면 바로 탭 전환
       setIsEditMode(false);
       setEditedSubjects([]);
       setOriginalSubjects([]);
     }
     setActiveTab(tab);
+  };
+
+  //모달 확인
+  const handleConfirmTabChange = () => {
+    if (pendingTab) {
+      setIsEditMode(false);
+      setEditedSubjects([]);
+      setOriginalSubjects([]);
+      setActiveTab(pendingTab);
+      setPendingTab(null);
+    }
+    setIsConfirmModalOpen(false);
+  };
+
+  //모달 취소
+  const handleCancelTabChange = () => {
+    setIsConfirmModalOpen(false);
+    setPendingTab(null);
   };
 
   // 저장
@@ -245,6 +268,16 @@ const TimeTablePage = () => {
           disabled={isSaving || getCurrentSubjects().length === 0}
         />
       </div>
+      <ConfirmModal
+        isOpen={isConfirmModalOpen}
+        title="시간표 등록 탭 전환 확인"
+        message={`수정 중인 내용이 있습니다.
+        탭을 전환하면 수정 내용이 사라집니다. 계속하시겠습니까?`}
+        onConfirm={handleConfirmTabChange}
+        onClose={handleCancelTabChange}
+        confirmText="계속"
+        confirmButtonColor="bg-red-500 hover:bg-red-600"
+      />
     </>
   );
 };
