@@ -32,6 +32,7 @@ export interface addTeamCalendarEventRequest {
   description?: string;
   start_time: string;
   end_time?: string;
+  event_participants?: number[];
 }
 export interface addTeamCalendarEventResponse {
   event_id: number;
@@ -48,6 +49,7 @@ export interface addTeamCalendarRecurringEventRequest {
   first_start_time: string;
   first_end_time: string;
   rrule: string;
+  event_participants?: number[];
 }
 export interface addTeamCalendarRecurringEventResponse {
   event_id: number;
@@ -75,6 +77,7 @@ export interface modifyTeamCalendarRecurringAllEventsRequest extends CalendarEve
 //팀 반복 일정 단일 인스턴스 수정
 export interface modifyTeamCalendarRecurringOneEventRequest extends CalendarEventUpdateBase {
   original_start_time: string;
+  event_participants?: number[];
 }
 
 //팀 반복 일정 단일 인스턴스 삭제

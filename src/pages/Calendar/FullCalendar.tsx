@@ -144,6 +144,9 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
             first_start_time: eventData.start_time,
             first_end_time: eventData.end_time,
             rrule: rrule,
+            ...(formData.event_participants !== undefined
+              ? { event_participants: formData.event_participants }
+              : {}),
           });
           await getEvents({ teamId, mode: 'team' });
           await getTodayEvents();
@@ -155,6 +158,9 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
               description: eventData.description,
               start_time: eventData.start_time,
               end_time: eventData.end_time,
+              ...(formData.event_participants !== undefined
+                ? { event_participants: formData.event_participants }
+                : {}),
             },
             { teamId, mode: 'team' },
           );
@@ -458,6 +464,7 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
         modalType={modalType}
         selectedEvent={selectedEvent}
         selectedDate={selectedDate}
+        teamId={teamId} // teamId 전달 (mode === 'team'일 때만 값이 있음)
         onSave={handleSaveEvent}
         onEditRecurringOne={handleEditRecurringOne}
         onEditRecurringAll={handleEditRecurringAll}
