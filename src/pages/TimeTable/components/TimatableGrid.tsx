@@ -74,14 +74,14 @@ const TimetableGrid: React.FC<TimetableGirdProps> = ({ subjects }) => {
   //색상 선언
   const getSubjectColor = (index: number) => {
     const colors = [
-      'bg-blue-100 text-blue-800',
-      'bg-green-100 text-green-800',
+      'bg-blue-50 text-blue-800',
+      'bg-blue-100 text-blue-900',
+      'bg-blue-200 text-blue-900',
+      'bg-indigo-50 text-indigo-800',
+      'bg-indigo-100 text-indigo-800',
+      'bg-indigo-200 text-indigo-800',
       'bg-purple-100 text-purple-800',
       'bg-orange-100 text-orange-800',
-      'bg-pink-100 text-pink-800',
-      'bg-yellow-100 text-yellow-800',
-      'bg-indigo-100 text-indigo-800',
-      'bg-red-100 text-red-800',
     ];
     return colors[index % colors.length];
   };
@@ -150,7 +150,7 @@ const TimetableGrid: React.FC<TimetableGirdProps> = ({ subjects }) => {
                 return (
                   <div
                     key={`${item.subject.name}-${dayIndex}-${idx}`}
-                    className={`absolute left-1 mt-1 right-1 text-center py-2 text-xs ${colorClass} rounded-sm overflow-hidden`}
+                    className={`absolute left-0 right-0 text-center py-2 text-xs ${colorClass} overflow-hidden`}
                     style={{
                       top: `${top}px`,
                       height: `${Math.max(height, 20)}px`,
