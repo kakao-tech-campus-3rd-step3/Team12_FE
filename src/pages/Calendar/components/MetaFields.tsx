@@ -127,6 +127,37 @@ const MetaFields: React.FC<MetaFieldsProps> = ({ formData, range, updateFormData
       )}
 
       <FormInput
+        id="allDay"
+        label="종일"
+        value={formData.allDay.toString()}
+        onChange={(value) => {
+          const isAllDay = value === 'true';
+          if (isAllDay) {
+            // 종일 선택 시 00:00 ~ 23:59로 설정
+            const startDate =
+              getDatePart(formData.startTime) ||
+              (range?.from
+                ? `${range.from.getFullYear()}-${String(range.from.getMonth() + 1).padStart(2, '0')}-${String(range.from.getDate()).padStart(2, '0')}`
+                : '');
+            const endDate =
+              getDatePart(formData.endTime) ||
+              (range?.to
+                ? `${range.to.getFullYear()}-${String(range.to.getMonth() + 1).padStart(2, '0')}-${String(range.to.getDate()).padStart(2, '0')}`
+                : '') ||
+              startDate;
+            updateFormData({
+              allDay: true,
+              startTime: startDate ? `${startDate}T00:00:00` : '',
+              endTime: endDate ? `${endDate}T23:59:00` : '',
+            });
+          } else {
+            updateFormData({ allDay: false });
+          }
+        }}
+        type="checkbox"
+        className="ml-4 -mt-1"
+      />
+      <FormInput
         id="description"
         label="메모"
         value={formData.description}
