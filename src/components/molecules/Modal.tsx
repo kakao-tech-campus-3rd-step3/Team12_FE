@@ -17,12 +17,12 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
       onClick={onClose}
     >
       <div
-        className="relative fit-content min-w-md  bg-white rounded-lg max-h-[90vh] overflow-y-auto p-6"
+        className="relative fit-content min-w-[90%] sm:min-w-md  bg-white rounded-lg max-h-[90vh] overflow-y-auto p-6"
         onClick={(e) => e.stopPropagation()}
       >
         <button
           onClick={onClose}
-          className="flex items-center justify-center w-8 h-8 rounded-full absolute top-3 right-3 text-2xl text-gray-500 hover:text-red-500 hover:bg-red-50 transition-colors cursor-pointer"
+          className="flex absolute top-3 right-3 justify-center items-center w-8 h-8 text-2xl text-gray-500 rounded-full transition-colors cursor-pointer hover:text-red-500 hover:bg-red-50"
           aria-label="Close modal"
         >
           &times;

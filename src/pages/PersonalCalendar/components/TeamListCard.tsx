@@ -1,10 +1,10 @@
 import type { TeamData } from '@/apis/types/team';
 import Button from '@/components/atoms/Button';
-import { Calendar, LogOut, Settings, Trash, Users, Copy } from 'lucide-react';
+import { Copy, LogOut, Settings, Trash, Users } from 'lucide-react';
 
+import { RouterPath } from '@/routes/path';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { RouterPath } from '@/routes/path';
 import { toast } from 'react-toastify';
 
 interface TeamListCardProps {
@@ -61,7 +61,7 @@ const TeamListCard = ({ team, leaveTeam, deleteTeam }: TeamListCardProps) => {
   // 가입 코드 복사
   const handleCopyInviteCode = async (e: React.MouseEvent) => {
     e.stopPropagation(); // 카드 클릭 방지
-    
+
     try {
       await navigator.clipboard.writeText(team.invite_code);
       toast.success('가입 코드가 복사되었습니다.');
@@ -145,21 +145,23 @@ const TeamListCard = ({ team, leaveTeam, deleteTeam }: TeamListCardProps) => {
                   </div>
                 )}
               </div>
-              <div className="ml-2 text-sm text-gray-700">
-                {team.members
-                  .slice(0, MAX_VISIBLE_MEMBER_NAMES)
-                  .map((m) => m.name)
-                  .join(', ')}
-                {team.member_count > MAX_VISIBLE_MEMBER_NAMES &&
-                  ` 외 ${team.member_count - MAX_VISIBLE_MEMBER_NAMES}명`}
+              <div className="overflow-visible ml-2 text-sm text-gray-700 max-w-[70px]">
+                <div className="text-nowrap">
+                  {team.members
+                    .slice(0, MAX_VISIBLE_MEMBER_NAMES)
+                    .map((m) => m.name)
+                    .join(', ')}
+                  {team.member_count > MAX_VISIBLE_MEMBER_NAMES &&
+                    ` 외 ${team.member_count - MAX_VISIBLE_MEMBER_NAMES}명`}
+                </div>
               </div>
             </div>
           </div>
 
-          <div className="flex items-center space-x-2">
+          <div className="flex absolute right-2 items-center space-x-2">
             <button
               onClick={handleCopyInviteCode}
-              className="flex items-center gap-1 px-2 py-1 font-mono text-xs font-medium text-gray-600 bg-gray-100 rounded-full border border-gray-200 hover:bg-gray-200 hover:text-gray-800 transition-colors cursor-pointer"
+              className="flex gap-1 items-center px-2 py-1 font-mono text-xs font-medium text-gray-600 bg-gray-100 rounded-full border border-gray-200 transition-colors cursor-pointer hover:bg-gray-200 hover:text-gray-800"
               title="가입 코드 복사"
             >
               <span>{team.invite_code}</span>

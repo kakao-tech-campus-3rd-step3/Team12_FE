@@ -71,7 +71,7 @@ const TeamCalendarPage = () => {
       </button>
 
       {showChat && (
-        <div className="fixed bottom-24 right-6 w-90 h-[600px] z-50">
+        <div className="fixed bottom-24 left-1/2 -translate-x-1/2 sm:left-auto sm:right-6 sm:translate-x-0 w-[90%] sm:w-90 h-[600px] z-50">
           <TeamChat teamId={teamId} chatData={chatData} />
         </div>
       )}

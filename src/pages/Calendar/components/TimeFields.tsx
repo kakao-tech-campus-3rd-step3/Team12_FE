@@ -14,35 +14,41 @@ const TimeFields: React.FC<TimeFieldsProps> = ({ formData, range, updateFormData
   const [error, setError] = useState<string | null>(null);
 
   return (
-    <div className="">
+    <div className="w-full">
       <div
         className={`transition-all duration-300 ${!formData.allDay ? 'opacity-100 h-auto' : 'opacity-0 h-0 overflow-hidden'}`}
       >
-        <div className="flex flex-row gap-6 ml-4 -mt-4">
-          <FormInput
-            id="startTime"
-            value={getTimePart(formData.startTime) || ''}
-            onChange={(value) => {
-              updateFormData({
-                startTime: buildIsoFromDateAndTime(formData.startTime, range?.from, value),
-              });
-              if (error === 'startTime') setError(null);
-            }}
-            type="time"
-            error={error === 'startTime' ? '시작 시간을 선택해주세요' : undefined}
-          />
-          <FormInput
-            id="endTime"
-            value={getTimePart(formData.endTime) || ''}
-            onChange={(value) => {
-              updateFormData({
-                endTime: buildIsoFromDateAndTime(formData.endTime, range?.to ?? range?.from, value),
-              });
-              if (error === 'endTime') setError(null);
-            }}
-            type="time"
-            error={error === 'endTime' ? '종료 시간을 선택해주세요' : undefined}
-          />
+        <div className="flex flex-col gap-3 p-4 sm:flex-row sm:gap-3 sm:items-center">
+          <div className="flex-1 min-w-0">
+            <FormInput
+              id="startTime"
+              label="시작 시간"
+              value={getTimePart(formData.startTime) || ''}
+              onChange={(value) => {
+                updateFormData({
+                  startTime: buildIsoFromDateAndTime(formData.startTime, range?.from, value),
+                });
+                if (error === 'startTime') setError(null);
+              }}
+              type="time"
+              error={error === 'startTime' ? '시작 시간을 선택해주세요' : undefined}
+            />
+          </div>
+          <div className="flex-1 min-w-0">
+            <FormInput
+              id="endTime"
+              label="종료 시간"
+              value={getTimePart(formData.endTime) || ''}
+              onChange={(value) => {
+                updateFormData({
+                  endTime: buildIsoFromDateAndTime(formData.endTime, range?.to ?? range?.from, value),
+                });
+                if (error === 'endTime') setError(null);
+              }}
+              type="time"
+              error={error === 'endTime' ? '종료 시간을 선택해주세요' : undefined}
+            />
+          </div>
         </div>
       </div>
     </div>
