@@ -3,7 +3,7 @@ import SelectBox from '@/components/atoms/SelectBox';
 import { useGetMyTeam, useTeamRecommendTimes } from '@/hooks/team/useTeam'; // import { mockTimeSlots } from '@/mockdata/teamData';
 import SelectDurationCalendar from '@/pages/TeamCalendar/components/SelectDurationCalendar';
 import '@/styles/datapicker.css';
-import { formatDateTimeShort } from '@/utils/dateTimeUtils';
+import { formatDateWithWeekday, getTimePart } from '@/utils/dateTimeUtils';
 import { Loader2 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import type { DateRange } from 'react-day-picker';
@@ -99,7 +99,7 @@ const RecommendTimes: React.FC<RecommendTimesProps> = ({ onViewAvailability, tea
           >
             <div className="flex gap-2 justify-between items-center">
               <div className={`font-medium text-gray-800 ${!isDesktop ? 'flex-1 min-w-0' : ''}`}>
-                {slot.week}요일
+                {formatDateWithWeekday(slot.start_time)}
               </div>
               <span
                 className={`${
@@ -112,9 +112,9 @@ const RecommendTimes: React.FC<RecommendTimesProps> = ({ onViewAvailability, tea
               </span>
             </div>
             <div
-              className={`text-gray-700 font-medium ${isDesktop ? 'mt-2 text-sm' : 'mt-1 text-xs sm:mt-2'}`}
+              className={`text-gray-600 text-medium ${isDesktop ? 'text-sm' : 'mt-1 text-xs sm:mt-2'}`}
             >
-              {formatDateTimeShort(slot.start_time)} - {formatDateTimeShort(slot.end_time)}
+              {getTimePart(slot.start_time)} - {getTimePart(slot.end_time)}
             </div>
             <div
               className={`text-gray-500 ${isDesktop ? 'mt-1 text-xs' : 'mt-1 text-xs line-clamp-2'}`}

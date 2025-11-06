@@ -8,6 +8,7 @@ import type { CalendarEvent } from '@/types/calendar';
 import { formatDateTimeShort } from '@/utils/dateTimeUtils';
 import { useState } from 'react';
 import type { DateRange } from 'react-day-picker';
+import { formatDateWithWeekday, getTimePart } from '@/utils/dateTimeUtils';
 
 // 추천 시간대 컴포넌트
 interface RecommendedTimeSlotsProps {
@@ -80,8 +81,10 @@ const RecommendedTimeSlots: React.FC<RecommendedTimeSlotsProps> = ({
               className={`p-3 rounded-lg border border-gray-200 duration-300 cursor-pointer hover:border-mainBlue animate-all ${selectedTimeSlot?.start_time === slot.start_time ? 'border-mainBlue' : ''}`}
               onClick={() => handleSelectTimeSlot(slot)}
             >
-              <div className="flex justify-between items-center mb-2">
-                <div className="text-sm font-medium text-gray-800">{slot.week}</div>
+              <div className="flex justify-between items-center mb-1">
+                <div className="text-md font-medium text-gray-800">
+                  {formatDateWithWeekday(slot.start_time)}
+                </div>
                 <span
                   className={`px-2 py-1 text-xs font-medium rounded-full ${
                     slot.status === '최적' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'
@@ -90,8 +93,8 @@ const RecommendedTimeSlots: React.FC<RecommendedTimeSlotsProps> = ({
                   {slot.status}
                 </span>
               </div>
-              <div className="text-sm font-medium text-gray-700">
-                {formatDateTimeShort(slot.start_time)} - {formatDateTimeShort(slot.end_time)}
+              <div className="text-sm font-medium text-gray-600">
+                {getTimePart(slot.start_time)} - {getTimePart(slot.end_time)}
               </div>
               <div className="mt-1 text-xs text-gray-500">
                 {slot.available} / {memberCount} 명
