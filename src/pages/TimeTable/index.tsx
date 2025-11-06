@@ -271,7 +271,7 @@ const TimeTablePage = () => {
       </div>
       <ConfirmModal
         isOpen={isConfirmModalOpen}
-        title="시간표 등록 탭 전환 확인"
+        title="탭을 전환하시겠습니까?"
         message={`수정 중인 내용이 있습니다.
         탭을 전환하면 수정 내용이 사라집니다. 계속하시겠습니까?`}
         onConfirm={handleConfirmTabChange}

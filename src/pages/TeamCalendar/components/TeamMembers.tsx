@@ -1,5 +1,6 @@
 import { useTeamMembers } from '@/hooks/team';
 import { useAuthStore } from '@/store/useAuthStore';
+import ConfirmModal from '@/components/atoms/ConfirmModal';
 import { Check, ChevronDown, ChevronUp, Crown, LogOut, Settings } from 'lucide-react';
 import { useState } from 'react';
 
@@ -12,6 +13,11 @@ const TeamMembers: React.FC<TeamMembersProps> = ({ teamId, onDeleteMember }) => 
   const [isOpen, setIsOpen] = useState(true);
   const [isEditMode, setIsEditMode] = useState(false);
   const [deletingMemberId, setDeletingMemberId] = useState<number | null>(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [pendingDeleteMember, setPendingDeleteMember] = useState<{
+    id: number;
+    name: string;
+  } | null>(null);
 
   const { data, isError } = useTeamMembers({ teamId });
   const { user } = useAuthStore();
@@ -30,15 +36,24 @@ const TeamMembers: React.FC<TeamMembersProps> = ({ teamId, onDeleteMember }) => 
   const isCurrentUserMember = members.find((member) => member.name === user?.name);
   const isMemberLeader = isCurrentUserMember?.role === 'LEADER';
 
-  const handleDeleteTeamMember = async (memberId: number, memberName: string) => {
-    if (confirm(`${memberName} 님을 팀에서 제거하시겠습니까?`)) {
-      try {
-        setDeletingMemberId(memberId);
-        await onDeleteMember?.(memberId, memberName);
-        setDeletingMemberId(null);
-      } catch (error) {
-        setDeletingMemberId(null);
-      }
+  const handleDeleteTeamMemberClick = (memberId: number, memberName: string) => {
+    setPendingDeleteMember({ id: memberId, name: memberName });
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleDeleteTeamMemberConfirm = async () => {
+    if (!pendingDeleteMember) return;
+
+    try {
+      setDeletingMemberId(pendingDeleteMember.id);
+      await onDeleteMember?.(pendingDeleteMember.id, pendingDeleteMember.name);
+      setDeletingMemberId(null);
+      setIsDeleteModalOpen(false);
+      setPendingDeleteMember(null);
+    } catch (error) {
+      setDeletingMemberId(null);
+      setIsDeleteModalOpen(false);
+      setPendingDeleteMember(null);
     }
   };
 
@@ -137,7 +152,7 @@ const TeamMembers: React.FC<TeamMembersProps> = ({ teamId, onDeleteMember }) => 
                   </div>
                   {canDelete && (
                     <button
-                      onClick={() => handleDeleteTeamMember(member.id, member.name)}
+                      onClick={() => handleDeleteTeamMemberClick(member.id, member.name)}
                       disabled={isDeleting}
                       className={`flex gap-2 p-2 text-xs text-red-500 rounded-lg border border-none transition-all duration-200  hover:bg-red-100 hover:border-transparent hover:cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed`}
                     >
@@ -155,6 +170,22 @@ const TeamMembers: React.FC<TeamMembersProps> = ({ teamId, onDeleteMember }) => 
           )}
         </div>
       )}
+
+      {/* 팀원 제거 확인 모달 */}
+      <ConfirmModal
+        isOpen={isDeleteModalOpen}
+        title="팀원을 제거하시겠습니까?"
+        message={
+          pendingDeleteMember ? `${pendingDeleteMember.name} 님을 팀에서 제거하시겠습니까?` : ''
+        }
+        onConfirm={handleDeleteTeamMemberConfirm}
+        onClose={() => {
+          setIsDeleteModalOpen(false);
+          setPendingDeleteMember(null);
+        }}
+        confirmText="제거"
+        confirmButtonColor="bg-red-600 hover:bg-red-700"
+      />
     </div>
   );
 };
