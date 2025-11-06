@@ -126,7 +126,7 @@ const Signup = () => {
               error={errors.nickname?.message}
               {...register('nickname')}
             />
-            <div className="flex space-x-2">
+            <div className="flex gap-2">
               <AuthInput
                 icon={Mail}
                 type="email"
@@ -142,13 +142,13 @@ const Signup = () => {
                 variant="primary"
                 size="md"
                 noWrapper={true}
-                className="px-4 cursor-pointer h-[50px]"
+                className="px-3 cursor-pointer h-[50px] whitespace-nowrap min-w-[70px]"
               >
-                {isSendingCode ? '발송중...' : isEmailVerified ? '인증완료' : '인증코드'}
+                {isSendingCode ? '발송중' : isEmailVerified ? '완료' : '인증'}
               </Button>
             </div>
             {showVerification && (
-              <div className="flex space-x-2">
+              <div className="flex gap-2">
                 <div className="flex flex-1 items-center px-3 py-3 rounded-lg border border-gray-300 transition hover:border-blue-500 focus-within:border-blue-500">
                   <KeyRound className="mr-2 w-5 h-5 text-gray-400" />
                   <input
@@ -166,9 +166,9 @@ const Signup = () => {
                   variant="primary"
                   size="md"
                   noWrapper={true}
-                  className="px-4 cursor-pointer h-[50px]"
+                  className="px-3 cursor-pointer h-[50px] whitespace-nowrap min-w-[70px]"
                 >
-                  {isVerifyingCode ? '확인중...' : isEmailVerified ? '인증완료' : '인증하기'}
+                  {isVerifyingCode ? '확인중' : isEmailVerified ? '완료' : '인증'}
                 </Button>
               </div>
             )}
