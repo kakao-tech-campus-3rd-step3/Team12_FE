@@ -24,7 +24,6 @@ const CreateTeam = ({ onBack, onCreateTeam }: CreateTeamProps) => {
     });
     setTeamName('');
     setTeamDescription('');
-    toast.success('팀 생성 성공');
   };
 
   return (

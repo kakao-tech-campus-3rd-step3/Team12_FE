@@ -11,6 +11,7 @@ import TimetableEdit from '@/pages/TimeTable/components/TimetableEdit';
 import { everytimeAPI } from '@/apis';
 import type { Subject } from '@/apis/types/timetable';
 import ConfirmModal from '@/components/atoms/ConfirmModal';
+import { toast } from 'react-toastify';
 
 const TimeTablePage = () => {
   const navigate = useNavigate();
@@ -93,7 +94,7 @@ const TimeTablePage = () => {
     const currentSubjects = isEditMode ? editedSubjects : getCurrentSubjects();
 
     if (currentSubjects.length === 0) {
-      alert('저장할 시간표가 없습니다.');
+      toast.error('저장할 시간표가 없습니다.');
       return;
     }
 
@@ -107,7 +108,7 @@ const TimeTablePage = () => {
             : null;
 
       if (!timetable) {
-        alert('시간표 정보가 없습니다.');
+        toast.error('시간표 정보가 없습니다.');
         return;
       }
       await everytimeAPI.saveLectures({
@@ -120,12 +121,12 @@ const TimeTablePage = () => {
         },
       });
 
-      alert('시간표가 저장되었습니다.');
+      toast.success('시간표가 저장되었습니다.');
       localStorage.setItem('timetableLinked', 'true');
       navigate(RouterPath.HOME.DEFAULT);
     } catch (error) {
       console.error('시간표 저장 실패:', error);
-      alert('시간표 저장에 실패했습니다.');
+      toast.error('시간표 저장에 실패했습니다.');
     } finally {
       setIsSaving(false);
     }
@@ -270,7 +271,7 @@ const TimeTablePage = () => {
       </div>
       <ConfirmModal
         isOpen={isConfirmModalOpen}
-        title="시간표 등록 탭 전환 확인"
+        title="탭을 전환하시겠습니까?"
         message={`수정 중인 내용이 있습니다.
         탭을 전환하면 수정 내용이 사라집니다. 계속하시겠습니까?`}
         onConfirm={handleConfirmTabChange}

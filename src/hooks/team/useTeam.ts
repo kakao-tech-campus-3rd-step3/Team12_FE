@@ -53,7 +53,7 @@ export const useLeaveTeam = () => {
   } = useMutation({
     mutationFn: (teamId: number) => teamAPI.leaveTeam(teamId),
     onSuccess: () => {
-      toast.success('팀 탈퇴 성공');
+      toast.error('팀에서 탈퇴하였습니다.');
       queryClient.invalidateQueries({ queryKey: queryKeys.teams });
     },
     onError: (error) => {
@@ -80,7 +80,7 @@ export const useDeleteTeam = () => {
   } = useMutation({
     mutationFn: (teamId: number) => teamAPI.deleteTeam(teamId),
     onSuccess: () => {
-      toast.success('팀 삭제 성공');
+      toast.error('팀이 삭제되었습니다');
       queryClient.invalidateQueries({ queryKey: queryKeys.teams });
     },
     onError: (error: Error) => {
