@@ -5,7 +5,6 @@ import type { FormData } from '@/hooks/calendar/useFormData';
 import { useTeamRecommendTimes } from '@/hooks/team/useTeam';
 import DateModal from '@/pages/Calendar/components/DateModal';
 import type { CalendarEvent } from '@/types/calendar';
-import { formatDateTimeShort } from '@/utils/dateTimeUtils';
 import { useState } from 'react';
 import type { DateRange } from 'react-day-picker';
 import { formatDateWithWeekday, getTimePart } from '@/utils/dateTimeUtils';
