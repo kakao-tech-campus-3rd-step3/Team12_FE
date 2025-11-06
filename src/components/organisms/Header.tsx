@@ -128,8 +128,8 @@ const Header = () => {
     <>
       <nav className="sticky top-0 z-50 py-1 bg-white border-b border-gray-200">
         <div className="flex justify-between items-center ml-1 mr-2 sm:ml-3 sm:mr-6">
-          <div>
-            <Logo className="scale-75 sm:scale-80" />
+          <div className={isAuthenticated ? 'xl:ml-0 ml-8' : ''}>
+            <Logo className="scale-70 sm:scale-80" />
           </div>
 
           <div className="flex items-center gap-1 sm:gap-2">

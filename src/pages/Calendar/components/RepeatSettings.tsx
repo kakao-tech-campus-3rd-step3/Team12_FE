@@ -76,7 +76,7 @@ const RepeatSettings: React.FC<RepeatSettingsProps> = ({ formData, updateFormDat
                     }
                   }}
                   className={`
-                     px-2 py-1.5 text-xs rounded-md transition-colors duration-200
+                     px-2 py-1.5 text-xs rounded-md transition-colors duration-200 cursor-pointer
                      ${
                        isSelected
                          ? 'bg-blue-500 text-white'
@@ -100,9 +100,9 @@ const RepeatSettings: React.FC<RepeatSettingsProps> = ({ formData, updateFormDat
               id="repeatEndType"
               label="반복 종료"
               value={formData.repeatEndType || 'endcount'}
-              onChange={(value) =>
-                updateFormData({ repeatEndType: value as 'endcount' | 'enddate' })
-              }
+              onChange={(value) => {
+                updateFormData({ repeatEndType: (value || 'endcount') as 'endcount' | 'enddate' });
+              }}
               type="select"
               options={[
                 { label: '횟수', value: 'endcount' },
@@ -113,14 +113,27 @@ const RepeatSettings: React.FC<RepeatSettingsProps> = ({ formData, updateFormDat
         </div>
 
         <div
-          className={`transition-all duration-300 ${(formData.repeat === 'daily' || formData.repeat === 'monthly' || (formData.repeat === 'weekly' && formData.repeatWeekDays && formData.repeatWeekDays.length > 0)) && formData.repeatEndType === 'endcount' ? 'opacity-100 h-auto' : 'opacity-0 h-0 overflow-hidden'}`}
+          className={`transition-all duration-300 ${(formData.repeat === 'daily' || formData.repeat === 'monthly' || (formData.repeat === 'weekly' && formData.repeatWeekDays && formData.repeatWeekDays.length > 0)) && (formData.repeatEndType === 'endcount' || !formData.repeatEndType) ? 'opacity-100 h-auto' : 'opacity-0 h-0 overflow-hidden'}`}
         >
           <div className="mt-4">
             <FormInput
               id="repeatCount"
               label="반복 횟수"
-              value={formData.repeatCount?.toString() || ''}
-              onChange={(value) => updateFormData({ repeatCount: parseInt(value) || 1 })}
+              value={
+                formData.repeatCount && formData.repeatCount > 0
+                  ? formData.repeatCount.toString()
+                  : ''
+              }
+              onChange={(value) => {
+                if (value === '') {
+                  updateFormData({ repeatCount: 0 });
+                  return;
+                }
+                const numValue = parseInt(value, 10);
+                if (!isNaN(numValue) && numValue > 0) {
+                  updateFormData({ repeatCount: numValue });
+                }
+              }}
               type="input"
               placeholder="1"
             />

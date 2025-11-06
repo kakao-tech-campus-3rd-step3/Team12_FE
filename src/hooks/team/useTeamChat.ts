@@ -16,14 +16,7 @@ interface ErrorResponse {
 
 type WebSocketMessage = NewMessageResponse | ErrorResponse;
 
-//메세지 시간순 정렬
-const sortMessagesByTime = (messages: ChatMessage[]): ChatMessage[] => {
-  return [...messages].sort(
-    (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-  );
-};
-
-export const useTeamChat = (teamId: number) => {
+export const useTeamChat = (teamId: number, isChatOpen: boolean = false) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isConnected, setIsConnected] = useState(false);
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
@@ -34,6 +27,11 @@ export const useTeamChat = (teamId: number) => {
   const wsRef = useRef<WebSocket | null>(null);
   const { accessToken, user } = useAuthStore();
   const isInitialLoadRef = useRef(true);
+  const isChatOpenRef = useRef(isChatOpen);
+
+  useEffect(() => {
+    isChatOpenRef.current = isChatOpen;
+  }, [isChatOpen]);
 
   //초기 메세지 조회
   const loadInitialMessages = useCallback(async () => {
@@ -42,14 +40,13 @@ export const useTeamChat = (teamId: number) => {
     setIsLoadingMessages(true);
     try {
       const response = await chatAPI.getChatMessages({ teamId });
-      const sortedMessages = sortMessagesByTime(response.messages);
-      setMessages(sortedMessages);
+      setMessages(response.messages);
       setHasMore(response.hasNext);
       setNextCursor(response.nextCursor);
 
       const lastReadId = localStorage.getItem(`team_${teamId}_lastRead`);
       if (lastReadId && user?.user_id) {
-        const unreadMessages = sortedMessages.filter(
+        const unreadMessages = response.messages.filter(
           (msg) => msg.id > Number(lastReadId) && String(msg.senderId) !== String(user.user_id),
         );
         setUnReadCount(unreadMessages.length);
@@ -69,9 +66,8 @@ export const useTeamChat = (teamId: number) => {
     setIsLoadingMessages(true);
     try {
       const response = await chatAPI.getChatMessages({ teamId, cursor: nextCursor });
-      const sortedMessages = sortMessagesByTime(response.messages);
 
-      setMessages((prev) => [...sortedMessages, ...prev]);
+      setMessages((prev) => [...response.messages, ...prev]);
       setHasMore(response.hasNext);
       setNextCursor(response.nextCursor);
     } catch (error) {
@@ -130,7 +126,13 @@ const ws = new WebSocket(wsUrl);
           : false;
 
         if (!isMyMessage) {
-          setUnReadCount((prev) => prev + 1);
+          if (isChatOpenRef.current) {
+            const lastMessageId = message.data.id;
+            localStorage.setItem(`team_${teamId}_lastRead`, String(lastMessageId));
+            setUnReadCount(0);
+          } else {
+            setUnReadCount((prev) => prev + 1);
+          }
         }
       } else if (message.type === 'ERROR') {
         console.error('서버 에러', message.message);

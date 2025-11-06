@@ -29,7 +29,14 @@ interface UseFormDataProps {
   initialEndTime?: string;
 }
 
-const useFormData = ({ isOpen, modalType, selectedEvent, selectedDate, initialStartTime, initialEndTime }: UseFormDataProps) => {
+const useFormData = ({
+  isOpen,
+  modalType,
+  selectedEvent,
+  selectedDate,
+  initialStartTime,
+  initialEndTime,
+}: UseFormDataProps) => {
   const [showTime, setShowTime] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     title: '',

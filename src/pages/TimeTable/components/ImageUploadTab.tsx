@@ -1,7 +1,8 @@
 import React from 'react';
 import ImageInput from '@/pages/TimeTable/components/ImageInput';
 import type { TimetableImageResponse } from '@/apis';
-import { validateTimetableData, getDayOfWeek, formatTime } from '@/utils/timetableUtils';
+import { validateTimetableData } from '@/utils/timetableUtils';
+import TimetableGrid from '@/pages/TimeTable/components/TimatableGrid';
 
 interface ImageUploadTabProps {
   selectedImage: File | null;
@@ -55,25 +56,13 @@ const ImageUploadTab: React.FC<ImageUploadTabProps> = ({
               parsedTimetable.semester &&
               ` (${parsedTimetable.year} ${parsedTimetable.semester})`}
           </label>
-          <div className="max-h-60 overflow-y-auto border border-gray-200 rounded-md p-3 bg-gray-50">
-            {(() => {
-              const validation = validateTimetableData(parsedTimetable.subjects);
-              if (!validation.isValid) {
-                return <div className="text-center text-red-500 py-4">{validation.message}</div>;
-              }
-              return parsedTimetable.subjects.map((subject, index) => (
-                <div key={index} className="mb-3 last:mb-0">
-                  <div className="font-semibold text-gray-800 mb-1">{subject.name}</div>
-                  {subject.times.map((time, timeIndex) => (
-                    <div key={timeIndex} className="ml-2 text-sm text-gray-600">
-                      {getDayOfWeek(time.dayOfWeek)} {formatTime(time.startTime)} -{' '}
-                      {formatTime(time.endTime)}
-                    </div>
-                  ))}
-                </div>
-              ));
-            })()}
-          </div>
+          {(() => {
+            const validation = validateTimetableData(parsedTimetable.subjects);
+            if (!validation.isValid) {
+              return <div className="text-center text-red-500 py-4">{validation.message}</div>;
+            }
+            return <TimetableGrid subjects={parsedTimetable.subjects} />;
+          })()}
         </div>
       )}
     </div>

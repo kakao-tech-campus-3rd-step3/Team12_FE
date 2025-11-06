@@ -18,7 +18,6 @@ const JoinTeam = ({ onBack, onJoinTeam }: JoinTeamProps) => {
     }
     onJoinTeam(inviteCode);
     setInviteCode('');
-    toast.success('팀 가입 성공');
   };
 
   return (
