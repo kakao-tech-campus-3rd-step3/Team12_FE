@@ -163,20 +163,20 @@ const TeamChat = ({ teamId, chatData }: TeamChatProps) => {
       </div>
 
       {/* 입력 영역 */}
-      <div className="px-3 py-3">
-        <form onSubmit={handleSubmit} className="flex gap-2 items-center">
+      <div className="px-3 py-3 sm:px-3">
+        <form onSubmit={handleSubmit} className="flex gap-2 items-center min-w-0">
           <input
             type="text"
             placeholder="메시지 보내기"
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
             disabled={!isConnected}
-            className="flex-1 px-4 py-2.5 bg-gray-100 rounded-full text-gray-800 placeholder-gray-400 focus:outline-none transition-all"
+            className="flex-1 min-w-0 px-4 py-2.5 bg-gray-100 rounded-full text-gray-800 placeholder-gray-400 focus:outline-none transition-all"
           />
           <Button
             type="submit"
             icon={<Send className="-ml-1 w-5 h-5 rotate-45" />}
-            className="justify-center text-white rounded-full shadow-md cursor-pointer p-y-2"
+            className="justify-center text-white rounded-full shadow-md cursor-pointer p-y-2 flex-shrink-0"
             noWrapper
           />
         </form>
