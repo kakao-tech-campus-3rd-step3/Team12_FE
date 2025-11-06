@@ -92,7 +92,7 @@ const Login = () => {
               size="md"
               noWrapper={true}
               fullWidth={true}
-              className="mt-3 w-[100%]"
+              className="mt-3 w-[100%] cursor-pointer"
             >
               로그인하기
             </Button>

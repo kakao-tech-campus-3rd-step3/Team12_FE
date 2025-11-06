@@ -106,6 +106,7 @@ const RecommendedTimeSlots: React.FC<RecommendedTimeSlotsProps> = ({
             onClick={selectedTimeSlot ? () => handleSelectClick(selectedTimeSlot) : undefined}
             text="선택"
             fullWidth={true}
+            className="cursor-pointer"
           />
         </div>
       </div>

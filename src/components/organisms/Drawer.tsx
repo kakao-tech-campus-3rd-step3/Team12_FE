@@ -24,7 +24,7 @@ const Drawer = ({ children, className = '' }: DrawerProps) => {
       {/* 모바일에서 햄버거 메뉴 버튼 */}
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed top-4 left-4 z-50 p-2 bg-white rounded-lg border border-gray-200 shadow-md xl:hidden"
+        className="fixed top-3.5 left-3 z-50 p-2 bg-white rounded-lg border border-gray-100 xl:hidden cursor-pointer hover:bg-gray-100"
       >
         <Menu className="w-6 h-6 text-gray-600" />
       </button>

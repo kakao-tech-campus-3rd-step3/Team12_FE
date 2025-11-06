@@ -13,6 +13,7 @@ const AvailabilityHeader: React.FC<AvailabilityHeaderProps> = ({ onBack }) => {
         text="캘린더로 돌아가기"
         fullWidth={false}
         wrapperClassName="mx-0 text-nowrap"
+        className="cursor-pointer"
       />
     </div>
   );

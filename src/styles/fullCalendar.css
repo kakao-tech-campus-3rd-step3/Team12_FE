@@ -59,12 +59,12 @@
   /* 네비게이션 버튼 스타일 */
   .fc-prev-button,
   .fc-next-button {
-    @apply rounded-lg px-3 py-2 font-medium transition-all duration-200 !bg-white !text-gray-400 !shadow-none !border-1 !border-gray-200;
+    @apply rounded-lg px-2 py-2 font-medium transition-all duration-200 !bg-white !text-gray-400 !shadow-none !border-none !border-gray-200;
   }
 
   .fc-prev-button:hover,
   .fc-next-button:hover {
-    @apply cursor-pointer rounded-lg px-3 py-2 font-medium transition-all duration-200 !bg-white !text-gray-400 !shadow-none !border-1 !border-gray-200;
+    @apply cursor-pointer rounded-lg px-2 py-2 font-medium transition-all duration-200 !bg-gray-100 !text-gray-400 !shadow-none;
   }
 
   /* 오늘 버튼 스타일 */
