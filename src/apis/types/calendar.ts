@@ -23,6 +23,7 @@ export type getTeamCalendarEventsResponse = {
   start_time: string;
   end_time?: string;
   is_recurring: boolean;
+  event_participants?: number[];
 }[];
 
 //팀 일정 추가
