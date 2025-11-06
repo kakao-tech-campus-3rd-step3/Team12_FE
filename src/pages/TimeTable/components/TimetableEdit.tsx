@@ -98,13 +98,14 @@ const TimetableEditForm: React.FC<TimetableEditFormProps> = ({ subjects, onSubje
               value={subject.name}
               onChange={(value) => handleSubjectFieldChange(subjectIndex, 'name', value)}
               required
-              className="w-full md:flex-1"
+              className="w-full md:flex-1 md:min-w-0"
             />
             <FormInput
               id={`subject-professor-${subjectIndex}`}
               label="교수명"
               value={subject.professor || ''}
               onChange={(value) => handleSubjectFieldChange(subjectIndex, 'professor', value)}
+              className="md:min-w-0"
             />
             <Button
               onClick={() => handleAddTime(subjectIndex)}
@@ -112,7 +113,7 @@ const TimetableEditForm: React.FC<TimetableEditFormProps> = ({ subjects, onSubje
               variant="outline"
               size="md"
               noWrapper={true}
-              className="mb-1"
+              className="mb-1 md:whitespace-nowrap"
             />
             <Button
               onClick={() => handleDeleteSubject(subjectIndex)}
@@ -120,7 +121,7 @@ const TimetableEditForm: React.FC<TimetableEditFormProps> = ({ subjects, onSubje
               variant="primary"
               size="md"
               noWrapper={true}
-              className="mb-1 bg-red-500 hover:bg-red-600"
+              className="mb-1 bg-red-500 hover:bg-red-600 md:whitespace-nowrap"
             />
           </div>
 
@@ -141,6 +142,7 @@ const TimetableEditForm: React.FC<TimetableEditFormProps> = ({ subjects, onSubje
                       label: day,
                       value: (index + 1).toString(),
                     }))}
+                    className="min-w-0"
                   />
 
                   <FormInput
@@ -156,7 +158,7 @@ const TimetableEditForm: React.FC<TimetableEditFormProps> = ({ subjects, onSubje
                         formatTimeToSeconds(value),
                       )
                     }
-                    className="w-full"
+                    className="w-full min-w-0"
                     required
                   />
 
@@ -173,7 +175,7 @@ const TimetableEditForm: React.FC<TimetableEditFormProps> = ({ subjects, onSubje
                         formatTimeToSeconds(value),
                       )
                     }
-                    className="w-full"
+                    className="w-full min-w-0"
                     required
                   />
 
@@ -184,7 +186,7 @@ const TimetableEditForm: React.FC<TimetableEditFormProps> = ({ subjects, onSubje
                     onChange={(value) =>
                       handleTimeFieldChange(subjectIndex, timeIndex, 'place', value)
                     }
-                    className="[&_input]:py-2"
+                    className="[&_input]:py-2 min-w-0"
                   />
                 </div>
                 {subject.times.length > 0 && (
@@ -195,7 +197,7 @@ const TimetableEditForm: React.FC<TimetableEditFormProps> = ({ subjects, onSubje
                       variant="primary"
                       size="md"
                       noWrapper={true}
-                      className="py-2 bg-gray-400 hover:bg-gray-500 w-full"
+                      className="py-2 w-full bg-gray-400 hover:bg-gray-500"
                     />
                   </div>
                 )}
