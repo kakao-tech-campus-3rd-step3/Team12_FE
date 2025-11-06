@@ -1,6 +1,7 @@
 import type { TeamData } from '@/apis/types/team';
 import Button from '@/components/atoms/Button';
-import { LogOut, Settings, Trash, Users } from 'lucide-react';
+import { Calendar, LogOut, Settings, Trash, Users, Copy } from 'lucide-react';
+
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { RouterPath } from '@/routes/path';
@@ -55,6 +56,18 @@ const TeamListCard = ({ team, leaveTeam, deleteTeam }: TeamListCardProps) => {
       return;
     }
     navigate(RouterPath.TEAM_CALENDAR.DEFAULT.replace(':id', team.id.toString()));
+  };
+
+  // 가입 코드 복사
+  const handleCopyInviteCode = async (e: React.MouseEvent) => {
+    e.stopPropagation(); // 카드 클릭 방지
+    
+    try {
+      await navigator.clipboard.writeText(team.invite_code);
+      toast.success('가입 코드가 복사되었습니다.');
+    } catch (err) {
+      toast.error('복사에 실패했습니다.');
+    }
   };
 
   return (
@@ -144,9 +157,14 @@ const TeamListCard = ({ team, leaveTeam, deleteTeam }: TeamListCardProps) => {
           </div>
 
           <div className="flex items-center space-x-2">
-            <span className="px-2 py-1 font-mono text-xs font-medium text-gray-600 bg-gray-100 rounded-full border border-gray-200">
-              {team.invite_code}
-            </span>
+            <button
+              onClick={handleCopyInviteCode}
+              className="flex items-center gap-1 px-2 py-1 font-mono text-xs font-medium text-gray-600 bg-gray-100 rounded-full border border-gray-200 hover:bg-gray-200 hover:text-gray-800 transition-colors cursor-pointer"
+              title="가입 코드 복사"
+            >
+              <span>{team.invite_code}</span>
+              <Copy className="w-3 h-3" />
+            </button>
             <Button
               noWrapper
               variant="ghost"
