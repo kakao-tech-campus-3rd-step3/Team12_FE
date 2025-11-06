@@ -1,3 +1,5 @@
+import { useDisableBodyScroll } from '@/hooks';
+
 interface ConfirmModalProps {
   isOpen: boolean;
   title: string;
@@ -17,6 +19,8 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
   confirmText = '확인',
   confirmButtonColor = 'bg-blue-600 hover:bg-blue-700',
 }) => {
+  useDisableBodyScroll(isOpen);
+
   if (!isOpen) return null;
 
   const handleConfirm = () => {
