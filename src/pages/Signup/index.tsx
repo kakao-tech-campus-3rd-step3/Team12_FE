@@ -132,7 +132,7 @@ const Signup = () => {
                 type="email"
                 placeholder="이메일"
                 error={errors.email?.message}
-                className="flex-1"
+                className="flex-1 min-w-0"
                 {...register('email')}
               />
               <Button
@@ -142,14 +142,14 @@ const Signup = () => {
                 variant="primary"
                 size="md"
                 noWrapper={true}
-                className="px-3 cursor-pointer h-[50px] whitespace-nowrap min-w-[70px]"
+                className="px-3 cursor-pointer h-[50px] whitespace-nowrap min-w-[70px] flex-shrink-0"
               >
                 {isSendingCode ? '발송중' : isEmailVerified ? '완료' : '인증'}
               </Button>
             </div>
             {showVerification && (
               <div className="flex gap-2">
-                <div className="flex flex-1 items-center px-3 py-3 rounded-lg border border-gray-300 transition hover:border-blue-500 focus-within:border-blue-500">
+                <div className="flex flex-1 min-w-0 items-center px-3 py-3 rounded-lg border border-gray-300 transition hover:border-blue-500 focus-within:border-blue-500">
                   <KeyRound className="mr-2 w-5 h-5 text-gray-400" />
                   <input
                     type="text"
@@ -166,7 +166,7 @@ const Signup = () => {
                   variant="primary"
                   size="md"
                   noWrapper={true}
-                  className="px-3 cursor-pointer h-[50px] whitespace-nowrap min-w-[70px]"
+                  className="px-3 cursor-pointer h-[50px] whitespace-nowrap min-w-[70px] flex-shrink-0"
                 >
                   {isVerifyingCode ? '확인중' : isEmailVerified ? '완료' : '인증'}
                 </Button>
