@@ -128,7 +128,7 @@ const TimetableEditForm: React.FC<TimetableEditFormProps> = ({ subjects, onSubje
           <div className="mt-1 space-y-3">
             {subject.times.map((time, timeIndex) => (
               <div key={timeIndex} className="p-3 bg-white rounded-md border border-gray-300">
-                <div className="grid grid-cols-1 gap-3 items-end md:grid-cols-5">
+                <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4">
                   <FormInput
                     id={`time-day-${subjectIndex}-${timeIndex}`}
                     label="요일"
@@ -156,7 +156,7 @@ const TimetableEditForm: React.FC<TimetableEditFormProps> = ({ subjects, onSubje
                         formatTimeToSeconds(value),
                       )
                     }
-                    className="flex-1 w-full"
+                    className="w-full"
                     required
                   />
 
@@ -173,7 +173,7 @@ const TimetableEditForm: React.FC<TimetableEditFormProps> = ({ subjects, onSubje
                         formatTimeToSeconds(value),
                       )
                     }
-                    className="flex-1 w-full"
+                    className="w-full"
                     required
                   />
 
@@ -186,19 +186,19 @@ const TimetableEditForm: React.FC<TimetableEditFormProps> = ({ subjects, onSubje
                     }
                     className="[&_input]:py-2"
                   />
-                  {subject.times.length > 0 && (
-                    <div className="flex items-end">
-                      <Button
-                        onClick={() => handleDeleteTime(subjectIndex, timeIndex)}
-                        text="시간 삭제"
-                        variant="primary"
-                        size="md"
-                        noWrapper={true}
-                        className="py-2 mb-1.5 bg-gray-400 hover:bg-gray-500 w-full"
-                      />
-                    </div>
-                  )}
                 </div>
+                {subject.times.length > 0 && (
+                  <div className="mt-3">
+                    <Button
+                      onClick={() => handleDeleteTime(subjectIndex, timeIndex)}
+                      text="시간 삭제"
+                      variant="primary"
+                      size="md"
+                      noWrapper={true}
+                      className="py-2 bg-gray-400 hover:bg-gray-500 w-full"
+                    />
+                  </div>
+                )}
               </div>
             ))}
           </div>
