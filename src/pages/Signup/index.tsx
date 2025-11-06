@@ -149,17 +149,15 @@ const Signup = () => {
             </div>
             {showVerification && (
               <div className="flex space-x-2">
-                <div className="flex-1">
-                  <div className="flex items-center px-3 py-3 rounded-lg border border-gray-300 transition hover:border-blue-500 focus-within:border-blue-500">
-                    <KeyRound className="mr-2 w-5 h-5 text-gray-400" />
-                    <input
-                      type="text"
-                      value={verificationCode}
-                      onChange={(e) => setVerificationCode(e.target.value)}
-                      placeholder="인증코드 입력"
-                      className="flex-1 bg-transparent border-none outline-none"
-                    />
-                  </div>
+                <div className="flex flex-1 items-center px-3 py-3 rounded-lg border border-gray-300 transition hover:border-blue-500 focus-within:border-blue-500">
+                  <KeyRound className="mr-2 w-5 h-5 text-gray-400" />
+                  <input
+                    type="text"
+                    value={verificationCode}
+                    onChange={(e) => setVerificationCode(e.target.value)}
+                    placeholder="인증코드 입력"
+                    className="flex-1 bg-transparent border-none outline-none"
+                  />
                 </div>
                 <Button
                   type="button"
@@ -168,7 +166,7 @@ const Signup = () => {
                   variant="primary"
                   size="md"
                   noWrapper={true}
-                  className="px-4 cursor-pointer"
+                  className="px-4 cursor-pointer h-[50px]"
                 >
                   {isVerifyingCode ? '확인중...' : isEmailVerified ? '인증완료' : '인증하기'}
                 </Button>
