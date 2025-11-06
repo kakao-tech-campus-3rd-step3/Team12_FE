@@ -122,26 +122,21 @@ export const FormInput = ({
           </div>
         </div>
       ) : type === 'time' ? (
-        <div className="relative">
-          <input
-            type="time"
-            id={id}
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-            maxLength={maxLength}
-            disabled={disabled}
-            className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
-              error ? 'border-red-300 focus:ring-red-500' : 'border-gray-300'
-            } ${disabled ? 'text-gray-500 bg-gray-50 cursor-not-allowed' : ''} ${
-              !value ? 'text-gray-400' : ''
-            }`}
-          />
-          {!value && (
-            <div className="absolute inset-0 flex items-center px-4 pointer-events-none">
-              <span className="text-gray-400">{placeholder}</span>
-            </div>
-          )}
-        </div>
+        <input
+          type="time"
+          id={id}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          maxLength={maxLength}
+          disabled={disabled}
+          placeholder={placeholder}
+          className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
+            error ? 'border-red-300 focus:ring-red-500' : 'border-gray-300'
+          } ${disabled ? 'text-gray-500 bg-gray-50 cursor-not-allowed' : ''}`}
+          style={{
+            colorScheme: 'light',
+          }}
+        />
       ) : (
         <input
           type={type}
