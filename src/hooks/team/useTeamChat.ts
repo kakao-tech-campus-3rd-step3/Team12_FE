@@ -16,7 +16,7 @@ interface ErrorResponse {
 
 type WebSocketMessage = NewMessageResponse | ErrorResponse;
 
-export const useTeamChat = (teamId: number) => {
+export const useTeamChat = (teamId: number, isChatOpen: boolean = false) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isConnected, setIsConnected] = useState(false);
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
@@ -27,6 +27,11 @@ export const useTeamChat = (teamId: number) => {
   const wsRef = useRef<WebSocket | null>(null);
   const { accessToken, user } = useAuthStore();
   const isInitialLoadRef = useRef(true);
+  const isChatOpenRef = useRef(isChatOpen);
+
+  useEffect(() => {
+    isChatOpenRef.current = isChatOpen;
+  }, [isChatOpen]);
 
   //초기 메세지 조회
   const loadInitialMessages = useCallback(async () => {
@@ -111,7 +116,13 @@ export const useTeamChat = (teamId: number) => {
           : false;
 
         if (!isMyMessage) {
-          setUnReadCount((prev) => prev + 1);
+          if (isChatOpenRef.current) {
+            const lastMessageId = message.data.id;
+            localStorage.setItem(`team_${teamId}_lastRead`, String(lastMessageId));
+            setUnReadCount(0);
+          } else {
+            setUnReadCount((prev) => prev + 1);
+          }
         }
       } else if (message.type === 'ERROR') {
         console.error('서버 에러', message.message);
