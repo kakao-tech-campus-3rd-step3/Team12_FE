@@ -1,10 +1,11 @@
 import { Plus, UserPlus, Users } from 'lucide-react';
 import { useMemo, useState } from 'react';
 //import { mockTeams } from '@/mockdata/teamData';
-import type { ApiError } from '@/apis/types/error';
 import { teamAPI } from '@/apis';
+import type { ApiError } from '@/apis/types/error';
 import Button from '@/components/atoms/Button';
 import Pagination from '@/components/molecules/Pagination';
+import { useDisableBodyScroll } from '@/hooks';
 import { queryKeys } from '@/lib/queryKeys';
 import CreateTeam from '@/pages/PersonalCalendar/components/CreateTeam';
 import JoinTeam from '@/pages/PersonalCalendar/components/JoinTeam';
@@ -12,7 +13,6 @@ import TeamListCard from '@/pages/PersonalCalendar/components/TeamListCard';
 import { useTeamStore } from '@/store/team';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
-import { useDisableBodyScroll } from '@/hooks';
 
 interface TeamListModalProps {
   isOpen: boolean;
@@ -120,7 +120,7 @@ const TeamListModal = ({ isOpen, onClose, leaveTeam, deleteTeam }: TeamListModal
       >
         <button
           onClick={handleClose}
-          className="flex items-center justify-center w-8 h-8 rounded-full absolute top-3 right-3 z-10 text-2xl text-gray-500 hover:text-red-500 hover:bg-red-50 transition-colors focus:outline-none cursor-pointer"
+          className="flex absolute top-3 right-3 z-10 justify-center items-center w-8 h-8 text-2xl text-gray-500 rounded-full transition-colors cursor-pointer hover:text-red-500 hover:bg-red-50 focus:outline-none"
           aria-label="Close modal"
         >
           &times;
@@ -140,7 +140,7 @@ const TeamListModal = ({ isOpen, onClose, leaveTeam, deleteTeam }: TeamListModal
             {/* 팀 목록 뷰 */}
             <div className="overflow-y-auto p-6 w-1/3">
               <div className="pt-8 pb-0">
-                <div className="flex justify-between items-start mb-4">
+                <div className="flex flex-col gap-4 justify-between items-start mb-4 sm:flex-row">
                   <div className="flex flex-col">
                     <h2 className="text-xl font-semibold text-gray-900">팀 관리</h2>
                     <p className="text-sm leading-relaxed text-gray-600">
