@@ -107,7 +107,7 @@ const TeamListModal = ({ isOpen, onClose, leaveTeam, deleteTeam }: TeamListModal
       >
         <button
           onClick={handleClose}
-          className="absolute top-4 right-4 z-10 text-2xl text-gray-500 rounded hover:text-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+          className="flex items-center justify-center w-8 h-8 rounded-full absolute top-3 right-3 z-10 text-2xl text-gray-500 hover:text-red-500 hover:bg-red-50 transition-colors focus:outline-none cursor-pointer"
           aria-label="Close modal"
         >
           &times;
@@ -142,6 +142,7 @@ const TeamListModal = ({ isOpen, onClose, leaveTeam, deleteTeam }: TeamListModal
                       icon={<Plus />}
                       size="sm"
                       noWrapper={true}
+                      className="cursor-pointer"
                     />
                     <Button
                       onClick={() => setCurrentView('join')}
@@ -150,6 +151,7 @@ const TeamListModal = ({ isOpen, onClose, leaveTeam, deleteTeam }: TeamListModal
                       variant="outline"
                       size="sm"
                       noWrapper={true}
+                      className="cursor-pointer"
                     />
                   </div>
                 </div>

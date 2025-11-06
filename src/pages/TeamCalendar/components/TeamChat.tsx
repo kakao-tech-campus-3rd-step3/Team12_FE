@@ -176,7 +176,7 @@ const TeamChat = ({ teamId, chatData }: TeamChatProps) => {
           <Button
             type="submit"
             icon={<Send className="w-5 h-5 rotate-45 -ml-1" />}
-            className="p-y-2 rounded-full text-white shadow-md justify-center"
+            className="p-y-2 rounded-full text-white shadow-md justify-center cursor-pointer"
             noWrapper
           />
         </form>

@@ -349,7 +349,7 @@ const DateModal: React.FC<DateModalProps> = ({
                 variant="primary"
                 size="md"
                 noWrapper={true}
-                className="flex justify-center items-center w-[20%] h-[40px] bg-red-500 hover:bg-red-600"
+                className="flex justify-center items-center w-[20%] h-[40px] bg-red-500 hover:bg-red-600 cursor-pointer"
               />
             )}
             <Button
@@ -358,7 +358,7 @@ const DateModal: React.FC<DateModalProps> = ({
               variant="primary"
               size="md"
               noWrapper={true}
-              className="flex justify-center items-center w-[20%] h-[40px] bg-blue-500 hover:bg-blue-600"
+              className="flex justify-center items-center w-[20%] h-[40px] bg-blue-500 hover:bg-blue-600 cursor-pointer"
             />
           </div>
         </form>

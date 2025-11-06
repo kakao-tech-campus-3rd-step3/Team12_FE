@@ -76,7 +76,7 @@ const RepeatSettings: React.FC<RepeatSettingsProps> = ({ formData, updateFormDat
                     }
                   }}
                   className={`
-                     px-2 py-1.5 text-xs rounded-md transition-colors duration-200
+                     px-2 py-1.5 text-xs rounded-md transition-colors duration-200 cursor-pointer
                      ${
                        isSelected
                          ? 'bg-blue-500 text-white'

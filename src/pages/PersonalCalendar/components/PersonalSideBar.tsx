@@ -55,8 +55,6 @@ const PersonalSideBar = ({
 
   const renderContent = () => {
     switch (activeSidebarTab) {
-      // case 'quickActions':
-      //   return <QuickActions />;
       case 'myClass':
         return (
           <div className="flex flex-col gap-4">

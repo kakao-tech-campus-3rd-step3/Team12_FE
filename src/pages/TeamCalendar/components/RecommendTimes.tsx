@@ -40,7 +40,7 @@ const RecommendTimes: React.FC<RecommendTimesProps> = ({ onViewAvailability, tea
           text={showDatePicker ? '날짜 선택 숨기기' : '날짜 선택하기'}
           variant="secondary"
           fullWidth={true}
-          className="mb-3"
+          className="mb-3 cursor-pointer"
         />
       )}
       {(showDatePicker || forceShow) && (
@@ -158,7 +158,12 @@ const RecommendTimes: React.FC<RecommendTimesProps> = ({ onViewAvailability, tea
           </div>
           <TimeSlotCards isDesktop={true} />
           <div className="mt-4">
-            <Button onClick={handleViewMore} text="더 많은 시간 확인하기" fullWidth={true} />
+            <Button
+              onClick={handleViewMore}
+              text="더 많은 시간 확인하기"
+              fullWidth={true}
+              className="cursor-pointer"
+            />
           </div>
         </div>
       </div>
@@ -187,7 +192,12 @@ const RecommendTimes: React.FC<RecommendTimesProps> = ({ onViewAvailability, tea
           <div className="mt-1 lg:w-1/2">
             <TimeSlotCards />
             <div className="mt-4 sm:mt-6">
-              <Button onClick={handleViewMore} text="더 많은 시간 확인하기" fullWidth={true} />
+              <Button
+                onClick={handleViewMore}
+                text="더 많은 시간 확인하기"
+                fullWidth={true}
+                className="cursor-pointer"
+              />
             </div>
           </div>
         </div>
