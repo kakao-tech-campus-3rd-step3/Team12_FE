@@ -1,3 +1,5 @@
+import { useDisableBodyScroll } from '@/hooks';
+
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -5,6 +7,8 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
+  useDisableBodyScroll(isOpen);
+
   if (!isOpen) return null;
 
   return (
