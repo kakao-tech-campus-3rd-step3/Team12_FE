@@ -176,7 +176,7 @@ const TimeTablePage = () => {
         <div className="flex mb-6 border-b border-gray-200">
           <button
             onClick={() => handleTabChange('image')}
-            className={`px-6 py-3 font-medium transition-colors ${
+            className={`cursor-pointer px-6 py-3 font-medium transition-colors ${
               activeTab === 'image'
                 ? 'border-b-2 text-blue-600'
                 : 'text-gray-400 hover:text-blue-600'
@@ -186,7 +186,7 @@ const TimeTablePage = () => {
           </button>
           <button
             onClick={() => handleTabChange('link')}
-            className={`px-6 py-3 font-medium transition-colors ${
+            className={`cursor-pointer px-6 py-3 font-medium transition-colors ${
               activeTab === 'link'
                 ? 'border-b-2 text-blue-600'
                 : 'text-gray-400 hover:text-blue-600'
@@ -224,7 +224,7 @@ const TimeTablePage = () => {
               onClick={handleToggleEdit}
               text={isEditMode ? '수정 취소' : '수정'}
               variant={isEditMode ? 'outline' : 'primary'}
-              className="w-full"
+              className="w-full cursor-pointer"
             />
           </div>
         )}
@@ -264,7 +264,7 @@ const TimeTablePage = () => {
         <Button
           onClick={handleSave}
           text={isSaving ? '등록 중' : '등록하기'}
-          className="flex justify-center w-full"
+          className="flex justify-center w-full cursor-pointer"
           disabled={isSaving || getCurrentSubjects().length === 0}
         />
       </div>

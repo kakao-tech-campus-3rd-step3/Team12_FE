@@ -113,7 +113,7 @@ const TimetableEditForm: React.FC<TimetableEditFormProps> = ({ subjects, onSubje
               variant="outline"
               size="md"
               noWrapper={true}
-              className="mb-1 md:whitespace-nowrap"
+              className="cursor-pointer mb-1 md:whitespace-nowrap"
             />
             <Button
               onClick={() => handleDeleteSubject(subjectIndex)}
@@ -121,7 +121,7 @@ const TimetableEditForm: React.FC<TimetableEditFormProps> = ({ subjects, onSubje
               variant="primary"
               size="md"
               noWrapper={true}
-              className="mb-1 bg-red-500 hover:bg-red-600 md:whitespace-nowrap"
+              className="cursor-pointer mb-1 bg-red-500 hover:bg-red-600 md:whitespace-nowrap"
             />
           </div>
 
@@ -197,7 +197,7 @@ const TimetableEditForm: React.FC<TimetableEditFormProps> = ({ subjects, onSubje
                       variant="primary"
                       size="md"
                       noWrapper={true}
-                      className="py-2 w-full bg-gray-400 hover:bg-gray-500"
+                      className="cursor-pointer py-2 w-full bg-gray-400 hover:bg-gray-500"
                     />
                   </div>
                 )}
@@ -207,7 +207,12 @@ const TimetableEditForm: React.FC<TimetableEditFormProps> = ({ subjects, onSubje
         </div>
       ))}
 
-      <Button onClick={handleAddSubject} text="+ 과목 추가" variant="outline" className="w-full" />
+      <Button
+        onClick={handleAddSubject}
+        text="+ 과목 추가"
+        variant="outline"
+        className="w-full cursor-pointer"
+      />
     </div>
   );
 };
