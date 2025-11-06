@@ -1,6 +1,7 @@
 import { Plus, UserPlus, Users } from 'lucide-react';
 import { useMemo, useState } from 'react';
 //import { mockTeams } from '@/mockdata/teamData';
+import type { ApiError } from '@/apis/types/error';
 import { teamAPI } from '@/apis';
 import Button from '@/components/atoms/Button';
 import Pagination from '@/components/molecules/Pagination';
@@ -72,7 +73,16 @@ const TeamListModal = ({ isOpen, onClose, leaveTeam, deleteTeam }: TeamListModal
 
       toast.success('팀 가입 성공');
       setCurrentView('list');
-    } catch {}
+    } catch (error) {
+      if (error instanceof Error) {
+        const apiError = error as ApiError;
+        const errorMessage =
+          apiError.response?.data?.message || apiError.message || '팀 가입에 실패했습니다.';
+        toast.error(errorMessage);
+      } else {
+        toast.error('팀 가입에 실패했습니다.');
+      }
+    }
   };
 
   const handleClose = () => {
