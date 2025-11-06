@@ -45,7 +45,7 @@ const RecommendTimes: React.FC<RecommendTimesProps> = ({ onViewAvailability, tea
       )}
       {(showDatePicker || forceShow) && (
         <div className="p-2 rounded-lg border border-gray-200">
-          <SelectDurationCalendar range={range} />
+          <SelectDurationCalendar range={range} setRange={setRange} />
         </div>
       )}
     </>
