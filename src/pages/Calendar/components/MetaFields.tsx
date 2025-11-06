@@ -2,7 +2,7 @@ import { FormInput } from '@/components/atoms/FormInput';
 import MemberSelectDropdown from '@/pages/Calendar/components/MemberSelectDropdown';
 import { getDatePart } from '@/utils/dateTimeUtils';
 import type { FormData } from '@/hooks/calendar/useFormData';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { DateRange } from 'react-day-picker';
 
 interface MetaFieldsProps {
@@ -15,6 +15,12 @@ interface MetaFieldsProps {
 const MetaFields: React.FC<MetaFieldsProps> = ({ formData, range, updateFormData, teamId }) => {
   const [error, setError] = useState<string | null>(null);
   const [selectedMemberIds, setSelectedMemberIds] = useState<number[]>([]);
+
+  useEffect(() => {
+    if (formData.event_participants !== undefined) {
+      setSelectedMemberIds(formData.event_participants);
+    }
+  }, [formData.event_participants]);
 
   const handleAllDayChange = (value: string) => {
     const isAllDay = value === 'true';

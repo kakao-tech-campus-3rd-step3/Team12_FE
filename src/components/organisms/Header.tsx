@@ -1,10 +1,10 @@
-import Logo from '@/components/atoms/Logo';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuthStore } from '@/store/useAuthStore';
-import { useState, useRef, useEffect } from 'react';
-import { RouterPath } from '@/routes/path';
 import { authAPI } from '@/apis';
 import ConfirmModal from '@/components/atoms/ConfirmModal';
+import Logo from '@/components/atoms/Logo';
+import { RouterPath } from '@/routes/path';
+import { useAuthStore } from '@/store/useAuthStore';
+import { useEffect, useRef, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 const Header = () => {
@@ -88,11 +88,11 @@ const Header = () => {
     return (
       <>
         {isOpen && (
-          <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+          <div className="absolute right-0 z-[40] py-2 mt-2 w-64 bg-white rounded-lg border border-gray-200 shadow-lg">
             {/* 사용자 정보 헤더 */}
             <div className="px-4 py-3 border-b border-gray-100">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center">
+              <div className="flex gap-3 items-center">
+                <div className="flex justify-center items-center w-10 h-10 text-white bg-blue-600 rounded-full">
                   <span className="text-sm font-medium">{userInitial}</span>
                 </div>
                 <div>
@@ -104,7 +104,7 @@ const Header = () => {
 
             <button
               onClick={handleLogout}
-              className="w-full py-3 px-4 text-sm text-red-600 hover:bg-red-50 transition-all duration-200 cursor-pointer"
+              className="px-4 py-3 w-full text-sm text-red-600 transition-all duration-200 cursor-pointer hover:bg-red-50"
             >
               로그아웃
             </button>
@@ -114,7 +114,7 @@ const Header = () => {
                 setIsSignoutModalOpen(true);
                 setIsDropdownOpen(false);
               }}
-              className="w-full py-3 px-4 text-sm text-red-600 hover:bg-red-50 transition-all duration-200 cursor-pointer"
+              className="px-4 py-3 w-full text-sm text-red-600 transition-all duration-200 cursor-pointer hover:bg-red-50"
             >
               탈퇴하기
             </button>
@@ -126,20 +126,20 @@ const Header = () => {
 
   return (
     <>
-      <nav className="sticky top-0 z-50 py-1 bg-white border-b border-gray-200">
-        <div className="flex justify-between items-center ml-1 mr-2 sm:ml-3 sm:mr-6">
-          <div className={isAuthenticated ? 'xl:ml-0 ml-8' : ''}>
+      <nav className="sticky top-0 z-20 py-1 bg-white border-b border-gray-200">
+        <div className="flex justify-between items-center mr-2 ml-1 sm:ml-3 sm:mr-6">
+          <div className={isAuthenticated ? 'ml-8 xl:ml-0' : ''}>
             <Logo className="scale-70 sm:scale-80" />
           </div>
 
-          <div className="flex items-center gap-1 sm:gap-2">
+          <div className="flex gap-1 items-center sm:gap-2">
             {isAuthenticated ? (
               <>
-                <div className="flex items-center gap-2">
+                <div className="flex gap-2 items-center">
                   <div className="relative" ref={dropdownRef}>
                     <button
                       onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                      className="flex items-center justify-center w-8 h-8 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors cursor-pointer"
+                      className="flex justify-center items-center w-8 h-8 text-white bg-blue-600 rounded-full transition-colors cursor-pointer hover:bg-blue-700"
                     >
                       <span className="text-sm font-medium">{userInitial}</span>
                     </button>
@@ -151,13 +151,13 @@ const Header = () => {
               <>
                 <Link
                   to="/login"
-                  className="px-3 sm:px-6 py-2 text-sm sm:text-base font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition cursor-pointer"
+                  className="px-3 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg transition cursor-pointer sm:px-6 sm:text-base hover:bg-blue-700"
                 >
                   로그인
                 </Link>
                 <Link
                   to="/signup"
-                  className="px-3 sm:px-6 py-2 text-sm sm:text-base font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition cursor-pointer"
+                  className="px-3 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg transition cursor-pointer sm:px-6 sm:text-base hover:bg-blue-700"
                 >
                   회원가입
                 </Link>

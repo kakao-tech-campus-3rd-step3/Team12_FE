@@ -24,7 +24,7 @@ const Drawer = ({ children, className = '' }: DrawerProps) => {
       {/* 모바일에서 햄버거 메뉴 버튼 */}
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed top-3.5 left-3 z-50 p-2 bg-white rounded-lg border border-gray-100 xl:hidden cursor-pointer hover:bg-gray-100"
+        className="fixed top-3.5 left-3 z-[20] p-2 bg-white rounded-lg border border-gray-100 xl:hidden cursor-pointer hover:bg-gray-100"
       >
         <Menu className="w-6 h-6 text-gray-600" />
       </button>
@@ -51,14 +51,14 @@ const Drawer = ({ children, className = '' }: DrawerProps) => {
         {/* 모바일에서 닫기 버튼 */}
         <button
           onClick={() => setIsOpen(false)}
-          className="flex absolute top-4 left-4 z-10 justify-center items-center p-2 w-12 h-12 text-blue-600 bg-blue-50 rounded-lg transition-all duration-200 cursor-pointer xl:hidden"
+          className="flex z-10 justify-center items-center p-2 w-12 h-12 text-blue-600 bg-blue-50 rounded-lg transition-all duration-200 cursor-pointer xl:hidden"
           title="닫기"
         >
           <ChevronLeft className="w-6 h-6" />
         </button>
 
         {/* 사이드바 내용 */}
-        <div className="pt-16 xl:pt-0">{children}</div>
+        <div className="pt-4 xl:pt-4">{children}</div>
       </Sidebar>
     </>
   );

@@ -165,6 +165,7 @@ export const useTeamRecommendTimes = ({
     queryKey: queryKeys.teamRecommendTimes,
     queryFn: () =>
       teamAPI.getTeamRecommendTimes({ teamId, N, start_time, end_time, required_time }),
+    enabled: !!start_time && !!end_time && !!teamId,
   });
 
   return {

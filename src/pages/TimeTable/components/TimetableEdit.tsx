@@ -1,6 +1,6 @@
 import type { Subject, SubjectTime } from '@/apis/types/timetable';
-import { FormInput } from '@/components/atoms/FormInput';
 import Button from '@/components/atoms/Button';
+import { FormInput } from '@/components/atoms/FormInput';
 import { WEEKDAYS_MON_FIRST } from '@/constants';
 import { formatTime, formatTimeToSeconds } from '@/utils/timetableUtils';
 
@@ -89,9 +89,9 @@ const TimetableEditForm: React.FC<TimetableEditFormProps> = ({ subjects, onSubje
     <div className="mt-4 space-y-4">
       {/* 과목 목록 */}
       {subjects.map((subject, subjectIndex) => (
-        <div key={subjectIndex} className="p-4 border border-gray-200 rounded-lg">
+        <div key={subjectIndex} className="p-4 rounded-lg border border-gray-200">
           {/* 과목 기본 정보 */}
-          <div className="flex flex-col md:flex-row gap-2 md:items-end lg:items-end">
+          <div className="flex flex-col gap-2 md:flex-row md:items-end lg:items-end">
             <FormInput
               id={`subject-name-${subjectIndex}`}
               label="과목명"
@@ -125,10 +125,10 @@ const TimetableEditForm: React.FC<TimetableEditFormProps> = ({ subjects, onSubje
           </div>
 
           {/* 시간 정보 */}
-          <div className="space-y-3 mt-1 ">
+          <div className="mt-1 space-y-3">
             {subject.times.map((time, timeIndex) => (
-              <div key={timeIndex} className="p-3 border border-gray-300 rounded-md bg-white">
-                <div className="grid grid-cols-1 md:grid-cols-5 gap-3 items-end">
+              <div key={timeIndex} className="p-3 bg-white rounded-md border border-gray-300">
+                <div className="grid grid-cols-1 gap-3 items-end md:grid-cols-5">
                   <FormInput
                     id={`time-day-${subjectIndex}-${timeIndex}`}
                     label="요일"
@@ -156,6 +156,7 @@ const TimetableEditForm: React.FC<TimetableEditFormProps> = ({ subjects, onSubje
                         formatTimeToSeconds(value),
                       )
                     }
+                    className="flex-1 w-full"
                     required
                   />
 
@@ -172,6 +173,7 @@ const TimetableEditForm: React.FC<TimetableEditFormProps> = ({ subjects, onSubje
                         formatTimeToSeconds(value),
                       )
                     }
+                    className="flex-1 w-full"
                     required
                   />
 

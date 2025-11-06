@@ -71,8 +71,7 @@ const useFormData = ({
           repeatEndDate: '',
           repeatCount: 1,
           repeatWeekDays: [],
-          // startTime: new Date(selectedEvent.start_time).toTimeString().slice(0, 5),
-          // endTime: new Date(selectedEvent.end_time).toTimeString().slice(0, 5),
+          event_participants: selectedEvent.event_participants,
         });
       } else if (modalType === 'add' && (initialStartTime || selectedDate)) {
         setFormData({

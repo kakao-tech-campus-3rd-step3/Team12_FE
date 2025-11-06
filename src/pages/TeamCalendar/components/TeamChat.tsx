@@ -1,10 +1,10 @@
-import { useState, useEffect, useRef, useLayoutEffect } from 'react';
-import { Send, Users } from 'lucide-react';
-import { useQuery } from '@tanstack/react-query';
+import { teamAPI } from '@/apis';
 import Button from '@/components/atoms/Button';
 import { useTeamChat } from '@/hooks/team/useTeamChat';
 import { useAuthStore } from '@/store/useAuthStore';
-import { teamAPI } from '@/apis';
+import { useQuery } from '@tanstack/react-query';
+import { Send, Users } from 'lucide-react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 interface TeamChatProps {
   teamId: number;
@@ -96,13 +96,13 @@ const TeamChat = ({ teamId, chatData }: TeamChatProps) => {
   };
 
   return (
-    <div className="flex flex-col w-full h-full rounded-xl shadow-lg border border-gray-200 bg-white">
+    <div className="flex relative flex-col w-full h-full bg-white rounded-xl border border-gray-200 shadow-lg z-[110]">
       {/* 헤더 */}
-      <div className="flex items-center justify-between px-5 py-3 sticky top-0 z-10">
-        <div className="flex items-center gap-2">
+      <div className="flex sticky top-0 justify-between items-center px-5 py-3 bg-white">
+        <div className="flex gap-2 items-center">
           <div>
             <h3 className="text-base font-semibold text-gray-900">{teamInfo?.name || '팀 채팅'}</h3>
-            <div className="flex text-xs text-gray-500 mt-1">
+            <div className="flex mt-1 text-xs text-gray-500">
               <Users className="w-3.5 h-3.5 mr-1" />
               {teamInfo?.count || 0}명
             </div>
@@ -114,15 +114,15 @@ const TeamChat = ({ teamId, chatData }: TeamChatProps) => {
       <div
         ref={messagesContainerRef}
         onScroll={handleScroll}
-        className="flex-1 overflow-y-auto px-4 py-5 space-y-1"
+        className="overflow-y-auto flex-1 px-4 py-5 space-y-1"
         style={{
           scrollBehavior: 'smooth',
         }}
       >
         {messages.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-full text-gray-400">
+          <div className="flex flex-col justify-center items-center h-full text-gray-400">
             <p className="text-sm">아직 메시지가 없습니다</p>
-            <p className="text-xs mt-1">첫 메시지를 보내보세요!</p>
+            <p className="mt-1 text-xs">첫 메시지를 보내보세요!</p>
           </div>
         ) : (
           <>
@@ -140,7 +140,7 @@ const TeamChat = ({ teamId, chatData }: TeamChatProps) => {
                     className={`flex flex-col ${isMyMessage ? 'items-end' : 'items-start'} max-w-[70%]`}
                   >
                     {!isMyMessage && (
-                      <span className="text-xs font-medium text-gray-700 mb-1 px-1">
+                      <span className="px-1 mb-1 text-xs font-medium text-gray-700">
                         {message.senderName}
                       </span>
                     )}
@@ -164,7 +164,7 @@ const TeamChat = ({ teamId, chatData }: TeamChatProps) => {
 
       {/* 입력 영역 */}
       <div className="px-3 py-3">
-        <form onSubmit={handleSubmit} className="flex items-center gap-2">
+        <form onSubmit={handleSubmit} className="flex gap-2 items-center">
           <input
             type="text"
             placeholder="메시지 보내기"
@@ -175,8 +175,8 @@ const TeamChat = ({ teamId, chatData }: TeamChatProps) => {
           />
           <Button
             type="submit"
-            icon={<Send className="w-5 h-5 rotate-45 -ml-1" />}
-            className="p-y-2 rounded-full text-white shadow-md justify-center cursor-pointer"
+            icon={<Send className="-ml-1 w-5 h-5 rotate-45" />}
+            className="justify-center text-white rounded-full shadow-md cursor-pointer p-y-2"
             noWrapper
           />
         </form>

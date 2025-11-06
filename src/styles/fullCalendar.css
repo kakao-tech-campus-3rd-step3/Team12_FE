@@ -35,6 +35,21 @@
     @apply flex items-center gap-3 justify-end;
   }
 
+  /* 모바일에서 오늘 버튼부터 아랫줄로 내리기 */
+  @media (max-width: 768px) {
+    .fc-toolbar {
+      @apply flex-wrap gap-2 justify-center;
+    }
+
+    .fc-toolbar-chunk:first-child {
+      @apply w-full justify-center;
+    }
+
+    .fc-toolbar-chunk:last-child {
+      @apply w-full justify-center mt-2;
+    }
+  }
+
   .fc-toolbar-title {
     @apply text-xl font-semibold text-gray-900 text-center min-w-[160px];
   }
