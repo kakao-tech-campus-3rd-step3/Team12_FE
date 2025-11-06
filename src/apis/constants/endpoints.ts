@@ -14,6 +14,8 @@ export const AUTH_ENDPOINTS = {
   VERITY_VERIFICATION_CODE: '/api/auth/email/verify', // 이메일 인증 코드 검증
 
   SIGNOUT: '/api/members/me',
+
+  GOOGLE_CALENDAR_SYNC: '/api/google/calendar/sync', //구글 캘린더 연동
 } as const;
 
 export const PERSONAL_CALENDAR_ENDPOINTS = {
