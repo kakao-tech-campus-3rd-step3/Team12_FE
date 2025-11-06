@@ -17,6 +17,7 @@ export type CalendarEvent = {
   start_time: string; // ISO string e.g. 2025-09-18T10:00:00
   end_time: string; // ISO string e.g. 2025-09-18T11:00:00
   is_recurring?: boolean;
+  event_participants?: number[];
 };
 
 export type getCalendarEventsResponse = {
