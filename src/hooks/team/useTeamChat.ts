@@ -40,13 +40,14 @@ export const useTeamChat = (teamId: number, isChatOpen: boolean = false) => {
     setIsLoadingMessages(true);
     try {
       const response = await chatAPI.getChatMessages({ teamId });
-      setMessages(response.messages);
+      const reversedMessages = [...response.messages].reverse();
+      setMessages(reversedMessages);
       setHasMore(response.hasNext);
       setNextCursor(response.nextCursor);
 
       const lastReadId = localStorage.getItem(`team_${teamId}_lastRead`);
       if (lastReadId && user?.user_id) {
-        const unreadMessages = response.messages.filter(
+        const unreadMessages = reversedMessages.filter(
           (msg) => msg.id > Number(lastReadId) && String(msg.senderId) !== String(user.user_id),
         );
         setUnReadCount(unreadMessages.length);
@@ -66,8 +67,8 @@ export const useTeamChat = (teamId: number, isChatOpen: boolean = false) => {
     setIsLoadingMessages(true);
     try {
       const response = await chatAPI.getChatMessages({ teamId, cursor: nextCursor });
-
-      setMessages((prev) => [...response.messages, ...prev]);
+      const reversedMessages = [...response.messages].reverse();
+      setMessages((prev) => [...reversedMessages, ...prev]);
       setHasMore(response.hasNext);
       setNextCursor(response.nextCursor);
     } catch (error) {
