@@ -1,15 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useTeamUpcomingSchedule } from '@/hooks/team';
 import { useTeamStore } from '@/store/team';
-import type { TeamSchedule } from '@/apis';
 import { UpcomingTeamScheduleItem } from '@/pages/TeamCalendar/components/UpcomingTeamScheduleItem';
-
-// 시작 시간 기준 오름차순 정렬
-const sortByStartTime = (schedules: TeamSchedule[]) => {
-  return [...schedules].sort(
-    (a, b) => new Date(a.start_time).getTime() - new Date(b.start_time).getTime(),
-  );
-};
 
 export const UpcomingTeamScheduleList = () => {
   const { currentTeam } = useTeamStore();
@@ -30,11 +22,9 @@ export const UpcomingTeamScheduleList = () => {
     return <div className="text-center text-sm text-gray-500">예정된 일정이 없습니다.</div>;
   }
 
-  const sortedSchedules = sortByStartTime(schedules);
-
   return (
     <div className="space-y-2">
-      {sortedSchedules.map((schedule) => (
+      {schedules.map((schedule) => (
         <UpcomingTeamScheduleItem key={schedule.event_id} schedule={schedule} />
       ))}
     </div>

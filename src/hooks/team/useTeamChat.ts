@@ -16,13 +16,6 @@ interface ErrorResponse {
 
 type WebSocketMessage = NewMessageResponse | ErrorResponse;
 
-//메세지 시간순 정렬
-const sortMessagesByTime = (messages: ChatMessage[]): ChatMessage[] => {
-  return [...messages].sort(
-    (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-  );
-};
-
 export const useTeamChat = (teamId: number) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isConnected, setIsConnected] = useState(false);
@@ -42,14 +35,13 @@ export const useTeamChat = (teamId: number) => {
     setIsLoadingMessages(true);
     try {
       const response = await chatAPI.getChatMessages({ teamId });
-      const sortedMessages = sortMessagesByTime(response.messages);
-      setMessages(sortedMessages);
+      setMessages(response.messages);
       setHasMore(response.hasNext);
       setNextCursor(response.nextCursor);
 
       const lastReadId = localStorage.getItem(`team_${teamId}_lastRead`);
       if (lastReadId && user?.user_id) {
-        const unreadMessages = sortedMessages.filter(
+        const unreadMessages = response.messages.filter(
           (msg) => msg.id > Number(lastReadId) && String(msg.senderId) !== String(user.user_id),
         );
         setUnReadCount(unreadMessages.length);
@@ -69,9 +61,8 @@ export const useTeamChat = (teamId: number) => {
     setIsLoadingMessages(true);
     try {
       const response = await chatAPI.getChatMessages({ teamId, cursor: nextCursor });
-      const sortedMessages = sortMessagesByTime(response.messages);
 
-      setMessages((prev) => [...sortedMessages, ...prev]);
+      setMessages((prev) => [...response.messages, ...prev]);
       setHasMore(response.hasNext);
       setNextCursor(response.nextCursor);
     } catch (error) {
