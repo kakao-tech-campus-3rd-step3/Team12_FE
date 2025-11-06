@@ -26,9 +26,6 @@ const MyClass = ({ lectures = [], lectureNames = [] }: MyClassProps) => {
     <div className="px-3 mb-8">
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-lg font-semibold text-gray-800">내 수업 ({lectures.length})</h3>
-        <button className="p-1 text-sm rounded-md text-mainBlue hover:text-mainBlue/80">
-          설정
-        </button>
       </div>
       <div className="space-y-3">
         {lectures.length === 0 ? (
