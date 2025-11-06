@@ -42,3 +42,17 @@ export const getDayOfWeek = (dayOfWeek: number) => {
 export const formatTime = (time: string) => {
   return time.substring(0, 5);
 };
+
+/**
+ * 시간 문자열을 HH:MM:SS 형식으로 포맷팅 (input에서 사용)
+ * @param time 시간 문자열 (HH:MM 또는 HH:MM:SS)
+ * @returns HH:MM:SS 형식의 시간 문자열
+ */
+export const formatTimeToSeconds = (time: string): string => {
+  if (time.length === 5) {
+    // "HH:MM" 형식이면 "HH:MM:SS"로 변환
+    return `${time}:00`;
+  }
+  // "HH:MM:SS" 형식이면 그대로 반환
+  return time;
+};

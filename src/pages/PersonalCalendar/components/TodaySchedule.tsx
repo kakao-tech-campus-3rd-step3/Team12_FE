@@ -1,5 +1,5 @@
 import { useCalendarStore } from '@/store/calendar/useCalendarStore';
-import { getTimePart } from '@/utils/dateTimeUtils';
+import { formatDateWithWeekday, getTimePart } from '@/utils/dateTimeUtils';
 import { Paperclip } from 'lucide-react';
 import { useEffect } from 'react';
 
@@ -26,7 +26,8 @@ const TodaySchedule = () => {
             <div className="space-y-1">
               <p className="text-sm font-medium">{events.title}</p>
               <p className="text-xs text-gray-600">
-                {getTimePart(events.start_time)} - {getTimePart(events.end_time)}
+                {formatDateWithWeekday(events.start_time)} {getTimePart(events.start_time)}-
+                {getTimePart(events.end_time)}
               </p>
               {events.description && (
                 <p className="flex gap-1 items-center text-xs text-gray-400">

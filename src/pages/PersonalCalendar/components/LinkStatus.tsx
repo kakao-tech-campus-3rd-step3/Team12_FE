@@ -34,7 +34,7 @@ const LinkStatus = () => {
                 variant="outline"
                 size="sm"
                 noWrapper={true}
-                className="border-mainBlue text-[#1C398E] hover:bg-mainBlue/50 hover:text-white"
+                className="border-none bg-blue-600 text-white hover:bg-blue-700"
               >
                 시간표 수정
               </Button>

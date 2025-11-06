@@ -42,3 +42,15 @@ export interface SubjectTime {
   endTime: string;
   place: string;
 }
+
+// 강의 저장
+export interface SaveLecturesRequest {
+  startDate: string;
+  endDate: string;
+  timetable: {
+    year: string;
+    semester: string;
+    subjects: Subject[];
+  };
+}
+export type SaveLecturesResponse = TimetableDetailResponse;
