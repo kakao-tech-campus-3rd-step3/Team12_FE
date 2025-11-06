@@ -181,13 +181,6 @@ const CalendarPage = ({ mode = 'personal' }: CalendarProps) => {
         await getEvents({ mode: 'personal' });
         await getTodayEvents();
       } else {
-        // 일반 일정 추가
-        await personalCalendarAPI.addEvent({
-          title: eventData.title,
-          description: eventData.description,
-          start_time: eventData.start_time,
-          end_time: eventData.end_time,
-        });
         await addEvent(eventData, { mode: 'personal' });
         await getTodayEvents();
       }
