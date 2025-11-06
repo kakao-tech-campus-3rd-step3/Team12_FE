@@ -1,15 +1,15 @@
 import type { TeamData } from '@/apis/types/team';
 import Button from '@/components/atoms/Button';
-import { Calendar, LogOut, Settings, Trash, Users } from 'lucide-react';
+import { LogOut, Settings, Trash, Users } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { RouterPath } from '@/routes/path';
 import { toast } from 'react-toastify';
 
 interface TeamListCardProps {
   team: TeamData;
   leaveTeam: (teamId: number) => void;
   deleteTeam: (teamId: number) => void;
-  // onSettingsClick?: (teamId: string) => void;
 }
 
 const MAX_VISIBLE_AVATARS = 4;
@@ -54,7 +54,7 @@ const TeamListCard = ({ team, leaveTeam, deleteTeam }: TeamListCardProps) => {
     if (!checkTeamId(team)) {
       return;
     }
-    navigate(`/team-calendar/${team.id}`);
+    navigate(RouterPath.TEAM_CALENDAR.DEFAULT.replace(':id', team.id.toString()));
   };
 
   return (
@@ -82,7 +82,7 @@ const TeamListCard = ({ team, leaveTeam, deleteTeam }: TeamListCardProps) => {
             className="p-2 font-normal text-orange-600 bg-transparent rounded-lg hover:bg-orange-100"
             onClick={(e) => {
               e.stopPropagation();
-              handleDeleteTeam();
+              handleLeaveTeam();
             }}
           >
             <div className="flex flex-col gap-1 items-center">
