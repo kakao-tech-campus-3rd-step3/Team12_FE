@@ -138,11 +138,11 @@ const Signup = () => {
               <Button
                 type="button"
                 onClick={handleSendVerificationCode}
-                disabled={isSendingCode || !userEmail || !!errors.email || isEmailVerified}
+                disabled={isSendingCode || !userEmail || isEmailVerified}
                 variant="primary"
                 size="md"
                 noWrapper={true}
-                className="px-4 cursor-pointer"
+                className="px-4 cursor-pointer h-[50px]"
               >
                 {isSendingCode ? '발송중...' : isEmailVerified ? '인증완료' : '인증코드'}
               </Button>
