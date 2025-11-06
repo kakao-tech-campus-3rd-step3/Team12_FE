@@ -1,6 +1,5 @@
 import { Plus, UserPlus, Users } from 'lucide-react';
 import { useMemo, useState } from 'react';
-//import { mockTeams } from '@/mockdata/teamData';
 import { teamAPI } from '@/apis';
 import type { ApiError } from '@/apis/types/error';
 import Button from '@/components/atoms/Button';
@@ -74,7 +73,7 @@ const TeamListModal = ({ isOpen, onClose, leaveTeam, deleteTeam }: TeamListModal
       // React Query 캐시를 무효화하여 최신 데이터를 가져옴
       await queryClient.invalidateQueries({ queryKey: queryKeys.teams });
 
-      toast.success('팀 가입 성공');
+      toast.success('팀 가입이 완료되었습니다.');
       setCurrentView('list');
     } catch (error) {
       if (error instanceof Error) {
@@ -83,7 +82,7 @@ const TeamListModal = ({ isOpen, onClose, leaveTeam, deleteTeam }: TeamListModal
           apiError.response?.data?.message || apiError.message || '팀 가입에 실패했습니다.';
         toast.error(errorMessage);
       } else {
-        toast.error('팀 가입에 실패했습니다.');
+        toast.error('팀에 가입할 수 없습니다. 다시 시도해주세요.');
       }
     }
   };

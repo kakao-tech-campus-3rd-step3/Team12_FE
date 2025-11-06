@@ -1,11 +1,14 @@
 import type { TeamData } from '@/apis/types/team';
 import Button from '@/components/atoms/Button';
+import ConfirmModal from '@/components/atoms/ConfirmModal';
 import { Copy, LogOut, Settings, Trash, Users } from 'lucide-react';
 
 import { RouterPath } from '@/routes/path';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useTeamMembers } from '@/hooks/team/useTeamMembers';
+import { useAuthStore } from '@/store/useAuthStore';
 
 interface TeamListCardProps {
   team: TeamData;
@@ -18,36 +21,77 @@ const MAX_VISIBLE_MEMBER_NAMES = 2;
 
 const TeamListCard = ({ team, leaveTeam, deleteTeam }: TeamListCardProps) => {
   const [isActionsOpen, setIsActionsOpen] = useState(false);
+  const [isLeaveModalOpen, setIsLeaveModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isNotLeaderModalOpen, setIsNotLeaderModalOpen] = useState(false);
+  const [isLeaderCannotLeaveModalOpen, setIsLeaderCannotLeaveModalOpen] = useState(false);
   const navigate = useNavigate();
+  const { user } = useAuthStore();
+  const { data: teamMembersData } = useTeamMembers({ teamId: team.id });
 
-  // 설정 버튼 클릭으로 토글
   const handleSettingsClick = () => {
     setIsActionsOpen(!isActionsOpen);
   };
 
   const checkTeamId = (team: TeamData) => {
     if (!team.id || team.id === undefined) {
-      console.error('Invalid team_id for leaving team:', team);
       toast.error('팀 정보가 올바르지 않습니다.');
       return false;
     }
     return true;
   };
-  const handleLeaveTeam = () => {
+
+  const handleLeaveTeamClick = () => {
     if (!checkTeamId(team)) {
       return;
     }
     setIsActionsOpen(false);
-    leaveTeam(team.id);
-    toast.success('팀 탈퇴 성공');
+
+    // 현재 사용자가 리더인지 확인
+    const members = teamMembersData?.content || [];
+    const currentUserMember = members.find((member) => member.name === user?.name);
+    const isLeader = currentUserMember?.role === 'LEADER';
+
+    if (isLeader) {
+      setIsLeaderCannotLeaveModalOpen(true);
+      return;
+    }
+
+    setIsLeaveModalOpen(true);
   };
 
-  const handleDeleteTeam = () => {
+  const handleLeaveTeamConfirm = () => {
+    if (!checkTeamId(team)) {
+      return;
+    }
+    leaveTeam(team.id);
+    setIsLeaveModalOpen(false);
+  };
+
+  const handleDeleteTeamClick = () => {
     if (!checkTeamId(team)) {
       return;
     }
     setIsActionsOpen(false);
+
+    const members = teamMembersData?.content || [];
+    const currentUserMember = members.find((member) => member.name === user?.name);
+    const isLeader = currentUserMember?.role === 'LEADER';
+
+    if (!isLeader) {
+      setIsNotLeaderModalOpen(true);
+      return;
+    }
+
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleDeleteTeamConfirm = () => {
+    if (!checkTeamId(team)) {
+      return;
+    }
     deleteTeam(team.id);
+    setIsDeleteModalOpen(false);
   };
 
   //팀으로 이동
@@ -60,13 +104,13 @@ const TeamListCard = ({ team, leaveTeam, deleteTeam }: TeamListCardProps) => {
 
   // 가입 코드 복사
   const handleCopyInviteCode = async (e: React.MouseEvent) => {
-    e.stopPropagation(); // 카드 클릭 방지
+    e.stopPropagation();
 
     try {
       await navigator.clipboard.writeText(team.invite_code);
       toast.success('가입 코드가 복사되었습니다.');
     } catch (err) {
-      toast.error('복사에 실패했습니다.');
+      toast.error('복사할 수 없습니다.');
     }
   };
 
@@ -81,7 +125,7 @@ const TeamListCard = ({ team, leaveTeam, deleteTeam }: TeamListCardProps) => {
             className="p-2 font-normal text-red-600 bg-transparent rounded-lg hover:bg-red-100"
             onClick={(e) => {
               e.stopPropagation();
-              handleDeleteTeam();
+              handleDeleteTeamClick();
             }}
           >
             <div className="flex flex-col gap-1 items-center">
@@ -95,7 +139,7 @@ const TeamListCard = ({ team, leaveTeam, deleteTeam }: TeamListCardProps) => {
             className="p-2 font-normal text-orange-600 bg-transparent rounded-lg hover:bg-orange-100"
             onClick={(e) => {
               e.stopPropagation();
-              handleLeaveTeam();
+              handleLeaveTeamClick();
             }}
           >
             <div className="flex flex-col gap-1 items-center">
@@ -181,6 +225,50 @@ const TeamListCard = ({ team, leaveTeam, deleteTeam }: TeamListCardProps) => {
           </div>
         </div>
       </div>
+
+      {/* 팀 탈퇴 확인 모달 */}
+      <ConfirmModal
+        isOpen={isLeaveModalOpen}
+        title="팀에서 탈퇴하시겠습니까?"
+        message={`탈퇴 후에는 팀 일정에 접근할 수 없습니다.\n"${team.team_name}" 팀에서 탈퇴하시겠습니까?`}
+        onConfirm={handleLeaveTeamConfirm}
+        onClose={() => setIsLeaveModalOpen(false)}
+        confirmText="탈퇴"
+        confirmButtonColor="bg-red-600 hover:bg-red-700"
+      />
+
+      {/* 팀 삭제 확인 모달 */}
+      <ConfirmModal
+        isOpen={isDeleteModalOpen}
+        title="해당 팀을 삭제하시겠습니까?"
+        message={`삭제된 팀은 복구할 수 없으며, 모든 팀 데이터가 영구적으로 삭제됩니다.\n"${team.team_name}" 팀을 삭제하시겠습니까?`}
+        onConfirm={handleDeleteTeamConfirm}
+        onClose={() => setIsDeleteModalOpen(false)}
+        confirmText="삭제"
+        confirmButtonColor="bg-red-600 hover:bg-red-700"
+      />
+
+      {/* 리더가 아닐 때 경고 모달 (삭제) */}
+      <ConfirmModal
+        isOpen={isNotLeaderModalOpen}
+        title="해당 팀을 삭제할 수 없습니다"
+        message={`팀 리더만 팀을 삭제할 수 있습니다.\n현재 팀 리더가 아니므로 팀을 삭제할 수 없습니다.`}
+        onConfirm={() => setIsNotLeaderModalOpen(false)}
+        onClose={() => setIsNotLeaderModalOpen(false)}
+        confirmText="확인"
+        confirmButtonColor="bg-blue-600 hover:bg-blue-700"
+      />
+
+      {/* 리더가 탈퇴할 수 없을 때 경고 모달 */}
+      <ConfirmModal
+        isOpen={isLeaderCannotLeaveModalOpen}
+        title="해당 팀에서 탈퇴할 수 없습니다"
+        message={`팀 리더는 팀에서 탈퇴할 수 없습니다.\n리더가 팀을 탈퇴하려면 팀을 삭제해주세요.`}
+        onConfirm={() => setIsLeaderCannotLeaveModalOpen(false)}
+        onClose={() => setIsLeaderCannotLeaveModalOpen(false)}
+        confirmText="확인"
+        confirmButtonColor="bg-blue-600 hover:bg-blue-700"
+      />
     </div>
   );
 };
