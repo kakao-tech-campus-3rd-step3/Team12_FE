@@ -18,7 +18,7 @@ const TeamCalendarPage = () => {
   const { id } = useParams<{ id: string }>();
   const teamId = id ? Number(id) : 0;
 
-  const chatData = useTeamChat(teamId);
+  const chatData = useTeamChat(teamId, showChat);
   const { unReadCount, markAsRead } = chatData;
 
   const handleChatReadTag = () => {
