@@ -49,7 +49,7 @@ const ImageInput: React.FC<ImageInputProps> = ({
 
       <button
         type="button"
-        className="px-4 py-2 text-sm font-medium text-white bg-black rounded-md transition-colors hover:bg-gray-800"
+        className="cursor-pointer px-4 py-2 text-sm font-medium text-white bg-black rounded-md transition-colors hover:bg-gray-800"
         onClick={handleButtonClick}
       >
         {selectedImage ? '이미지 변경' : '이미지 선택'}

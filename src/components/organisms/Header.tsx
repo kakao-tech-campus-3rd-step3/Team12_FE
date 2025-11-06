@@ -170,11 +170,11 @@ const Header = () => {
       {/* 회원 탈퇴 확인 모달 */}
       <ConfirmModal
         isOpen={isSignoutModalOpen}
-        title="회원 탈퇴"
+        title="UniSchedule 에서 탈퇴하시겠습니까?"
         message={
-          '탈퇴 시 모든 데이터가 삭제되며 복구할 수 없습니다.\n팀 리더인 경우 팀이 삭제되며 복구할 수 없습니다.\n\n정말로 회원 탈퇴하시겠습니까?'
+          '\n탈퇴 시 모든 데이터가 삭제되며 복구할 수 없습니다.\n팀 리더인 경우 팀이 삭제되며 복구할 수 없습니다.\n정말로 회원 탈퇴하시겠습니까?'
         }
-        confirmText="탈퇴하기"
+        confirmText="탈퇴"
         confirmButtonColor="bg-red-600 hover:bg-red-700"
         onConfirm={handleSignout}
         onClose={() => setIsSignoutModalOpen(false)}
