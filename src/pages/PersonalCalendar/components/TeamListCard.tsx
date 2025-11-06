@@ -1,6 +1,6 @@
 import type { TeamData } from '@/apis/types/team';
 import Button from '@/components/atoms/Button';
-import { Calendar, LogOut, Settings, Trash, Users, Copy } from 'lucide-react';
+import { LogOut, Settings, Trash, Users, Copy } from 'lucide-react';
 
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
