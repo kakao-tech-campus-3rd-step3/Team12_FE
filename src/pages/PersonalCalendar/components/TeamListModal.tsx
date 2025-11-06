@@ -12,6 +12,7 @@ import TeamListCard from '@/pages/PersonalCalendar/components/TeamListCard';
 import { useTeamStore } from '@/store/team';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
+import { useDisableBodyScroll } from '@/hooks';
 
 interface TeamListModalProps {
   isOpen: boolean;
@@ -21,6 +22,8 @@ interface TeamListModalProps {
 }
 
 const TeamListModal = ({ isOpen, onClose, leaveTeam, deleteTeam }: TeamListModalProps) => {
+  useDisableBodyScroll(isOpen);
+
   const [currentView, setCurrentView] = useState<'list' | 'create' | 'join'>('list');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3;
