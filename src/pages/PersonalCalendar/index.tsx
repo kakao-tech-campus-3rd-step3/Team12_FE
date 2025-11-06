@@ -10,8 +10,10 @@ import TodaySchedule from '@/pages/PersonalCalendar/components/TodaySchedule';
 import UpcomingSchedule from '@/pages/PersonalCalendar/components/UpcomingSchedule';
 import { useClassStore } from '@/store/calendar/useClassStore';
 import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 const PersonalCalendarPage = () => {
+  const location = useLocation();
   const { teams, isLoading, isSetting, setIsSetting } = useTeam();
   const { leaveTeam } = useLeaveTeam();
   const { deleteTeam } = useDeleteTeam();
@@ -19,7 +21,15 @@ const PersonalCalendarPage = () => {
 
   useEffect(() => {
     void getLectures();
-  }, [getLectures]);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    const handleFocus = () => {
+      void getLectures();
+    };
+    window.addEventListener('focus', handleFocus);
+    return () => window.removeEventListener('focus', handleFocus);
+  }, []);
 
   return (
     <div className="min-h-[calc(100vh-70px)] bg-gradient-to-br from-blue-50 to-indigo-100">

@@ -7,6 +7,8 @@ import type {
   TimetableDetailResponse,
   TimetableImageRequest,
   TimetableImageResponse,
+  SaveLecturesRequest,
+  SaveLecturesResponse,
 } from '@/apis/types/timetable';
 
 export const everytimeAPI = {
@@ -102,6 +104,24 @@ export const everytimeAPI = {
           };
         }
 
+        throw error;
+      });
+  },
+  // 강의 저장
+  saveLectures: (request: SaveLecturesRequest) => {
+    return apiClient
+      .put(EVERYTIME_ENDPOINTS.SAVE_LECTURES, request)
+      .then((response) => {
+        console.log('강의 저장 성공', response.data);
+        return response.data as SaveLecturesResponse;
+      })
+      .catch((error) => {
+        console.error('강의 저장 에러:', error);
+        console.error('에러 상세:', {
+          message: error.message,
+          status: error.response?.status,
+          data: error.response?.data,
+        });
         throw error;
       });
   },

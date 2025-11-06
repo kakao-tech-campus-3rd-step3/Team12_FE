@@ -12,7 +12,7 @@ export const AUTH_ENDPOINTS = {
 
   SEND_VERIFICATION_CODE: '/api/auth/email/send', // 이메일 인증 코드 발송
   VERITY_VERIFICATION_CODE: '/api/auth/email/verify', // 이메일 인증 코드 검증
-  
+
   SIGNOUT: '/api/members/me',
 } as const;
 
@@ -48,6 +48,7 @@ export const EVERYTIME_ENDPOINTS = {
   TIMETABLES: '/api/everytime/timetables',
   TIMETABLE_DETAIL: '/api/everytime/timetable',
   TIMETABLE_IMAGE: '/api/everytime/timetable',
+  SAVE_LECTURES: '/api/lectures',
 } as const;
 
 export const TEAM_ENDPOINTS = {
