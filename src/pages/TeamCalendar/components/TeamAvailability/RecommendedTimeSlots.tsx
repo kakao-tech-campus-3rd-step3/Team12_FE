@@ -21,8 +21,8 @@ const RecommendedTimeSlots: React.FC<RecommendedTimeSlotsProps> = ({
   memberCount,
   onBack,
 }) => {
-  const [selectedDuration, setSelectedDuration] = useState(60);
-  const [range, setRange] = useState<DateRange | undefined>();
+  const [selectedDuration] = useState(60);
+  const [range] = useState<DateRange | undefined>();
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<RecommendTime | undefined>();
   const [isOpen, setIsOpen] = useState(false);
   const { teamRecommendTimes, isLoading, error } = useTeamRecommendTimes({
@@ -46,7 +46,7 @@ const RecommendedTimeSlots: React.FC<RecommendedTimeSlotsProps> = ({
   const handleAddEvent = async (
     timeSlot: RecommendTime,
     event: Omit<CalendarEvent, 'event_id'>,
-    formData: FormData,
+    _formData: FormData,
   ) => {
     await teamCalendarAPI.addTeamEvent({
       team_id: teamId,

@@ -239,26 +239,26 @@ const TimeTablePage = () => {
         {/* 날짜 입력 필드 */}
         <div className="mt-6 space-y-3">
           <div className="flex flex-row space-x-2">
-            <label className="flex justify-between items-center mb-2 text-sm font-bold text-gray-700 text-nowrap">
+            <label className="flex items-center justify-between mb-2 text-sm font-bold text-gray-700 text-nowrap">
               학기 시작일 :
             </label>
             <input
               type="date"
               value={startDate.toISOString().split('T')[0]}
               onChange={(e) => setStartDate(new Date(e.target.value))}
-              className="px-3 py-2 w-full text-gray-700 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 text-gray-700 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
 
           <div className="flex flex-row space-x-2">
-            <label className="flex justify-between items-center mb-2 text-sm font-bold text-gray-700 text-nowrap">
+            <label className="flex items-center justify-between mb-2 text-sm font-bold text-gray-700 text-nowrap">
               학기 종료일 :
             </label>
             <input
               type="date"
               value={endDate.toISOString().split('T')[0]}
               onChange={(e) => setEndDate(new Date(e.target.value))}
-              className="px-3 py-2 w-full text-gray-700 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 text-gray-700 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
         </div>
