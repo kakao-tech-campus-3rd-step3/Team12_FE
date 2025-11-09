@@ -6,7 +6,7 @@ import { useTeamRecommendTimesV2 } from '@/hooks/team/useTeam';
 import DateModal from '@/pages/Calendar/components/DateModal';
 import type { CalendarEvent } from '@/types/calendar';
 import { formatDateWithWeekday, getTimePart } from '@/utils/dateTimeUtils';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import type { DateRange } from 'react-day-picker';
 
 // 추천 시간대 컴포넌트
@@ -28,15 +28,42 @@ const RecommendedTimeSlots: React.FC<RecommendedTimeSlotsProps> = ({
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<RecommendTime | undefined>();
   const [isOpen, setIsOpen] = useState(false);
 
+  // 시작 날짜와 끝 날짜 설정
+  const { startTime, endTime } = useMemo(() => {
+    if (!range?.from || !range?.to) {
+      return { startTime: '', endTime: '' };
+    }
+
+    // 시작 날짜는 00:00:00
+    const start = new Date(range.from);
+    start.setHours(0, 0, 0, 0);
+
+    // 끝 날짜는 23:59:59
+    const end = new Date(range.to);
+    end.setHours(23, 59, 59, 999);
+
+    return {
+      startTime: start.toISOString(),
+      endTime: end.toISOString(),
+    };
+  }, [range]);
+
   const { teamRecommendTimesV2, isLoading, error } = useTeamRecommendTimesV2({
     teamId: teamId,
     N: 5,
-    start_time: range?.from?.toISOString() || '',
-    end_time: range?.to?.toISOString() || '',
+    start_time: startTime,
+    end_time: endTime,
     required_time: selectedDuration.toString(),
     slot_time: selectedDuration,
   });
-  console.log('teamRecommendTimes', teamRecommendTimesV2);
+
+  console.log('🔍 RecommendedTimeSlots - API params:', {
+    startTime,
+    endTime,
+    selectedDuration,
+    range,
+  });
+  console.log('🔍 RecommendedTimeSlots - API response:', teamRecommendTimesV2);
 
   const handleSelectTimeSlot = (timeSlot: RecommendTime) => {
     setSelectedTimeSlot(timeSlot);
@@ -81,7 +108,7 @@ const RecommendedTimeSlots: React.FC<RecommendedTimeSlotsProps> = ({
           {teamRecommendTimesV2?.map((slot, index) => (
             <div
               key={index}
-              className={`p-3 rounded-lg border border-gray-200 duration-300 cursor-pointer hover:border-mainBlue animate-all ${selectedTimeSlot?.start_time === slot.start_time ? 'border-mainBlue' : ''}`}
+              className={`p-3  rounded-lg border border-gray-200 duration-300 cursor-pointer hover:border-mainBlue animate-all ${selectedTimeSlot?.start_time === slot.start_time ? 'border-mainBlue' : ''}`}
               onClick={() => handleSelectTimeSlot(slot)}
             >
               <div className="flex justify-between items-center mb-1">

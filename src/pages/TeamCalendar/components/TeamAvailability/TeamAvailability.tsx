@@ -180,7 +180,7 @@ const TeamAvailability: React.FC<TeamAvailabilityProps> = ({ teamId, onBack }) =
         <div className="flex flex-col gap-6 xl:flex-row">
           {/* 중앙: 가용성 테이블 */}
           <div className="overflow-x-auto flex-1 p-6 bg-white rounded-xl border shadow-lg border-mainBlue/70">
-            <div className="min-w-[600px]">
+            <div className="min-w-[600px] min-h-[700px]">
               <AvailabilityHeader onBack={onBack} />
               <AvailabilityControls
                 selectedDuration={selectedDuration}
