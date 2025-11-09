@@ -2,7 +2,6 @@ import { teamAPI } from '@/apis/services/team';
 import type {
   GetMyTeamInfoResponse,
   GetTeamAvailabilityResponse,
-  GetTeamRecommendTimesParams,
   GetTeamRecommendTimesResponse,
   GetTeamsResponse,
 } from '@/apis/types/team';
@@ -115,7 +114,7 @@ export const useGetTeamAvailability = (teamId: number) => {
     error,
   } = useQuery<GetTeamAvailabilityResponse>({
     queryKey: queryKeys.teamAvailability,
-    queryFn: () => teamAPI.getTeamAvailability(teamId),
+    queryFn: () => teamAPI.getTeamAvailabilityV2(teamId),
   });
   return {
     teamAvailability,
@@ -150,29 +149,67 @@ export const useTeamTodaySchedule = (teamId: number | null) => {
   };
 };
 
-export const useTeamRecommendTimes = ({
+// export const useTeamRecommendTimes = ({
+//   teamId,
+//   N,
+//   start_time,
+//   end_time,
+//   required_time,
+// }: GetTeamRecommendTimesParams) => {
+//   const {
+//     data: teamRecommendTimes,
+//     isLoading,
+//     error,
+//   } = useQuery<GetTeamRecommendTimesResponse>({
+//     queryKey: queryKeys.teamRecommendTimes(teamId, start_time, end_time, 15, required_time),
+//     queryFn: () =>
+//       teamAPI.getTeamRecommendTimes({ teamId, N, start_time, end_time, required_time }),
+//     enabled: !!start_time && !!end_time && !!teamId,
+//   });
+
+//   return {
+//     teamRecommendTimes,
+//     isLoading,
+//     error,
+//   };
+// };
+
+export const useTeamRecommendTimesV2 = ({
   teamId,
   N,
   start_time,
   end_time,
   required_time,
-}: GetTeamRecommendTimesParams) => {
+  slot_time = 15,
+}: {
+  teamId: number;
+  N: number;
+  start_time: string;
+  end_time: string;
+  required_time: string;
+  slot_time?: number;
+}) => {
   const {
-    data: teamRecommendTimes,
+    data: teamRecommendTimesV2,
     isLoading,
     error,
   } = useQuery<GetTeamRecommendTimesResponse>({
-    queryKey: queryKeys.teamRecommendTimes,
+    queryKey: queryKeys.teamRecommendTimes(teamId, start_time, end_time, slot_time, required_time),
     queryFn: () =>
-      teamAPI.getTeamRecommendTimes({ teamId, N, start_time, end_time, required_time }),
+      teamAPI.getTeamRecommendTimesV2({
+        teamId,
+        N,
+        start_time,
+        end_time,
+        required_time,
+        slot_time,
+      }),
     enabled: !!start_time && !!end_time && !!teamId,
   });
-
   return {
-    teamRecommendTimes,
+    teamRecommendTimesV2,
     isLoading,
     error,
   };
 };
-
 export default useTeam;

@@ -25,28 +25,28 @@ interface TeamAvailabilityProps {
   teamId: number;
   onBack?: () => void;
 }
+// 목데이터 사용
+// const generateMockAvailability = (): TimeSlotAvailability[] => {
+//   const timeSlots: TimeSlotAvailability[] = [];
+//   const levels: AvailabilityLevel[] = ['high', 'medium', 'low', 'none'];
 
-const generateMockAvailability = (): TimeSlotAvailability[] => {
-  const timeSlots: TimeSlotAvailability[] = [];
-  const levels: AvailabilityLevel[] = ['high', 'medium', 'low', 'none'];
+//   // 9시부터 23시까지
+//   for (let hour = 9; hour <= 23; hour++) {
+//     for (let minute = 0; minute < 60; minute += 15) {
+//       timeSlots.push({
+//         time: `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`,
+//         days: Array(7)
+//           .fill(0)
+//           .map(() => {
+//             const level = levels[levels.length - 1];
+//             return { level, count: 0 };
+//           }),
+//       });
+//     }
+//   }
 
-  // 9시부터 23시까지
-  for (let hour = 9; hour <= 23; hour++) {
-    for (let minute = 0; minute < 60; minute += 15) {
-      timeSlots.push({
-        time: `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`,
-        days: Array(7)
-          .fill(0)
-          .map(() => {
-            const level = levels[levels.length - 1];
-            return { level, count: 0 };
-          }),
-      });
-    }
-  }
-
-  return timeSlots;
-};
+//   return timeSlots;
+// };
 
 // 유틸리티 함수들
 const getAvailabilityLevel = (
@@ -74,7 +74,7 @@ const convertAPIDataToTimeSlots = (
       dateRange,
       totalMembers,
     });
-    return generateMockAvailability();
+    return []; //generateMockAvailability();
   }
 
   // 날짜 범위 내의 모든 날짜 생성
@@ -180,7 +180,7 @@ const TeamAvailability: React.FC<TeamAvailabilityProps> = ({ teamId, onBack }) =
         <div className="flex flex-col gap-6 xl:flex-row">
           {/* 중앙: 가용성 테이블 */}
           <div className="overflow-x-auto flex-1 p-6 bg-white rounded-xl border shadow-lg border-mainBlue/70">
-            <div className="min-w-[600px]">
+            <div className="min-w-[600px] min-h-[700px]">
               <AvailabilityHeader onBack={onBack} />
               <AvailabilityControls
                 selectedDuration={selectedDuration}
@@ -206,6 +206,8 @@ const TeamAvailability: React.FC<TeamAvailabilityProps> = ({ teamId, onBack }) =
             teamId={teamId}
             memberCount={teamInfo?.count || 0}
             onBack={onBack}
+            selectedDuration={selectedDuration}
+            range={range}
           />
         </div>
       </div>

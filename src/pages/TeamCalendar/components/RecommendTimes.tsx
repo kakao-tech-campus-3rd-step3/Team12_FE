@@ -1,6 +1,6 @@
 import Button from '@/components/atoms/Button';
 import SelectBox from '@/components/atoms/SelectBox';
-import { useGetMyTeam, useTeamRecommendTimes } from '@/hooks/team/useTeam'; // import { mockTimeSlots } from '@/mockdata/teamData';
+import { useGetMyTeam, useTeamRecommendTimesV2 } from '@/hooks/team/useTeam';
 import SelectDurationCalendar from '@/pages/TeamCalendar/components/SelectDurationCalendar';
 import '@/styles/datapicker.css';
 import { formatDateWithWeekday, getTimePart } from '@/utils/dateTimeUtils';
@@ -14,21 +14,47 @@ interface RecommendTimesProps {
 }
 
 const RecommendTimes: React.FC<RecommendTimesProps> = ({ onViewAvailability, teamId }) => {
-  const [selectedDuration, setSelectedDuration] = useState(60);
-  // const timeOptions = generateTimeOptions(0.1);
+  const [selectedDuration, setSelectedDuration] = useState(15);
+  const timeOptions = [
+    { value: 15, label: '15분' },
+    { value: 30, label: '30분' },
+    { value: 45, label: '45분' },
+    { value: 60, label: '60분' },
+    { value: 90, label: '90분' },
+    { value: 120, label: '120분' },
+  ];
   const [range, setRange] = useState<DateRange | undefined>();
   const [showDatePicker, setShowDatePicker] = useState(false);
+
+  const [searchParams, setSearchParams] = useState({
+    slot_time: 15,
+    start_time: '',
+    end_time: '',
+    required_time: '15',
+  });
+
   const { data: currentTeam } = useGetMyTeam(teamId);
-  const { teamRecommendTimes, isLoading, error } = useTeamRecommendTimes({
+
+  const { teamRecommendTimesV2, isLoading, error } = useTeamRecommendTimesV2({
     teamId: teamId,
     N: 5,
-    start_time: range?.from?.toISOString() || '',
-    end_time: range?.to?.toISOString() || '',
-    required_time: selectedDuration.toString(),
+    ...searchParams,
   });
+
+  const teamRecommendTimes = teamRecommendTimesV2;
 
   const handleViewMore = () => {
     onViewAvailability?.();
+  };
+
+  const handleSearch = () => {
+    setShowDatePicker(false);
+    setSearchParams({
+      slot_time: selectedDuration,
+      start_time: range?.from?.toISOString() || '',
+      end_time: range?.to?.toISOString() || '',
+      required_time: selectedDuration.toString(),
+    });
   };
 
   // 모든 뷰에서 사용되는 공통 컴포넌트
@@ -45,7 +71,7 @@ const RecommendTimes: React.FC<RecommendTimesProps> = ({ onViewAvailability, tea
       )}
       {(showDatePicker || forceShow) && (
         <div className="p-2 rounded-lg border border-gray-200">
-          <SelectDurationCalendar range={range} setRange={setRange} />
+          <SelectDurationCalendar range={range} setRange={setRange} onSearch={handleSearch} />
         </div>
       )}
     </>
@@ -138,7 +164,15 @@ const RecommendTimes: React.FC<RecommendTimesProps> = ({ onViewAvailability, tea
     sevenDaysLater.setHours(23, 59, 59, 999);
 
     setRange({ from: today, to: sevenDaysLater });
-  }, []);
+
+    // 초기 검색 파라미터 설정
+    setSearchParams({
+      slot_time: selectedDuration,
+      start_time: today.toISOString(),
+      end_time: sevenDaysLater.toISOString(),
+      required_time: '15',
+    });
+  }, [selectedDuration]);
 
   return (
     <div className="overflow-hidden p-5 w-full bg-white rounded-xl border shadow-md border-mainBlue/70 xl:border-0 xl:shadow-none xl:p-1">
@@ -150,7 +184,7 @@ const RecommendTimes: React.FC<RecommendTimesProps> = ({ onViewAvailability, tea
           label="최소 요구 시간"
           value={selectedDuration}
           onChange={setSelectedDuration}
-          options={[{ value: 60, label: '60분' }]}
+          options={timeOptions}
         />
         <div className="flex flex-col">
           <div className="mb-3">
@@ -175,7 +209,7 @@ const RecommendTimes: React.FC<RecommendTimesProps> = ({ onViewAvailability, tea
             label="최소 요구 시간"
             value={selectedDuration}
             onChange={setSelectedDuration}
-            options={[{ value: 60, label: '60분' }]}
+            options={timeOptions}
             className="mb-4"
           />
         </div>

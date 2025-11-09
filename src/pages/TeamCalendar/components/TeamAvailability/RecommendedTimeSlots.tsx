@@ -2,11 +2,11 @@ import { teamCalendarAPI } from '@/apis/services/calendar';
 import type { RecommendTime } from '@/apis/types/team';
 import Button from '@/components/atoms/Button';
 import type { FormData } from '@/hooks/calendar/useFormData';
-import { useTeamRecommendTimes } from '@/hooks/team/useTeam';
+import { useTeamRecommendTimesV2 } from '@/hooks/team/useTeam';
 import DateModal from '@/pages/Calendar/components/DateModal';
 import type { CalendarEvent } from '@/types/calendar';
 import { formatDateWithWeekday, getTimePart } from '@/utils/dateTimeUtils';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import type { DateRange } from 'react-day-picker';
 
 // 추천 시간대 컴포넌트
@@ -14,25 +14,57 @@ interface RecommendedTimeSlotsProps {
   teamId: number;
   memberCount: number;
   onBack?: () => void;
+  selectedDuration?: number;
+  range?: DateRange | undefined;
 }
 
 const RecommendedTimeSlots: React.FC<RecommendedTimeSlotsProps> = ({
   teamId,
   memberCount,
   onBack,
+  selectedDuration = 60,
+  range,
 }) => {
-  const [selectedDuration] = useState(60);
-  const [range] = useState<DateRange | undefined>();
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<RecommendTime | undefined>();
   const [isOpen, setIsOpen] = useState(false);
-  const { teamRecommendTimes, isLoading, error } = useTeamRecommendTimes({
+
+  // 시작 날짜와 끝 날짜 설정
+  const { startTime, endTime } = useMemo(() => {
+    if (!range?.from || !range?.to) {
+      return { startTime: '', endTime: '' };
+    }
+
+    // 시작 날짜는 00:00:00
+    const start = new Date(range.from);
+    start.setHours(0, 0, 0, 0);
+
+    // 끝 날짜는 다음날 00:00:00
+    const end = new Date(range.to);
+    end.setDate(end.getDate() + 1);
+    end.setHours(0, 0, 0, 0);
+
+    return {
+      startTime: start.toISOString(),
+      endTime: end.toISOString(),
+    };
+  }, [range]);
+
+  const { teamRecommendTimesV2, isLoading, error } = useTeamRecommendTimesV2({
     teamId: teamId,
     N: 5,
-    start_time: range?.from?.toISOString() || '',
-    end_time: range?.to?.toISOString() || '',
+    start_time: startTime,
+    end_time: endTime,
     required_time: selectedDuration.toString(),
+    slot_time: selectedDuration,
   });
-  console.log('teamRecommendTimes', teamRecommendTimes);
+
+  console.log('🔍 RecommendedTimeSlots - API params:', {
+    startTime,
+    endTime,
+    selectedDuration,
+    range,
+  });
+  console.log('🔍 RecommendedTimeSlots - API response:', teamRecommendTimesV2);
 
   const handleSelectTimeSlot = (timeSlot: RecommendTime) => {
     setSelectedTimeSlot(timeSlot);
@@ -71,17 +103,17 @@ const RecommendedTimeSlots: React.FC<RecommendedTimeSlotsProps> = ({
       <div className="p-6 bg-white rounded-xl border shadow-lg border-mainBlue/70">
         <h2 className="mb-4 text-lg font-semibold text-gray-800">추천 시간대</h2>
 
-        {isLoading && <div>Loading...</div>}
-        {error && <div>Error: {error.message}</div>}
+        {isLoading && <div className="p-4 text-center text-gray-500">Loading...</div>}
+        {error && <div className="p-4 text-center text-red-500">Error: {error.message}</div>}
         <div className="space-y-3">
-          {teamRecommendTimes?.map((slot, index) => (
+          {teamRecommendTimesV2?.map((slot, index) => (
             <div
               key={index}
-              className={`p-3 rounded-lg border border-gray-200 duration-300 cursor-pointer hover:border-mainBlue animate-all ${selectedTimeSlot?.start_time === slot.start_time ? 'border-mainBlue' : ''}`}
+              className={`p-3  rounded-lg border border-gray-200 duration-300 cursor-pointer hover:border-mainBlue animate-all ${selectedTimeSlot?.start_time === slot.start_time ? 'border-mainBlue' : ''}`}
               onClick={() => handleSelectTimeSlot(slot)}
             >
               <div className="flex justify-between items-center mb-1">
-                <div className="text-md font-medium text-gray-800">
+                <div className="font-medium text-gray-800 text-md">
                   {formatDateWithWeekday(slot.start_time)}
                 </div>
                 <span
