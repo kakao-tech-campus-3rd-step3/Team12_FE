@@ -38,9 +38,10 @@ const RecommendedTimeSlots: React.FC<RecommendedTimeSlotsProps> = ({
     const start = new Date(range.from);
     start.setHours(0, 0, 0, 0);
 
-    // 끝 날짜는 23:59:59
+    // 끝 날짜는 다음날 00:00:00
     const end = new Date(range.to);
-    end.setHours(23, 59, 59, 999);
+    end.setDate(end.getDate() + 1);
+    end.setHours(0, 0, 0, 0);
 
     return {
       startTime: start.toISOString(),
