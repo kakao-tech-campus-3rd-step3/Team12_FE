@@ -27,7 +27,14 @@ const AvailabilityControls: React.FC<AvailabilityControlsProps> = ({
 }) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const datePickerRef = useRef<HTMLDivElement>(null);
-  const timeOptions = [{ value: 15, label: '15분' }];
+  const timeOptions = [
+    { value: 15, label: '15분' },
+    { value: 30, label: '30분' },
+    { value: 45, label: '45분' },
+    { value: 60, label: '60분' },
+    { value: 90, label: '90분' },
+    { value: 120, label: '120분' },
+  ];
 
   // 외부 클릭 시 DatePicker 닫기
   useEffect(() => {
@@ -76,7 +83,7 @@ const AvailabilityControls: React.FC<AvailabilityControlsProps> = ({
       >
         <p className="text-sm text-gray-600">검색 기간</p>
         <button
-          // onClick={() => setShowDatePicker(!showDatePicker)}
+          onClick={() => setShowDatePicker(!showDatePicker)}
           className="flex gap-2 items-center px-3 py-2 font-medium text-gray-700 bg-white rounded-lg border border-gray-300 transition-colors hover:bg-gray-50"
         >
           <Calendar className="w-4 h-4 text-gray-500" />

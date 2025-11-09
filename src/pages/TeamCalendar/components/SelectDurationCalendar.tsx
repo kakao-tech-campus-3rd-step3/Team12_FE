@@ -1,3 +1,4 @@
+import Button from '@/components/atoms/Button';
 import { ko } from 'date-fns/locale';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import type { DateRange, MonthCaptionProps } from 'react-day-picker';
@@ -43,7 +44,7 @@ function CustomCaption(props: MonthCaptionProps) {
   );
 }
 
-const SelectDurationCalendar: React.FC<Props> = ({ range, setRange }) => {
+const SelectDurationCalendar: React.FC<Props> = ({ range, setRange, onSearch }) => {
   return (
     <div className="date-picker">
       {/* 캘린더 컨테이너 */}
@@ -54,7 +55,7 @@ const SelectDurationCalendar: React.FC<Props> = ({ range, setRange }) => {
             selected={range}
             onSelect={setRange ? setRange : undefined}
             locale={ko} // 한국어 요일 헤더
-            disabled={() => true} // 모든 날짜 클릭 비활성화
+            // disabled={() => true} // 모든 날짜 클릭 비활성화
             components={{
               MonthCaption: CustomCaption, // 커스텀 캡션 사용
             }}
@@ -94,14 +95,14 @@ const SelectDurationCalendar: React.FC<Props> = ({ range, setRange }) => {
           </div>
 
           {/* 검색 버튼 */}
-          {/* <Button
-            onClick={range?.from && range?.to ? onSearch : () => {}}
+          <Button
+            onClick={range?.from && range?.to ? () => onSearch?.() : () => {}}
             text="일정 검색하기"
             fullWidth={true}
             variant={range?.from && range?.to ? 'primary' : 'secondary'}
             size="md"
             className={`${!range?.from || !range?.to ? 'cursor-not-allowed opacity-50' : ''}`}
-          /> */}
+          />
         </div>
       </div>
     </div>

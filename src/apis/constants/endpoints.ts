@@ -64,6 +64,13 @@ export const TEAM_ENDPOINTS = {
   GET_TEAM_MEMBERS: (teamId: number) => `/api/teams/${teamId}/members`, // 팀원 정보 조회
 
   GET_AVAILABILITY: (teamId: number) => `/api/teams/${teamId}/when-to-meet`,
+  GET_AVAILABILITY_V2: (
+    teamId: number,
+    slot_time?: number,
+    start_time?: string,
+    end_time?: string,
+  ): string =>
+    `/api/teams/${teamId}/when-to-meet/v2?slot_time=${slot_time ?? ''}&start_time=${start_time ?? ''}&end_time=${end_time ?? ''}`,
 
   DELETE_TEAM_MEMBER: (teamId: number, memberId: number) =>
     `/api/teams/${teamId}/members/${memberId}`, // 팀원 제거 (팀장 권한)
@@ -82,4 +89,13 @@ export const TEAM_ENDPOINTS = {
     required_time: string,
   ) =>
     `/api/teams/${teamId}/when-to-meet/recommend?N=${N}&start_time=${start_time}&end_time=${end_time}&required_time=${required_time}`,
+  GET_TEAM_RECOMMEND_TIMES_V2: (
+    teamId: number,
+    N: number,
+    start_time: string,
+    end_time: string,
+    required_time: string,
+    slot_time?: number,
+  ) =>
+    `/api/teams/${teamId}/when-to-meet/recommend/v2?N=${N}&start_time=${start_time}&end_time=${end_time}&required_time=${required_time}&slot_time=${slot_time ?? ''}`,
 };
