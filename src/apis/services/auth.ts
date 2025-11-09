@@ -8,6 +8,7 @@ import type {
   EmailSendResponse,
   VerifyCodeResponse,
 } from '@/apis/types/auth';
+import { AxiosError } from 'axios';
 
 export const authAPI = {
   //회원가입 & 디버깅용 콘솔 메세지
@@ -95,7 +96,8 @@ export const authAPI = {
     return apiClient.delete(AUTH_ENDPOINTS.SIGNOUT);
   },
 
-  syncGoogleCalendar: async () => {
+  //구글 캘린더 연동
+  syncGoogleCalendar: async (redirectUri?: string) => {
     const authStorage = localStorage.getItem('auth-storage');
     if (!authStorage) {
       throw new Error('인증 정보가 없습니다.');
@@ -106,62 +108,84 @@ export const authAPI = {
       throw new Error('액세스 토큰이 없습니다.');
     }
 
+    const currentOrigin = window.location.origin;
+    const currentPath = '/';
+    const fullRedirectUri = redirectUri || `${currentOrigin}${currentPath}`;
+
+    console.log('구글 캘린더 연동 시작');
+    console.log('Redirect URI:', fullRedirectUri);
+
     try {
-      const response = await fetch(`${API_BASE_URL}${AUTH_ENDPOINTS.GOOGLE_CALENDAR_SYNC}`, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${state.accessToken}`,
-        },
-        redirect: 'manual', // 302 리다이렉트 수동 처리
-      });
+      const response = await apiClient.post<{
+        message?: string;
+        redirect_url?: string;
+      }>(AUTH_ENDPOINTS.GOOGLE_CALENDAR_SYNC, { redirect_url: fullRedirectUri });
 
-      // status가 0인 경우 (CORS 에러, 네트워크 에러, 또는 브라우저가 리다이렉트를 따라간 경우)
-      if (response.status === 0) {
-        // 브라우저가 리다이렉트를 따라갔을 가능성이 높음
-        console.warn('Response status is 0, likely redirected by browser');
-        window.location.href = `${API_BASE_URL}/oauth2/authorization/google`;
-        return {
-          success: true,
-          redirecting: true,
-          message: '구글 계정 연동을 위해 리다이렉트 중입니다.',
-        };
-      }
+      console.log('API 응답:', response);
 
-      // 204 No Content: 이미 연동 및 동기화 성공
-      if (response.status === 204) {
-        return {
-          success: true,
-          alreadyLinked: true,
-          message: '구글 캘린더 동기화가 완료되었습니다.',
-        };
-      }
+      // 200 OK + redirect_url
+      if (response.data.redirect_url) {
+        const redirectUrl = response.data.redirect_url.startsWith('http')
+          ? response.data.redirect_url
+          : `${API_BASE_URL}${response.data.redirect_url}`;
 
-      // 302 Found: 구글 계정 연동 필요
-      if (response.status === 302 || response.status === 307) {
-        const location = response.headers.get('Location');
-        const redirectUrl = location || `${API_BASE_URL}/oauth2/authorization/google`;
+        console.log('구글 OAuth로 리다이렉트:', redirectUrl);
+
+        localStorage.setItem(
+          'google-oauth-debug',
+          JSON.stringify({
+            timestamp: new Date().toISOString(),
+            redirectUri: fullRedirectUri,
+            message: response.data.message,
+          }),
+        );
+
         window.location.href = redirectUrl;
+
         return {
           success: true,
           redirecting: true,
-          message: '구글 계정 연동을 위해 리다이렉트 중입니다.',
+          message: response.data.message || '구글 계정 연동을 위해 리다이렉트 중입니다.',
         };
       }
 
-      // 그 외 에러 (401, 500 등)
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || `동기화 실패: ${response.status}`);
+      // 이미 연동된 경우
+      return {
+        success: true,
+        alreadyLinked: true,
+        message: response.data.message || '구글 캘린더가 이미 연동되어 있습니다.',
+      };
     } catch (error) {
-      // fetch 자체가 실패한 경우 (네트워크 에러, CORS 등)
-      if (error instanceof TypeError) {
-        // CORS 에러나 네트워크 에러인 경우
-        console.warn('Fetch 에러 발생 (CORS 또는 네트워크 에러), 수동 리다이렉트 시도:', error);
-        window.location.href = `${API_BASE_URL}/oauth2/authorization/google`;
-        return {
-          success: true,
-          redirecting: true,
-          message: '구글 계정 연동을 위해 리다이렉트 중입니다.',
-        };
+      if (error instanceof AxiosError) {
+        console.error('구글 캘린더 동기화 에러:', error);
+
+        // 401 에러 + redirect_url이 있는 경우
+        if (error.response?.status === 401 && error.response?.data?.redirect_url) {
+          const redirectUrl = error.response.data.redirect_url.startsWith('http')
+            ? error.response.data.redirect_url
+            : `${API_BASE_URL}${error.response.data.redirect_url}`;
+
+          console.log('401 응답: 구글 OAuth 인증 필요');
+          console.log('Redirect URL:', redirectUrl);
+
+          localStorage.setItem(
+            'google-oauth-debug',
+            JSON.stringify({
+              timestamp: new Date().toISOString(),
+              redirectUri: fullRedirectUri,
+              message: error.response.data?.message,
+              status: 401,
+            }),
+          );
+
+          window.location.href = redirectUrl;
+
+          return {
+            success: true,
+            redirecting: true,
+            message: error.response.data?.message || '구글 계정 연동을 위해 리다이렉트 중입니다.',
+          };
+        }
       }
       throw error;
     }

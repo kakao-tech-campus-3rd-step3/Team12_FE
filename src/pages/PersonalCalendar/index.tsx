@@ -11,6 +11,7 @@ import UpcomingSchedule from '@/pages/PersonalCalendar/components/UpcomingSchedu
 import { useClassStore } from '@/store/calendar/useClassStore';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const PersonalCalendarPage = () => {
   const location = useLocation();
@@ -29,6 +30,20 @@ const PersonalCalendarPage = () => {
     };
     window.addEventListener('focus', handleFocus);
     return () => window.removeEventListener('focus', handleFocus);
+  }, []);
+
+  // 구글 OAuth 콜백 처리
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const googleSync = urlParams.get('google_sync');
+
+    if (googleSync === 'success') {
+      toast.success('구글 캘린더 연동이 완료되었습니다!');
+      window.history.replaceState({}, '', '/');
+    } else if (googleSync === 'error') {
+      toast.error('구글 캘린더 연동에 실패했습니다. 다시 시도해주세요.');
+      window.history.replaceState({}, '', '/');
+    }
   }, []);
 
   return (
